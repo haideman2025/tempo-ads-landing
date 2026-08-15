@@ -12,7 +12,7 @@ describe("TEMPO landing visual system", () => {
   });
 
   it("references the complete commercial image system rather than a minimal three-image gallery", () => {
-    const commercialAssets = source.match(/\/manus-storage\/tempo-(?:p|l|h|i)\d{2}[^\"]+/g) ?? [];
+    const commercialAssets = source.match(/\/manus-storage\/tempo-[^\"]+/g) ?? [];
     expect(commercialAssets.length).toBeGreaterThanOrEqual(23);
     expect(source).toContain("const visualDiary = [");
     expect(source).toContain("THE VISUAL DIARY / 10 CHAPTERS");
@@ -27,6 +27,13 @@ describe("TEMPO landing visual system", () => {
     expect(source).toContain('"course-2x5ml"');
     expect(source).toContain("Đọc INCI");
     expect(source).toContain("Truy xuất");
+  });
+
+  it("keeps 5ml and 2×5ml formats on dedicated, non-mixed packshots", () => {
+    expect(source).toContain('pack5ml: "/manus-storage/tempo-pack-5ml-standalone-final_a9834962.jpg"');
+    expect(source).toContain('packCourse: "/manus-storage/tempo-pack-2x5ml-verified_194f0c5d.png"');
+    expect(source).toContain('name: "TEMPO 5ml", title: "Nhịp đều đặn", note: "Format đầy đủ cho routine riêng tư", image: ASSETS.pack5ml');
+    expect(source).toContain('name: "TEMPO 2×5ml", title: "Nhịp quay lại", note: "Bundle hai chai 5ml cho lựa chọn đầy đủ hơn", image: ASSETS.packCourse');
   });
 
   it("uses the connected ten-scene diary and visual fallback rather than rejected lifestyle frames", () => {

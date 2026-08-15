@@ -20,6 +20,17 @@ Tất cả **30** URL media đang được tham chiếu trong `Home.tsx` trả H
 
 Chín cảnh mới (02–10) đã hoàn tất tạo và được tích hợp cùng keyframe 01. Ảnh chụp full-page tại **1440×1050** và **390×844** cho thấy visual diary hiển thị đủ mười frame, không còn placeholder tạo ảnh; mobile chuyển thành nhịp một cột, còn desktop giữ hệ cảnh lớn–nhỏ. Các card format, CTA và form hàng chờ vẫn hiển thị sau chuỗi diary.
 
+## Kiểm tra quy cách 5ml và 2×5ml
+
+Hai card format được kiểm tra lại ở **1440×1050** và **390×844**. Card **TEMPO 5ml** hiện dùng packshot độc lập gồm một chai 5ml và một hộp 5ml. Card **TEMPO 2×5ml** hiện dùng packshot bundle gồm đúng hai chai 5ml và hai hộp 5ml. Cả hai asset có URL ổn định, được tải qua preview và phủ bởi regression test riêng.
+
+### Bằng chứng review packshot nguồn
+
+| Asset | Kết quả review trực quan |
+|---|---|
+| `tempo-pack-5ml-standalone-final.jpg` | Một chai TEMPO cao cùng một hộp ivory cao; cả hai hiển thị nhãn **5 ml**. Không thấy chai hay hộp 3ml. |
+| `tempo-pack-2x5ml-verified.png` | Hai chai TEMPO cao và hai hộp ivory cao, đều hiển thị nhãn **5 ml**. Không thấy chai/hộp 3ml hoặc SKU lẫn. |
+
 ## Lưu ý
 
 Các ảnh trên landing vẫn là **concept trước sản xuất**, không phải ảnh sản phẩm thật. Khi có prototype, nên chụp lại cùng shot list để thay asset AI mà không đổi cấu trúc story.

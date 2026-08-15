@@ -35,3 +35,8 @@
 - [x] Tạo một keyframe visual diary mới và tuyển chọn chín asset thương mại TEMPO đã kiểm chứng để thay ngay các khung bị lỗi, giữ câu chuyện liền mạch trong khi chờ đủ mười frame mới.
 - [x] Tích hợp visual diary mới, kèm alt text và fallback để không còn khung ảnh rỗng trên desktop/mobile.
 - [x] Chạy pass QA mạng/console cuối sau lần thay URL mới nhất, xác nhận không còn request 4xx/5xx và cảnh báo render visual trước checkpoint.
+
+- [x] Xác định mọi card, gallery và CTA đang dùng visual 5ml hoặc 2×5ml không đúng quy cách.
+- [x] Tạo packshot SKU 5ml độc lập gồm đúng một chai 5ml và một hộp 5ml, không xuất hiện 3ml.
+- [x] Tạo packshot bundle 2×5ml gồm đúng hai chai 5ml và hai hộp 5ml, không xuất hiện 3ml.
+- [x] Thay visual tại toàn bộ điểm chạm 5ml/2×5ml, bổ sung regression test và kiểm tra desktop/mobile.

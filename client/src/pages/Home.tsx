@@ -9,9 +9,9 @@ const ASSETS = {
   heroPoster: "/manus-storage/tempo-h01-night-confident-hero_05e26f4e.jpg",
   signalHero: "/manus-storage/tempo-h02-teal-signal-hero_bd3a2334.jpg",
   pack3ml: "/manus-storage/tempo-p01-3ml-front_b95aa838.jpg",
-  pack5ml: "/manus-storage/tempo-p02-5ml-front_c2429f23.jpg",
+  pack5ml: "/manus-storage/tempo-pack-5ml-standalone-final_a9834962.jpg",
   packDuo: "/manus-storage/tempo-p03-duo_f9127d21.jpg",
-  packCourse: "/manus-storage/tempo-p04-course-2x5ml_68d9a5cb.jpg",
+  packCourse: "/manus-storage/tempo-pack-2x5ml-verified_194f0c5d.png",
   packScale: "/manus-storage/tempo-p05-3ml-hand-scale_2e003621.jpg",
   pocket: "/manus-storage/tempo-l01-pocket-leaving_e9a5bc11.jpg",
   desk: "/manus-storage/tempo-l02-workday-desk_34391fc6.jpg",
@@ -49,9 +49,9 @@ type PreferredSku = "3ml" | "5ml" | "duo" | "course-2x5ml";
 
 const productChoices = [
   { id: "3ml" as const, step: "01", name: "TEMPO 3ml", title: "Nhịp làm quen", note: "Format gọn cho lịch hẹn đầu tiên", image: ASSETS.approvedScale },
-  { id: "5ml" as const, step: "02", name: "TEMPO 5ml", title: "Nhịp đều đặn", note: "Format đầy đủ cho routine riêng tư", image: ASSETS.masterTabletop },
+  { id: "5ml" as const, step: "02", name: "TEMPO 5ml", title: "Nhịp đều đặn", note: "Format đầy đủ cho routine riêng tư", image: ASSETS.pack5ml },
   { id: "duo" as const, step: "03", name: "TEMPO Duo", title: "Ở nhà, đi xa", note: "3ml mang theo + 5ml cho routine tại nhà", image: ASSETS.approvedUnboxing },
-  { id: "course-2x5ml" as const, step: "04", name: "TEMPO 2×5ml", title: "Nhịp quay lại", note: "Bundle hai chai 5ml cho lựa chọn đầy đủ hơn", image: ASSETS.masterTabletop },
+  { id: "course-2x5ml" as const, step: "04", name: "TEMPO 2×5ml", title: "Nhịp quay lại", note: "Bundle hai chai 5ml cho lựa chọn đầy đủ hơn", image: ASSETS.packCourse },
 ];
 
 const visualDiary = [
