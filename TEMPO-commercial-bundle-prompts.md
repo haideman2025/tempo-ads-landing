@@ -1,0 +1,14 @@
+# TEMPO Commercial Bundle Prompts
+
+Use the brand logo reference and the approved TEMPO bottle reference in every visual-generation run. Treat the current assets as **pre-production concepts**, not product proof. Keep the white ivory bottle, graphite cap, teal signal detail, graphite–ivory tabletop language, and a quiet after-dark mood. Do not generate efficacy claims, medical diagrams, certificates, user reviews, or excessive skin exposure.
+
+| Bundle | Prompt objective | Primary prompt |
+|---|---|---|
+| 3ml Khởi đầu | Communicate a compact first-try choice and visible travel scale. | `Premium photorealistic product lifestyle for TEMPO by V2JOY: one ivory 3ml TEMPO bottle with graphite cap, clearly labeled 3ml, placed beside a modern phone and a black jacket pocket on a graphite tabletop. Warm tungsten side light, restrained teal reflection, ivory card, spacious negative space for Vietnamese HTML copy. Quiet, discreet, high-end personal care, no medical claim, no fake text, no people.` |
+| 5ml Chuẩn | Present an at-home recurring ritual without implying treatment. | `Premium photorealistic product still life for TEMPO by V2JOY: one ivory 5ml TEMPO bottle with graphite cap, clearly labeled 5ml, resting on an ivory stone tray beside a soft lamp and ribbed glass. Graphite room, warm evening light, small teal signal reflection, elevated but private grooming ritual. No medical imagery, no efficacy text, no people, negative space for copy.` |
+| Duo 3ml + 5ml | Explain home-plus-away flexibility with the two sizes visibly distinct. | `High-end commercial duo image for TEMPO by V2JOY: a 3ml ivory bottle and a clearly taller 5ml ivory bottle, both graphite caps and teal signal details, arranged with an open black travel pouch, ivory card and a home tabletop. The 3ml is nearest the travel pouch; the 5ml anchors the home setting. Warm lamp light, graphite and ivory palette, subtle teal glow, premium e-commerce composition. No fake labels or claims.` |
+| Liệu trình 2×5ml | Speak to a return purchase as a routine-restock bundle, not a medical course. | `Premium restock bundle still life for TEMPO by V2JOY: two matching 5ml ivory TEMPO bottles with graphite caps, placed in a clean graphite drawer organizer with an ivory note card. Warm at-home evening light, teal signal reflection, calm repeat-routine atmosphere, product-first, no medical language, no certificates, no people.` |
+
+## Production settings
+
+Generate feed and marketplace images in **4:5**; generate catalog covers in **1:1**; use **16:9** for landing/YouTube headers and reserve 35% of the frame for HTML copy. Make each prompt in a new generation session with the same approved bottle reference. Do not ask the image model to render Vietnamese copy, prices or legal text; overlay those later through a controlled design file.

@@ -9,3 +9,8 @@
 - [x] Kiểm tra desktop/mobile, visual tĩnh, CTA và claim-safe trước khi lưu checkpoint.
 - [x] Dừng render video trong dự án và bàn giao bộ prompt Omni 5 short Night Confident để người dùng tự tạo.
 - [x] Hoàn tất thay thế placeholder visual bằng asset tĩnh ổn định trên toàn bộ landing trước khi lưu phiên bản.
+- [x] Xác minh cấu trúc SKU 3ml dùng thử, 5ml dùng thường xuyên và combo 3ml + 5ml theo insight/bối cảnh sử dụng.
+- [x] Thiết kế khung bundle và giá đề xuất, phân biệt rõ giá thử, giá dùng thường xuyên và ưu đãi combo trước khi công bố.
+- [x] Lập shot list full-funnel cho packshot, infographic, lifestyle và bundle card theo từng SKU.
+- [x] Tạo bộ visual bán hàng TEMPO đa tỷ lệ cho ads, marketplace và landing; không dùng claim y khoa chưa được duyệt.
+- [x] Đóng gói asset, prompt và playbook triển khai theo từng bundle.
