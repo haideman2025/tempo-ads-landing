@@ -31,7 +31,7 @@
 
 - [x] Kiểm kê tất cả URL ảnh/video trên landing, xác định chính xác các asset lỗi tải và thay toàn bộ đường dẫn không còn hoạt động.
 - [x] Viết lại visual diary theo chuỗi cảm xúc Night Confident liền mạch, lấy insight về chuyển nhịp từ ngày dài sang một cuộc hẹn có chủ đích làm mạch dẫn.
-- [ ] Tạo bộ visual diary mới gồm mười cảnh riêng biệt, nhất quán quy cách 3ml/5ml, logo V2JOY và tone graphite–ivory–teal; không dùng khung ảnh cũ bị phản ánh.
+- [x] Tạo bộ visual diary mới gồm mười cảnh riêng biệt, nhất quán quy cách 3ml/5ml, logo V2JOY và tone graphite–ivory–teal; không dùng khung ảnh cũ bị phản ánh.
 - [x] Tạo một keyframe visual diary mới và tuyển chọn chín asset thương mại TEMPO đã kiểm chứng để thay ngay các khung bị lỗi, giữ câu chuyện liền mạch trong khi chờ đủ mười frame mới.
 - [x] Tích hợp visual diary mới, kèm alt text và fallback để không còn khung ảnh rỗng trên desktop/mobile.
 - [x] Chạy pass QA mạng/console cuối sau lần thay URL mới nhất, xác nhận không còn request 4xx/5xx và cảnh báo render visual trước checkpoint.

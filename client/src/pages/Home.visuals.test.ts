@@ -38,6 +38,15 @@ describe("TEMPO landing visual system", () => {
     expect(source).toContain("ASSETS.masterTabletop");
     expect(source).toContain("function SafeImage");
     expect(source).toContain("tempo-diary-rebuilt-01-exit");
+    expect(source).toContain("tempo-diary-final-02-pause_5f867810.jpg");
+    expect(source).toContain("tempo-diary-final-03-signal_a5aaa208.jpg");
+    expect(source).toContain("tempo-diary-final-04-choose_7af39b22.jpg");
+    expect(source).toContain("tempo-diary-final-05-together_fc4a7e52.jpg");
+    expect(source).toContain("tempo-diary-final-06-arrival_f6c3c434.jpg");
+    expect(source).toContain("tempo-diary-final-07-evening_6f754f7b.jpg");
+    expect(source).toContain("tempo-diary-final-08-detail_e88069c6.jpg");
+    expect(source).toContain("tempo-diary-final-09-home-away_4b81419e.jpg");
+    expect(source).toContain("tempo-diary-final-10-return_eaaf682b.jpg");
     const diaryFrames = source.match(/ASSETS\.diary(?:Exit|Pause|Signal|Choose|Together|Arrival|Evening|Detail|HomeAway|Return)/g) ?? [];
     expect(new Set(diaryFrames)).toHaveLength(10);
     expect(source).toContain("gallery-grid--diary");
