@@ -17,3 +17,9 @@ Visual và copy chỉ khẳng định TEMPO **sản xuất tại Việt Nam** b�
 Sáu URL asset image-led trả `200 image/webp` qua lớp phân phối, gồm bốn visual provenance và hai keyframe nghi thức. Visual thứ hai, `Carry the Signal`, đã hiện hữu tại độ phân giải 1664×2080 ở kho asset.
 
 Không gửi form thật trên môi trường đang dùng vì thao tác đó sẽ tạo một dữ liệu liên hệ và chiếm một trong 1.000 suất hàng chờ. Luồng server-side được xác nhận qua test hiện hữu của `server/waitlist.test.ts`; cần một đăng ký thật do chủ dự án thực hiện khi muốn nghiệm thu luồng production, với một thông tin liên hệ hợp lệ và có sự đồng ý rõ ràng.
+
+## Redesign lifestyle-first — 15/08/2026
+
+Đã kiểm tra full-page ở desktop 1280×720 và mobile 390×844 sau khi chuyển các điểm nhịp chính từ packshot trực diện sang bối cảnh cảm xúc: rời ngày dài, đi bộ ban đêm, chuẩn bị ở nhà, khoảng riêng và buổi sáng trở lại. Các vùng ảnh mới giữ đúng tỷ lệ, không xuất hiện ảnh vỡ hoặc tràn ngang trong hai viewport đã kiểm tra; logo V2JOY ở header, trust chapter và footer đều dùng badge bo tròn tái sử dụng.
+
+Năm asset lifestyle đầu tiên đã được kiểm tra qua lớp phân phối. Bốn ảnh trả `200 image/webp`; asset date-night cũ trả SVG báo lỗi tạo ảnh. Phương án tạo lại cũng trả placeholder lỗi, nên đã loại khỏi landing thay vì giữ ảnh chờ. Điểm nhịp này hiện dùng visual date-table hiện hữu `tempo-l09-date-table_dcf91e62.jpg`, đã xác nhận là JPEG 1600×2000 hợp lệ qua lớp phân phối. Không còn URL placeholder trong markup landing.

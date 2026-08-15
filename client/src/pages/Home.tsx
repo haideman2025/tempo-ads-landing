@@ -53,6 +53,11 @@ const ASSETS = {
   openFile: "/manus-storage/tempo-provenance-04-open-file_a2a8f684.jpg",
   ritualPreparation: "/manus-storage/tempo-ritual-01-quiet-preparation_606c7e0a.jpg",
   ritualCarry: "/manus-storage/tempo-ritual-02-carry-signal_4c7ab5e4.jpg",
+  lifestyleExit: "/manus-storage/tempo-lifestyle-01-exit-evening_9c1f24f7.jpg",
+  lifestyleWalk: "/manus-storage/tempo-lifestyle-02-night-walk_745b948a.jpg",
+  lifestyleTogether: "/manus-storage/tempo-lifestyle-03-together-at-home_98385daf.jpg",
+  lifestyleMorning: "/manus-storage/tempo-lifestyle-04-morning-return_bb8916d6.jpg",
+  lifestyleObjects: "/manus-storage/tempo-l09-date-table_dcf91e62.jpg",
 };
 
 type PreferredSku = "3ml" | "5ml" | "duo" | "course-2x5ml";
@@ -65,16 +70,12 @@ const productChoices = [
 ];
 
 const visualDiary = [
-  { src: ASSETS.diaryExit, index: "01", kicker: "THE EXIT", title: "Rời khỏi ngày dài" },
-  { src: ASSETS.diaryPause, index: "02", kicker: "THE PAUSE", title: "Để lại một khoảng" },
-  { src: ASSETS.diarySignal, index: "03", kicker: "THE SIGNAL", title: "Chọn điều vừa đủ" },
-  { src: ASSETS.diaryChoose, index: "04", kicker: "THE FORMAT", title: "Chọn nhịp riêng" },
-  { src: ASSETS.diaryTogether, index: "05", kicker: "READY TOGETHER", title: "Đủ cho cả hai" },
-  { src: ASSETS.diaryArrival, index: "06", kicker: "THE ARRIVAL", title: "Đến với sự hiện diện" },
-  { src: ASSETS.diaryEvening, index: "07", kicker: "THE EVENING", title: "Giữ đêm ở lại" },
-  { src: ASSETS.diaryDetail, index: "08", kicker: "THE DETAIL", title: "Chi tiết nói thay" },
-  { src: ASSETS.diaryHomeAway, index: "09", kicker: "HOME + AWAY", title: "Ở nhà, đi xa" },
-  { src: ASSETS.diaryReturn, index: "10", kicker: "THE RETURN", title: "Mang nhịp về lại" },
+  { src: ASSETS.lifestyleExit, index: "01", kicker: "THE EXIT", title: "Rời ngày dài" },
+  { src: ASSETS.lifestyleWalk, index: "02", kicker: "THE WALK", title: "Để lại khoảng vội" },
+  { src: ASSETS.lifestyleObjects, index: "03", kicker: "THE SIGNAL", title: "Mang điều vừa đủ" },
+  { src: ASSETS.lifestyleTogether, index: "04", kicker: "THE MOMENT", title: "Có mặt cho nhau" },
+  { src: ASSETS.ritualPreparation, index: "05", kicker: "THE PAUSE", title: "Giữ khoảng riêng" },
+  { src: ASSETS.lifestyleMorning, index: "06", kicker: "THE RETURN", title: "Mang nhịp về lại" },
 ] as const;
 
 function goToWaitlist() {
@@ -85,12 +86,16 @@ function Signal({ className = "" }: { className?: string }) {
   return <svg className={`signal ${className}`} viewBox="0 0 560 80" fill="none" aria-hidden="true"><path d="M0 43H58c30 0 29-23 56-23 29 0 25 43 56 43 33 0 25-35 56-35 35 0 23 30 58 30 29 0 27-20 57-20 27 0 30 13 56 13h56" /></svg>;
 }
 
-function SafeImage({ src, alt, className = "", fallback = ASSETS.masterTabletop }: { src: string; alt: string; className?: string; fallback?: string }) {
+function SafeImage({ src, alt, className = "", fallback = ASSETS.heroPoster }: { src: string; alt: string; className?: string; fallback?: string }) {
   return <img src={src} alt={alt} className={className} loading="lazy" decoding="async" onError={({ currentTarget }) => {
     if (currentTarget.dataset.fallbackApplied) return;
     currentTarget.dataset.fallbackApplied = "true";
     currentTarget.src = fallback;
   }} />;
+}
+
+function V2JoyBadge({ className = "" }: { className?: string }) {
+  return <span className={`v2joy-badge ${className}`}><img src={V2JOY_LOGO} alt="V2JOY" /></span>;
 }
 
 function EditorialVideo() {
@@ -135,7 +140,7 @@ export default function Home() {
   return (
     <div className="night-site">
       <header className="night-header">
-        <a href="#top" className="brand" aria-label="TEMPO by V2JOY"><img src={V2JOY_LOGO} alt="V2JOY" /><span className="tempo-wordmark">TEMPO</span><small>PRE-ORDER / 01</small></a>
+        <a href="#top" className="brand" aria-label="TEMPO by V2JOY"><V2JoyBadge /><span className="tempo-wordmark">TEMPO</span><small>PRE-ORDER / 01</small></a>
         <div className="header-center"><span>Night Confident</span><i /> <span>Danh sách chờ 01.000</span></div>
         <button type="button" onClick={goToWaitlist} className="header-cta">Giữ suất <ArrowUpRight size={15} /></button>
       </header>
@@ -161,9 +166,9 @@ export default function Home() {
           <p className="opening-copy">Để lại nhịp vội. Mang theo sự hiện diện.</p>
         </section>
 
-        <section className="cinema-section">
-          <EditorialVideo />
-          <div className="cinema-section__copy"><p className="overline">02 / SET THE TONE</p><h2>Bật một ánh đèn.<br /><em>Đổi một nhịp.</em></h2><p>Một điểm dừng trước khi đi.</p><span className="micro-note">MOTION · ÂM THANH MẶC ĐỊNH TẮT</span></div>
+        <section className="cinema-section cinema-section--lifestyle">
+          <SafeImage src={ASSETS.lifestyleExit} alt="Lối ra căn hộ trong ánh chiều, gợi khoảnh khắc rời ngày dài" className="cinema-section__image" />
+          <div className="cinema-section__copy"><p className="overline">02 / SET THE TONE</p><h2>Bật một ánh đèn.<br /><em>Đổi một nhịp.</em></h2><p>Một điểm dừng trước khi đi.</p><span className="micro-note">MỘT BUỔI TỐI, KHÔNG PHẢI MỘT CATALOGUE</span></div>
         </section>
 
         <section className="story-panel story-panel--pocket">
@@ -171,7 +176,7 @@ export default function Home() {
           <div className="story-copy"><p className="overline overline--dark">HOW / 01 · CARRY THE SIGNAL</p><h2>Nhỏ để đi cùng<br /><em>lịch hẹn của bạn.</em></h2><p>3ml. Gọn trong nhịp riêng.</p><button onClick={() => { setPreferredSku("3ml"); goToWaitlist(); }} type="button" className="text-button">Chọn nhịp 3ml <ArrowUpRight size={16} /></button></div>
         </section>
 
-        <section className="signal-break"><div><p className="overline">TEMPO IS A RITUAL OBJECT</p><h2>Không cần vội.<br /><em>Chỉ cần có mặt.</em></h2><p>Graphite. Ivory. Một dấu hiệu teal.</p></div><SafeImage src={ASSETS.ritualPreparation} alt="TEMPO trong khoảnh khắc chuẩn bị riêng tư trước khi đi" /><Signal className="signal-break-line" /></section>
+        <section className="signal-break"><div><p className="overline">A QUIET SIGNAL</p><h2>Không cần vội.<br /><em>Chỉ cần có mặt.</em></h2><p>Một cuộc hẹn bắt đầu từ cách bạn dành thời gian cho nhau.</p></div><SafeImage src={ASSETS.lifestyleWalk} alt="Hai người đi cạnh nhau trên phố tối trong một buổi hẹn yên tĩnh" /><Signal className="signal-break-line" /></section>
 
         <section className="ingredient-origin" aria-labelledby="ingredient-origin-title">
           <div className="ingredient-origin__heading"><p className="overline overline--dark">HOW / BOTANICAL STUDIES + MADE IN VIETNAM</p><h2 id="ingredient-origin-title">Nhìn vào điều<br /><em>có thể kiểm tra.</em></h2><p>Chín dịch chiết thực vật trong danh mục INCI. <strong>TEMPO được sản xuất tại Việt Nam</strong> bởi NANOFRANCE, Ninh Bình.</p><a href="#inci-full" className="text-button">Mở danh mục INCI <ArrowDownRight size={16} /></a></div>
@@ -185,7 +190,7 @@ export default function Home() {
 
         <section className="story-panel story-panel--ritual">
           <div className="story-copy"><p className="overline">HOW / 02 · BEFORE YOU GO</p><h2>Chuẩn bị một chút.<br /><em>Giữ lại khoảng riêng.</em></h2><p>Đọc nhãn. Chọn format. Đi theo nhịp của bạn.</p><ul><li><Clock3 size={16} /> Theo hướng dẫn công bố trên nhãn</li><li><LockKeyhole size={16} /> Một routine riêng tư</li></ul></div>
-          <div className="story-image"><SafeImage src={ASSETS.ritualPreparation} alt="TEMPO 5ml trong không gian chuẩn bị riêng tư" /><span className="image-index">5ML / RITUAL FORMAT</span></div>
+          <div className="story-image"><SafeImage src={ASSETS.lifestyleTogether} alt="Hai người chuẩn bị đồ uống trong căn bếp ấm áp trước buổi tối" /><span className="image-index">A MOMENT / NOT A RUSH</span></div>
         </section>
 
         <section className="transparency-protocol" id="nguon-goc" aria-labelledby="transparency-title">
@@ -215,34 +220,34 @@ export default function Home() {
         </section>
 
         <section className="product-block" id="san-pham">
-          <div className="product-block__top"><div><p className="overline overline--dark">WHAT / THE FIRST EDITION</p><h2>Chọn nhịp<br /><em>đi cùng bạn.</em></h2></div><p>Bốn format. Bốn bối cảnh.</p></div>
+          <div className="product-block__top"><div><p className="overline overline--dark">WHAT / THE FIRST EDITION</p><h2>Chọn nhịp<br /><em>đi cùng bạn.</em></h2></div><p>Bốn format, để chọn đúng hoàn cảnh thay vì mua thêm một món đồ.</p></div>
           <div className="format-grid">
             {productChoices.map(item => <article className="format-card" key={item.id}><div className="format-card__image"><SafeImage src={item.image} alt={`Mockup ${item.name}`} /></div><div className="format-card__copy"><span>{item.step} / {item.name}</span><h3>{item.title}</h3><p>{item.note}</p><button type="button" onClick={() => { setPreferredSku(item.id); goToWaitlist(); }}>Chọn {item.name} <ArrowUpRight size={15} /></button></div></article>)}
           </div>
         </section>
 
-        <section className="info-ribbon" aria-label="Thông tin chọn dung tích TEMPO">
-          <div className="info-ribbon__intro"><p className="overline">WHAT / FIND YOUR FORMAT</p><h2>Bắt đầu<br /><em>đúng chỗ.</em></h2><p>Giữ suất cho format bạn quan tâm.</p><button className="teal-button" type="button" onClick={goToWaitlist}>Chọn pack trong form <ArrowDownRight size={17} /></button></div>
-          <div className="info-ribbon__cards"><SafeImage src={ASSETS.infoValue} alt="Khung lựa chọn TEMPO 3ml, 5ml, Duo và 2 chai 5ml" /></div>
+        <section className="info-ribbon info-ribbon--lifestyle" aria-label="Khoảnh khắc TEMPO xuất hiện trong ngày">
+          <div className="info-ribbon__intro"><p className="overline">WHAT / FIND YOUR FORMAT</p><h2>Một vật nhỏ.<br /><em>Một ý định rõ.</em></h2><p>Format chỉ nên xuất hiện khi nó hợp với nhịp sống của bạn.</p><button className="teal-button" type="button" onClick={goToWaitlist}>Chọn pack trong form <ArrowDownRight size={17} /></button></div>
+          <div className="info-ribbon__cards"><SafeImage src={ASSETS.lifestyleObjects} alt="Vật dụng chuẩn bị cho một buổi hẹn với TEMPO 3ml là chi tiết phụ" /><SafeImage src={ASSETS.ritualCarry} alt="TEMPO 3ml trong bối cảnh mang theo trước cuộc hẹn" /></div>
         </section>
 
         <section className="gallery-section" aria-label="Nhật ký visual TEMPO">
-          <div className="gallery-heading"><p className="overline">THE VISUAL DIARY / 10 CHAPTERS</p><h2>Không chỉ một ảnh.<br /><em>Mà là cả một buổi tối.</em></h2><p>10 cảnh. Một nhịp liền mạch.</p></div>
+          <div className="gallery-heading"><p className="overline">THE VISUAL DIARY / 06 CHAPTERS</p><h2>Không chỉ một ảnh.<br /><em>Mà là cả một buổi tối.</em></h2><p>Sáu khung hình. Một nhịp liền mạch.</p></div>
           <div className="gallery-grid gallery-grid--diary">{visualDiary.map(frame => <figure key={frame.index}><SafeImage src={frame.src} alt={`${frame.index} / ${frame.kicker} — ${frame.title}`} /><div className="gallery-grid__copy"><span>{frame.index} / {frame.kicker}</span><h3>{frame.title}</h3></div></figure>)}</div>
         </section>
 
         <section className="design-proof">
-          <div className="design-proof__copy"><p className="overline">DESIGN STUDIES / TRUE SCALE</p><h2>Quy cách được<br /><em>nhìn từ nhiều phía.</em></h2><p>Mockup để xem tỷ lệ, màu và trải nghiệm mở hộp.</p><div className="design-proof__marks"><span>3ML / 5ML</span><span>IVORY SOFT-TOUCH</span><span>SIGNAL TEAL</span></div></div>
-          <div className="design-proof__images"><img src={ASSETS.approvedScale} alt="TEMPO 3ml đặt cạnh điện thoại để đánh giá kích thước" loading="lazy" /><img src={ASSETS.approvedPrimary} alt="Mockup bao bì TEMPO đã phê duyệt" loading="lazy" /><img src={ASSETS.approvedUnboxing} alt="Mockup trải nghiệm mở hộp TEMPO" loading="lazy" /></div>
+          <div className="design-proof__copy"><p className="overline">DESIGN STUDIES / TRUE SCALE</p><h2>Chỉ giữ lại<br /><em>điều cần xem.</em></h2><p>Quy cách, tỷ lệ và trải nghiệm mở hộp — đủ để bạn đối chiếu trước khi chọn.</p><div className="design-proof__marks"><span>3ML / 5ML</span><span>TRUE SCALE</span><span>OPEN TO CHECK</span></div></div>
+          <div className="design-proof__images"><img src={ASSETS.approvedScale} alt="TEMPO 3ml đặt cạnh điện thoại để đánh giá kích thước" loading="lazy" /><img src={ASSETS.approvedUnboxing} alt="Mockup trải nghiệm mở hộp TEMPO" loading="lazy" /></div>
         </section>
 
         <section className="discreet-section">
-          <div className="discreet-section__image"><img src={ASSETS.infoDiscreet} alt="Thông điệp trải nghiệm kín đáo TEMPO" loading="lazy" /></div>
-          <div className="discreet-section__copy"><p className="overline">05 / KEEP IT YOURS</p><h2>Kín đáo<br /><em>là một lựa chọn.</em></h2><p>Giữ mọi thứ vừa đủ, cho riêng bạn.</p><img src={ASSETS.infoRitual} alt="Nhịp ritual TEMPO" loading="lazy" /></div>
+          <div className="discreet-section__image"><SafeImage src={ASSETS.lifestyleMorning} alt="Buổi sáng yên tĩnh với tách cà phê và ánh sáng cửa sổ" /></div>
+          <div className="discreet-section__copy"><p className="overline">05 / KEEP IT YOURS</p><h2>Kín đáo<br /><em>là một lựa chọn.</em></h2><p>Không phải mọi điều có ý nghĩa đều cần được nói lớn.</p><div className="discreet-section__badge"><V2JoyBadge /><span>V2JOY / NIGHT CONFIDENT</span></div></div>
         </section>
 
         <section className="waitlist-section" id="waitlist">
-          <div className="waitlist-cinema"><img src={ASSETS.masterTabletop} alt="TEMPO 3ml và 5ml với bao bì ivory đã phê duyệt" loading="lazy" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">THE FIRST 1,000</p><h2>Danh sách chờ<br /><em>đã mở.</em></h2><p>Giữ suất. Chờ thông tin mở bán chính thức.</p></div></div>
+          <div className="waitlist-cinema"><SafeImage src={ASSETS.lifestyleObjects} alt="Đồ vật chuẩn bị cho một buổi hẹn với TEMPO là chi tiết phụ" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">THE FIRST 1,000</p><h2>Danh sách chờ<br /><em>đã mở.</em></h2><p>Giữ suất. Chờ thông tin mở bán chính thức.</p></div></div>
           <div className="waitlist-form-wrap">
             <div className="waitlist-topline"><span>PRIVATE ACCESS / 01</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 đã ghi nhận</span></div>
             <h2>Giữ một suất<br />cho nhịp của bạn.</h2>
@@ -269,7 +274,7 @@ export default function Home() {
         ].map(([question, answer], index) => <article key={question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}><span>0{index + 1}</span><b>{question}</b><ChevronDown size={18} /></button>{openFaq === index && <p>{answer}</p>}</article>)}</div></section>
       </main>
 
-      <footer><div className="footer-brand"><img src={V2JOY_LOGO} alt="V2JOY" /><span>TEMPO</span></div><p>Concept visual và landing pre-order · Night Confident</p><p>Sản phẩm là mỹ phẩm, không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.</p></footer>
+      <footer><div className="footer-brand"><V2JoyBadge /><span>TEMPO</span></div><p>Concept visual và landing pre-order · Night Confident</p><p>Sản phẩm là mỹ phẩm, không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.</p></footer>
       <div className="mobile-sticky"><div><span>{remaining.toLocaleString("vi-VN")} suất đầu</span><b>TEMPO / WAITLIST</b></div><button type="button" onClick={goToWaitlist}>Giữ suất <ArrowUpRight size={16} /></button></div>
     </div>
   );

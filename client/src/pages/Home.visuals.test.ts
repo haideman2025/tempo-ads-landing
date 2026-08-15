@@ -11,11 +11,11 @@ describe("TEMPO landing visual system", () => {
     expect(source).toContain("poster={ASSETS.heroPoster}");
   });
 
-  it("references the complete commercial image system rather than a minimal three-image gallery", () => {
-    const commercialAssets = source.match(/\/manus-storage\/tempo-[^\"]+/g) ?? [];
+  it("references the expanded lifestyle-first image system rather than a minimal product gallery", () => {
+    const commercialAssets = source.match(/\/manus-storage\/tempo-[^"]+/g) ?? [];
     expect(commercialAssets.length).toBeGreaterThanOrEqual(23);
     expect(source).toContain("const visualDiary = [");
-    expect(source).toContain("THE VISUAL DIARY / 10 CHAPTERS");
+    expect(source).toContain("THE VISUAL DIARY / 06 CHAPTERS");
     expect(source).toContain("DESIGN STUDIES / TRUE SCALE");
   });
 
@@ -54,7 +54,7 @@ describe("TEMPO landing visual system", () => {
   });
 
   it("keeps the diary image-first rather than placing a paragraph on every frame", () => {
-    expect(source).toContain("10 cảnh. Một nhịp liền mạch.");
+    expect(source).toContain("Sáu khung hình. Một nhịp liền mạch.");
     expect(source).not.toContain("copy: \"Một cuộc hẹn có chủ đích bắt đầu từ lúc bạn rời nhịp vội.\"");
     expect(source).not.toContain("{frame.copy}");
   });
@@ -66,26 +66,25 @@ describe("TEMPO landing visual system", () => {
     expect(source).toContain('name: "TEMPO 2×5ml", title: "Nhịp quay lại", note: "Bundle hai chai 5ml cho lựa chọn đầy đủ hơn", image: ASSETS.packCourse');
   });
 
-  it("uses the connected ten-scene diary and visual fallback rather than rejected lifestyle frames", () => {
-    expect(source).not.toContain('ASSETS.pocket, "01 / POCKET SIGNAL"');
-    expect(source).not.toContain('ASSETS.gift, "07 / GIFT READY"');
-    expect(source).not.toContain('ASSETS.date, "08 / THE TABLE"');
-    expect(source).not.toContain("ASSETS.ritual}");
+  it("uses a connected lifestyle diary and keeps the product as a supporting cue", () => {
+    expect(source).toContain("tempo-lifestyle-01-exit-evening_9c1f24f7.jpg");
+    expect(source).toContain("tempo-lifestyle-02-night-walk_745b948a.jpg");
+    expect(source).toContain("tempo-lifestyle-03-together-at-home_98385daf.jpg");
+    expect(source).toContain("tempo-lifestyle-04-morning-return_bb8916d6.jpg");
+    expect(source).toContain("tempo-l09-date-table_dcf91e62.jpg");
+    expect(source).toContain("MỘT BUỔI TỐI, KHÔNG PHẢI MỘT CATALOGUE");
+    expect(source).toContain("info-ribbon--lifestyle");
     expect(source).toContain("ASSETS.approvedScale");
-    expect(source).toContain("ASSETS.masterTabletop");
     expect(source).toContain("function SafeImage");
-    expect(source).toContain("tempo-diary-rebuilt-01-exit");
-    expect(source).toContain("tempo-diary-final-02-pause_5f867810.jpg");
-    expect(source).toContain("tempo-diary-final-03-signal_a5aaa208.jpg");
-    expect(source).toContain("tempo-diary-final-04-choose_7af39b22.jpg");
-    expect(source).toContain("tempo-diary-final-05-together_fc4a7e52.jpg");
-    expect(source).toContain("tempo-diary-final-06-arrival_f6c3c434.jpg");
-    expect(source).toContain("tempo-diary-final-07-evening_6f754f7b.jpg");
-    expect(source).toContain("tempo-diary-final-08-detail_e88069c6.jpg");
-    expect(source).toContain("tempo-diary-final-09-home-away_4b81419e.jpg");
-    expect(source).toContain("tempo-diary-final-10-return_eaaf682b.jpg");
-    const diaryFrames = source.match(/ASSETS\.diary(?:Exit|Pause|Signal|Choose|Together|Arrival|Evening|Detail|HomeAway|Return)/g) ?? [];
-    expect(new Set(diaryFrames)).toHaveLength(10);
+    const diaryFrames = source.match(/ASSETS\.(?:lifestyleExit|lifestyleWalk|lifestyleObjects|lifestyleTogether|ritualPreparation|lifestyleMorning)/g) ?? [];
+    expect(new Set(diaryFrames)).toHaveLength(6);
     expect(source).toContain("gallery-grid--diary");
+  });
+
+  it("uses a reusable round V2JOY badge instead of loose logo images in the page chrome", () => {
+    expect(source).toContain("function V2JoyBadge");
+    expect(source).toContain('<V2JoyBadge />');
+    expect(source).toContain('className={`v2joy-badge ${className}`}');
+    expect(source).not.toContain('<footer><div className="footer-brand"><img src={V2JOY_LOGO}');
   });
 });

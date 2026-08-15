@@ -53,3 +53,9 @@
 - [x] Thay các khối chữ dài bằng cảnh hình ảnh, nhãn ngắn, caption và accordion thông tin chi tiết chỉ mở khi người dùng cần.
 - [x] Kiểm thử desktop/mobile, tải asset, accessibility baseline, form hàng chờ qua regression test và lập checklist phát hành quảng cáo theo trạng thái hồ sơ thực tế.
 - [ ] Thực hiện một lượt đăng ký hàng chờ production bằng dữ liệu liên hệ hợp lệ có sự đồng ý của chủ dự án trước khi chính thức chạy ads; không tự seed dữ liệu kiểm thử vào 1.000 suất.
+
+- [x] Phân tích landing mẫu tempo-by-v2joy.netlify.app và hình tham chiếu để rút nguyên tắc về nhịp hình ảnh, khoảng thở, card và bố cục; không sao chép review/rating/số liệu chưa xác thực.
+- [x] Lập lại art direction lifestyle-first: giảm packshot lặp lại, ưu tiên không gian, khoảnh khắc chuẩn bị, chuyển nhịp và kết nối cảm xúc claim-safe.
+- [x] Tạo và tích hợp visual bối cảnh mới, khắc phục những vùng ảnh crop/độ sáng/tỷ lệ chưa tối ưu trên desktop và mobile.
+- [x] Rút gọn copy theo caption-first, tái cấu trúc bố cục theo mô-đun visual và chuẩn hóa logo V2JOY thành badge bo tròn nhất quán trên toàn landing.
+- [x] Bổ sung regression tests, kiểm thử visual desktop/mobile, tải ảnh, accessibility baseline và production build cho đợt redesign lifestyle-first.
