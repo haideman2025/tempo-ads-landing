@@ -1,0 +1,11 @@
+- [x] Dùng file v2joylogo.jpg người dùng cung cấp làm nguồn logo V2JOY chính thức và tạo phiên bản web phù hợp.
+- [x] Khóa quy cách sản phẩm 3ml/5ml cùng hệ nhãn TEMPO trước khi tạo visual và video.
+- [x] Thiết kế luồng chuyển đổi cho form đăng ký hàng chờ/đặt trước, minh bạch giới hạn 1.000 suất đầu tiên.
+- [x] Tạo 12 hình ảnh đánh giá concept cho chai TEMPO 3ml/5ml khi chưa có sản phẩm thật.
+- [x] Phân tích bố cục, nhịp kể chuyện và ngôn ngữ thị giác của gian hàng ONIIZ trên Amazon.
+- [x] Chốt story arc Night Confident và bộ prompt video 8 giây với 6–8 quick cuts mỗi đoạn.
+- [x] Tạo asset hình ảnh sản phẩm đồng nhất; dừng render video theo yêu cầu và bàn giao prompt Omni thay thế.
+- [x] Tái dựng toàn bộ landing page theo các chương câu chuyện và điểm chuyển đổi rõ ràng.
+- [x] Kiểm tra desktop/mobile, visual tĩnh, CTA và claim-safe trước khi lưu checkpoint.
+- [x] Dừng render video trong dự án và bàn giao bộ prompt Omni 5 short Night Confident để người dùng tự tạo.
+- [x] Hoàn tất thay thế placeholder visual bằng asset tĩnh ổn định trên toàn bộ landing trước khi lưu phiên bản.

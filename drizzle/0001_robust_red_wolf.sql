@@ -1,0 +1,1 @@
+ALTER TABLE `tempo_waitlist_entries` ADD CONSTRAINT `tempo_waitlist_slot_range` CHECK (`tempo_waitlist_entries`.`slot_number` between 1 and 1000);
