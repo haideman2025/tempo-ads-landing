@@ -41,6 +41,24 @@ describe("TEMPO landing visual system", () => {
     expect(source).toContain("transparency-protocol");
   });
 
+  it("uses image-led botanical and Vietnam-manufacturing storytelling without inventing ingredient provenance", () => {
+    expect(source).toContain("tempo-provenance-01-botanical-studies_b1cbc1c5.jpg");
+    expect(source).toContain("tempo-provenance-02-formula_4c74c193.jpg");
+    expect(source).toContain("tempo-provenance-03-vietnam-made_a370a298.jpg");
+    expect(source).toContain("tempo-provenance-04-open-file_a2a8f684.jpg");
+    expect(source).toContain("tempo-ritual-02-carry-signal_4c7ab5e4.jpg");
+    expect(source).toContain("TEMPO được sản xuất tại Việt Nam");
+    expect(source).toContain("Hình ảnh thảo mộc là diễn giải danh mục chiết xuất thực vật");
+    expect(source).not.toContain("Nguyên liệu Việt Nam");
+    expect(source).not.toContain("trồng tại Việt Nam");
+  });
+
+  it("keeps the diary image-first rather than placing a paragraph on every frame", () => {
+    expect(source).toContain("10 cảnh. Một nhịp liền mạch.");
+    expect(source).not.toContain("copy: \"Một cuộc hẹn có chủ đích bắt đầu từ lúc bạn rời nhịp vội.\"");
+    expect(source).not.toContain("{frame.copy}");
+  });
+
   it("keeps 5ml and 2×5ml formats on dedicated, non-mixed packshots", () => {
     expect(source).toContain('pack5ml: "/manus-storage/tempo-pack-5ml-standalone-final_a9834962.jpg"');
     expect(source).toContain('packCourse: "/manus-storage/tempo-pack-2x5ml-verified_194f0c5d.png"');

@@ -46,3 +46,10 @@
 - [x] Tạo hệ visual chuyên biệt cho chương minh bạch gồm ingredient/INCI placeholder, traceability, label-reading và hồ sơ mở bán, nhất quán nhận diện TEMPO.
 - [x] Tích hợp module responsive với trạng thái dữ liệu chờ xác thực, alt text và điểm thay thế rõ ràng cho thông tin nhãn/hồ sơ chính thức.
 - [x] Kiểm tra cuối module trên desktop/mobile, hoàn thiện checklist “sẵn sàng quảng cáo” và regression test liên quan.
+
+- [x] Xác minh từng tuyên bố có thể công bố về nguyên liệu, nguồn gốc Việt Nam, nhà sản xuất và truy xuất; khóa các nội dung chưa có hồ sơ.
+- [x] Tái biên tập toàn landing theo story arc hình ảnh: nguồn nguyên liệu → bàn tay chuẩn bị → nghi thức riêng tư → format phù hợp → hàng chờ.
+- [x] Tạo bộ visual nguyên liệu/truy xuất Việt Nam, bàn tay chuẩn bị và các keyframe nghi thức, nhất quán quy cách TEMPO và không gán xuất xứ sai cho thành phần.
+- [x] Thay các khối chữ dài bằng cảnh hình ảnh, nhãn ngắn, caption và accordion thông tin chi tiết chỉ mở khi người dùng cần.
+- [x] Kiểm thử desktop/mobile, tải asset, accessibility baseline, form hàng chờ qua regression test và lập checklist phát hành quảng cáo theo trạng thái hồ sơ thực tế.
+- [ ] Thực hiện một lượt đăng ký hàng chờ production bằng dữ liệu liên hệ hợp lệ có sự đồng ý của chủ dự án trước khi chính thức chạy ads; không tự seed dữ liệu kiểm thử vào 1.000 suất.
