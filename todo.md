@@ -19,3 +19,12 @@
 - [x] Mở rộng landing Night Confident thành hành trình storytelling nhiều chương, dùng đầy đủ packshot, lifestyle, hero và infographic TEMPO.
 - [ ] Chèn video vào các điểm nhịp phù hợp, có poster, nhãn ngữ cảnh, fallback ảnh và tuân thủ trải nghiệm mobile-first.
 - [ ] Kiểm thử desktop/mobile, tốc độ tải, tự phát video và form hàng chờ sau khi nâng cấp visual.
+
+- [x] Chuẩn hóa cách đặt ảnh lifestyle/packshot để không crop sai sản phẩm hoặc hiển thị visual có thông tin không nhất quán.
+- [x] Tái cấu trúc storytelling theo Golden Circle: Why (cảm xúc và câu chuyện), How (nguyên tắc giải pháp), What (SKU/bundle TEMPO).
+- [x] Thêm mô-đun thành phần và nguồn gốc với nội dung tạm chờ hồ sơ công bố chính thức, không suy diễn claim hoặc xuất xứ chưa được xác nhận.
+- [x] Mở rộng form hàng chờ và tất cả CTA để lựa chọn đủ TEMPO 3ml, 5ml, Duo 3ml+5ml và liệu trình 2×5ml.
+- [x] Phóng to và tối ưu card pack/bundle trên desktop lẫn mobile để người dùng so sánh và ra quyết định rõ ràng hơn.
+
+- [x] Rà soát toàn bộ block story/gallery còn dùng lifestyle hoặc packshot cũ, thay các visual có quy cách không nhất quán bằng mockup đã phê duyệt và ghi nhận kết quả QA.
+- [x] Chuyển phần thành phần/nguồn gốc sang copy public trung tính, chỉ hứa công bố dữ liệu đối chiếu theo nhãn/hồ sơ cuối cùng thay vì nêu chi tiết nội bộ chưa được xác nhận mở bán.

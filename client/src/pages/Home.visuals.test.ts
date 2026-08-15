@@ -18,4 +18,22 @@ describe("TEMPO landing visual system", () => {
     expect(source).toContain("THE VISUAL DIARY / 10 FRAMES");
     expect(source).toContain("DESIGN STUDIES / TRUE SCALE");
   });
+
+  it("uses Golden Circle sections and makes every SKU available in the waitlist", () => {
+    expect(source).toContain("WHY / 01");
+    expect(source).toContain("HOW / 03 · MINH BẠCH TRƯỚC LỜI HỨA");
+    expect(source).toContain("WHAT / THE FIRST EDITION");
+    expect(source).toContain('"duo"');
+    expect(source).toContain('"course-2x5ml"');
+    expect(source).toContain("Đọc INCI");
+    expect(source).toContain("Truy xuất");
+  });
+
+  it("avoids the rejected lifestyle assets and relies on approved packaging studies in the format journey", () => {
+    expect(source).not.toContain('ASSETS.pocket, "01 / POCKET SIGNAL"');
+    expect(source).not.toContain('ASSETS.gift, "07 / GIFT READY"');
+    expect(source).not.toContain('ASSETS.date, "08 / THE TABLE"');
+    expect(source).toContain("ASSETS.approvedScale");
+    expect(source).toContain("ASSETS.masterTabletop");
+  });
 });

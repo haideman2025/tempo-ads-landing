@@ -14,6 +14,18 @@ describe("TEMPO waitlist validation", () => {
     expect(result.success).toBe(true);
   });
 
+  it("accepts the Duo and 2×5ml bundle interests", () => {
+    for (const preferredSku of ["duo", "course-2x5ml"]) {
+      const result = waitlistInputSchema.safeParse({
+        fullName: "Nguyễn Minh An",
+        phone: "0912345678",
+        preferredSku,
+        marketingConsent: true,
+      });
+      expect(result.success).toBe(true);
+    }
+  });
+
   it("rejects a request without marketing consent or a valid phone", () => {
     const result = waitlistInputSchema.safeParse({
       fullName: "A",

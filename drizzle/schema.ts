@@ -32,7 +32,7 @@ export const tempoWaitlistEntries = mysqlTable("tempo_waitlist_entries", {
   fullName: varchar("full_name", { length: 120 }).notNull(),
   phone: varchar("phone", { length: 24 }).notNull(),
   email: varchar("email", { length: 320 }),
-  preferredSku: mysqlEnum("preferred_sku", ["3ml", "5ml"]).notNull(),
+  preferredSku: mysqlEnum("preferred_sku", ["3ml", "5ml", "duo", "course-2x5ml"]).notNull(),
   note: text("note"),
   marketingConsent: boolean("marketing_consent").notNull().default(false),
   consentedAt: timestamp("consented_at").notNull(),

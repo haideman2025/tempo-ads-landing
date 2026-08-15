@@ -15,6 +15,13 @@
       "when": 1786782960118,
       "tag": "0001_robust_red_wolf",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1786785245312,
+      "tag": "0002_nifty_mordo",
+      "breakpoints": true
     }
   ]
 }

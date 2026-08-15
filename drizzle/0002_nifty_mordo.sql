@@ -1,0 +1,1 @@
+ALTER TABLE `tempo_waitlist_entries` MODIFY COLUMN `preferred_sku` enum('3ml','5ml','duo','course-2x5ml') NOT NULL;
