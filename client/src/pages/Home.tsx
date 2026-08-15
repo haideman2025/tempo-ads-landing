@@ -43,6 +43,10 @@ const ASSETS = {
   diaryDetail: "/manus-storage/tempo-diary-final-08-detail_e88069c6.jpg",
   diaryHomeAway: "/manus-storage/tempo-diary-final-09-home-away_4b81419e.jpg",
   diaryReturn: "/manus-storage/tempo-diary-final-10-return_eaaf682b.jpg",
+  transparencyFormula: "/manus-storage/tempo-transparency-01-formula_2ad96b95.jpg",
+  transparencyOrigin: "/manus-storage/tempo-transparency-02-origin_998f7423.jpg",
+  transparencyLabel: "/manus-storage/tempo-transparency-03-label_5b6f90ba.jpg",
+  transparencyProof: "/manus-storage/tempo-transparency-04-proof_6ba9f88f.jpg",
 };
 
 type PreferredSku = "3ml" | "5ml" | "duo" | "course-2x5ml";
@@ -168,14 +172,30 @@ export default function Home() {
           <div className="story-image"><SafeImage src={ASSETS.diaryEvening} alt="TEMPO 5ml trong không gian ritual riêng tư" /><span className="image-index">5ML / RITUAL FORMAT</span></div>
         </section>
 
-        <section className="ingredient-origin" id="nguon-goc">
-          <div className="ingredient-origin__heading"><p className="overline overline--dark">HOW / 03 · MINH BẠCH TRƯỚC LỜI HỨA</p><h2>Một công thức<br /><em>cần được nói rõ.</em></h2><p>TEMPO chọn cách nói ít hơn nhưng rõ hơn: thông tin công thức, nguồn gốc và giấy tờ cần thiết sẽ được công bố để bạn có thể đọc, đối chiếu và quyết định — không phải dựa trên claim điều trị hay lời hứa về thời lượng.</p></div>
-          <div className="ingredient-origin__grid">
-            <article><span>01 / FORMULA</span><h3>Đọc INCI<br />đầy đủ</h3><p>Danh mục thành phần sẽ được công bố trên nhãn cuối cùng và trong trang thông tin mở bán, để bạn không phải đoán về những gì đang chọn.</p></article>
-            <article><span>02 / ORIGIN</span><h3>Truy xuất<br />rõ ràng</h3><p>Thông tin nhà sản xuất, tổ chức chịu trách nhiệm và xuất xứ sẽ được đối chiếu theo hồ sơ công bố và bao bì chính thức khi TEMPO mở bán.</p></article>
-            <article><span>03 / PROOF</span><h3>Đọc nhãn<br />trước khi dùng</h3><p>Số lô, NSX/HSD, hướng dẫn sử dụng và các thông tin bắt buộc sẽ được trình bày để bạn kiểm tra ngay trên sản phẩm thực tế.</p></article>
+        <section className="transparency-protocol" id="nguon-goc" aria-labelledby="transparency-title">
+          <div className="transparency-protocol__masthead">
+            <div><p className="overline overline--dark">HOW / 03 · MINH BẠCH TRƯỚC LỜI HỨA</p><h2 id="transparency-title">Không cần tin vội.<br /><em>Hãy đọc cùng chúng tôi.</em></h2></div>
+            <p>TEMPO được xây như một lựa chọn chăm sóc cá nhân: nói đúng phần có thể kiểm tra, để bạn tự đối chiếu trước khi quyết định. Không thay thế thông tin bằng lời hứa quá mức.</p>
           </div>
-          <div className="ingredient-origin__note"><LockKeyhole size={16} /><span>Trang này chưa thay thế nhãn hoặc hồ sơ công bố. Chỉ thông tin trùng khớp bao bì và hồ sơ chính thức tại thời điểm mở bán mới là thông tin áp dụng cho sản phẩm.</span></div>
+
+          <div className="transparency-hero">
+            <SafeImage src={ASSETS.transparencyFormula} alt="TEMPO 5ml trong visual công thức và thành phần công bố" />
+            <div className="transparency-hero__copy"><span>01 / FORMULA</span><h3>Danh mục rõ ràng.<br /><em>Không cần đoán.</em></h3><p>Công thức công bố gồm nước tinh khiết, ethanol, butylene glycol, chín dịch chiết thực vật và panthenol. Công dụng ghi nhãn: <strong>“Giúp chăm sóc dưỡng ẩm da.”</strong></p><a href="#inci-full" className="transparency-link">Xem INCI đầy đủ <ArrowDownRight size={16} /></a></div>
+          </div>
+
+          <div className="transparency-steps">
+            <article className="transparency-card transparency-card--origin"><SafeImage src={ASSETS.transparencyOrigin} alt="Visual truy xuất nguồn gốc TEMPO" /><div><span>02 / ORIGIN</span><h3>Sản xuất tại<br /><em>Việt Nam.</em></h3><p>Nhà sản xuất: <b>Công ty TNHH SX Công nghệ cao NANOFRANCE</b>, KCN Đồng Văn IV, phường Lê Hồ, Ninh Bình. Thông tin trên nhãn cuối cùng và hồ sơ công bố là căn cứ ưu tiên.</p></div></article>
+            <article className="transparency-card transparency-card--label"><SafeImage src={ASSETS.transparencyLabel} alt="Visual kiểm tra nhãn TEMPO" /><div><span>03 / LABEL</span><h3>Đọc nhãn trước<br /><em>khi bắt đầu.</em></h3><p>Trên sản phẩm thực tế, hãy đối chiếu tên SKU, dung tích, số lô, NSX/HSD, hướng dẫn và thông tin bắt buộc. TEMPO không yêu cầu bạn quyết định chỉ dựa vào hình ảnh.</p></div></article>
+            <article className="transparency-card transparency-card--proof"><SafeImage src={ASSETS.transparencyProof} alt="Visual hồ sơ mở bán TEMPO" /><div><span>04 / OPEN FILE</span><h3>Hồ sơ mở bán<br /><em>được cập nhật.</em></h3><p>Danh sách chờ sẽ nhận trang thông tin mở bán khi nhãn, số công bố và bộ hồ sơ sản phẩm hoàn tất. Bạn có quyền xem, đối chiếu rồi mới chọn.</p></div></article>
+          </div>
+
+          <div className="transparency-inci" id="inci-full">
+            <div><span>INCI / REFERENCE LIST</span><h3>Toàn bộ tên thành phần<br /><em>theo danh mục công bố.</em></h3></div>
+            <details><summary>Hiện danh sách INCI <ChevronDown size={16} /></summary><p>Purified Water, Alcohol (Ethanol), Butylene Glycol, Cnidium monnieri extract, Zanthoxylum bungeanum extract, Sophora flavescens extract, Polygonatum sibiricum extract, Eucommia ulmoides extract, Cynomorium songaricum extract, Epimedium brevicornum extract, Verbena officinalis extract, Morinda officinalis extract, Sodium Benzoate, Panthenol.</p></details>
+          </div>
+
+          <div className="transparency-safety"><LockKeyhole size={20} /><div><b>Đọc kỹ trước khi dùng.</b><p>Chỉ dùng ngoài da. Kiểm tra hướng dẫn, cảnh báo và điều kiện bảo quản trên nhãn sản phẩm thực tế; thử lượng nhỏ ở vùng da phù hợp trước lần đầu. Ngưng dùng nếu có biểu hiện không phù hợp.</p></div><button type="button" onClick={goToWaitlist} className="text-button">Nhận thông tin mở bán <ArrowUpRight size={16} /></button></div>
+          <p className="transparency-disclaimer">Thông tin tại đây được biên soạn từ hồ sơ sản phẩm hiện có. Nhãn thành phẩm, số công bố và hồ sơ chính thức tại thời điểm mở bán luôn là nguồn thông tin áp dụng ưu tiên.</p>
         </section>
 
         <section className="product-block" id="san-pham">

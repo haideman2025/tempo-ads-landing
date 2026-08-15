@@ -31,6 +31,10 @@ Hai card format được kiểm tra lại ở **1440×1050** và **390×844**. C
 | `tempo-pack-5ml-standalone-final.jpg` | Một chai TEMPO cao cùng một hộp ivory cao; cả hai hiển thị nhãn **5 ml**. Không thấy chai hay hộp 3ml. |
 | `tempo-pack-2x5ml-verified.png` | Hai chai TEMPO cao và hai hộp ivory cao, đều hiển thị nhãn **5 ml**. Không thấy chai/hộp 3ml hoặc SKU lẫn. |
 
+## Kiểm tra chương minh bạch
+
+Chương “Minh bạch trước lời hứa” được chụp full-page ở **1440×1050** và **390×844**. Bốn visual Formula, Origin, Label và Open File hiển thị theo thứ tự; phần INCI đóng/mở, hướng dẫn dùng ngoài da, disclaimer hồ sơ chính thức và CTA hàng chờ đều vẫn dễ đọc trên mobile. Không ghi nhận crop ảnh, tràn ngang hay CTA bị che trong hai bản chụp.
+
 ## Lưu ý
 
 Các ảnh trên landing vẫn là **concept trước sản xuất**, không phải ảnh sản phẩm thật. Khi có prototype, nên chụp lại cùng shot list để thay asset AI mà không đổi cấu trúc story.

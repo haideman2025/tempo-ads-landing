@@ -25,8 +25,20 @@ describe("TEMPO landing visual system", () => {
     expect(source).toContain("WHAT / THE FIRST EDITION");
     expect(source).toContain('"duo"');
     expect(source).toContain('"course-2x5ml"');
-    expect(source).toContain("Đọc INCI");
-    expect(source).toContain("Truy xuất");
+    expect(source).toContain("Xem INCI đầy đủ");
+    expect(source.toLowerCase()).toContain("truy xuất");
+  });
+
+  it("makes the transparency module evidence-led, visual, and claim-safe", () => {
+    expect(source).toContain("transparencyFormula: \"/manus-storage/tempo-transparency-01-formula_2ad96b95.jpg\"");
+    expect(source).toContain("tempo-transparency-02-origin_998f7423.jpg");
+    expect(source).toContain("tempo-transparency-03-label_5b6f90ba.jpg");
+    expect(source).toContain("tempo-transparency-04-proof_6ba9f88f.jpg");
+    expect(source).toContain("Công ty TNHH SX Công nghệ cao NANOFRANCE");
+    expect(source).toContain("Giúp chăm sóc dưỡng ẩm da.");
+    expect(source).toContain("Purified Water, Alcohol (Ethanol)");
+    expect(source.toLowerCase()).toContain("nhãn thành phẩm, số công bố và hồ sơ chính thức");
+    expect(source).toContain("transparency-protocol");
   });
 
   it("keeps 5ml and 2×5ml formats on dedicated, non-mixed packshots", () => {

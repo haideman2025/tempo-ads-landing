@@ -40,3 +40,9 @@
 - [x] Tạo packshot SKU 5ml độc lập gồm đúng một chai 5ml và một hộp 5ml, không xuất hiện 3ml.
 - [x] Tạo packshot bundle 2×5ml gồm đúng hai chai 5ml và hai hộp 5ml, không xuất hiện 3ml.
 - [x] Thay visual tại toàn bộ điểm chạm 5ml/2×5ml, bổ sung regression test và kiểm tra desktop/mobile.
+
+- [x] Rà soát toàn bộ dữ liệu công khai hiện có về công thức, nhãn, xuất xứ và hồ sơ TEMPO; lập danh mục thông tin buộc phải xác thực trước ads.
+- [x] Viết lại chương “Minh bạch trước lời hứa” thành nội dung đầy đủ: lời hứa thương hiệu, cách đối chiếu hồ sơ, quy trình đọc nhãn và CTA hàng chờ.
+- [x] Tạo hệ visual chuyên biệt cho chương minh bạch gồm ingredient/INCI placeholder, traceability, label-reading và hồ sơ mở bán, nhất quán nhận diện TEMPO.
+- [x] Tích hợp module responsive với trạng thái dữ liệu chờ xác thực, alt text và điểm thay thế rõ ràng cho thông tin nhãn/hồ sơ chính thức.
+- [x] Kiểm tra cuối module trên desktop/mobile, hoàn thiện checklist “sẵn sàng quảng cáo” và regression test liên quan.
