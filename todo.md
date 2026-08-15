@@ -15,10 +15,10 @@
 - [x] Tạo bộ visual bán hàng TEMPO đa tỷ lệ cho ads, marketplace và landing; không dùng claim y khoa chưa được duyệt.
 - [x] Đóng gói asset, prompt và playbook triển khai theo từng bundle.
 
-- [ ] Đưa năm video landing do người dùng cung cấp vào kho asset web, kiểm tra nội dung và tối ưu định dạng phân phối.
+- [x] Đưa năm video landing do người dùng cung cấp vào kho asset web, kiểm tra nội dung và tối ưu định dạng phân phối.
 - [x] Mở rộng landing Night Confident thành hành trình storytelling nhiều chương, dùng đầy đủ packshot, lifestyle, hero và infographic TEMPO.
-- [ ] Chèn video vào các điểm nhịp phù hợp, có poster, nhãn ngữ cảnh, fallback ảnh và tuân thủ trải nghiệm mobile-first.
-- [ ] Kiểm thử desktop/mobile, tốc độ tải, tự phát video và form hàng chờ sau khi nâng cấp visual.
+- [x] Chèn video vào các điểm nhịp phù hợp, có poster, nhãn ngữ cảnh, fallback ảnh và tuân thủ trải nghiệm mobile-first.
+- [x] Hoàn tất audit tốc độ tải có bằng chứng và smoke test form hàng chờ không làm bẩn quota production sau khi nâng cấp visual.
 
 - [x] Chuẩn hóa cách đặt ảnh lifestyle/packshot để không crop sai sản phẩm hoặc hiển thị visual có thông tin không nhất quán.
 - [x] Tái cấu trúc storytelling theo Golden Circle: Why (cảm xúc và câu chuyện), How (nguyên tắc giải pháp), What (SKU/bundle TEMPO).
@@ -59,3 +59,23 @@
 - [x] Tạo và tích hợp visual bối cảnh mới, khắc phục những vùng ảnh crop/độ sáng/tỷ lệ chưa tối ưu trên desktop và mobile.
 - [x] Rút gọn copy theo caption-first, tái cấu trúc bố cục theo mô-đun visual và chuẩn hóa logo V2JOY thành badge bo tròn nhất quán trên toàn landing.
 - [x] Bổ sung regression tests, kiểm thử visual desktop/mobile, tải ảnh, accessibility baseline và production build cho đợt redesign lifestyle-first.
+
+- [x] Phân tích năm video 1-3 đến 5-2, xác định nhịp storytelling, poster và vị trí chèn phù hợp trong landing.
+- [x] Kiểm kê toàn bộ URL ảnh/video, phát hiện và thay mọi visual lỗi; thay toàn bộ cảnh cặp đôi không phải nam–nữ bằng bối cảnh nam–nữ phù hợp, không làm thay đổi claim-safe.
+- [x] Chuẩn hóa font có hỗ trợ tiếng Việt cho toàn landing, kiểm tra glyph, dấu và các tầng typography trên desktop/mobile.
+- [x] Tạo và tích hợp infographic hình ảnh về công nghệ trải nghiệm/sử dụng cùng danh mục thảo dược theo INCI, có ghi chú diễn giải và không khẳng định nguồn trồng khi chưa có hồ sơ.
+- [x] Hoàn thiện carousel/slide bằng thao tác swipe/touch thực sự, reduced-motion và bố cục responsive; thêm regression test tương ứng.
+- [x] Ghi lại bằng chứng kiểm thử phát video tự động, ảnh, carousel, typography, accessibility, desktop/mobile và production build trước checkpoint.
+- [x] Xác minh autoplay/loop/playInline của video trên desktop/mobile cho cả hero và carousel bằng kiểm thử UI quan sát được, không chỉ thuộc tính markup hoặc ảnh chụp tĩnh.
+- [x] Chỉnh fallback carousel chỉ hiện khi reduced-motion hoặc video lỗi, rồi xác nhận `data-playback-state`, phát inline và fallback qua kiểm thử UI.
+- [x] Lưu bằng chứng autoplay thực tế cho cả video hero lẫn từng tab carousel bằng browser inspection hoặc kiểm thử UI tự động trước checkpoint.
+- [x] Ngăn sự kiện media ghi đè trạng thái `playing` của carousel về `loading` sau khi video đã bắt đầu phát, đồng thời đồng bộ bằng `timeupdate` để bao phủ autoplay trước hydration.
+- [x] Hoàn tất performance smoke có đủ số request asset lỗi, kích thước phản hồi và thời điểm video sẵn sàng phát ở desktop/mobile.
+- [x] Chạy network audit đếm request ảnh/video lỗi trên desktop/mobile và lưu kết quả tách bạch trong biên bản QA.
+- [x] Đo byte size các asset ảnh/video chính qua phản hồi phân phối có thể quan sát được và bổ sung số liệu vào QA.
+- [x] Chạy lại audit UI/network, lưu artifact output riêng cho desktop/mobile và cập nhật QA với số request lỗi, thời gian media ready/playback cùng byte size phân phối trước checkpoint.
+- [x] Chạy network audit theo viewport có response count/media request thực tế trên desktop và mobile, không chỉ `loadingFailed`, rồi lưu artifact kết quả.
+- [x] Cập nhật biên bản QA bằng timing desktop/mobile, request lỗi và byte size phân phối đã kiểm chứng; xác nhận patch lưu thành công.
+- [x] Lưu artifact tổng hợp byte-size/response trong dự án và đọc lại QA sau cập nhật để xác nhận bằng chứng trước checkpoint.
+- [x] Tối ưu các JPEG/PNG trọng yếu thành biến thể WebP kích thước phù hợp, thay URL landing và đo lại tổng byte asset trước checkpoint.
+- [x] Tách bundle production vượt ngưỡng cảnh báo bằng cấu hình output chunks phù hợp, sau đó đo lại build để xác nhận tải ban đầu được cải thiện.

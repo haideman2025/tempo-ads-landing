@@ -1,63 +1,71 @@
-import { FormEvent, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Check, ChevronDown, Clock3, LockKeyhole, Mail, X } from "lucide-react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { ArrowDownRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Clock3, LockKeyhole, Mail, X } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
-const V2JOY_LOGO = "/manus-storage/v2joylogo-official_87b7dfc4.jpg";
-const VIDEO_ARRIVAL = "/manus-storage/tempo-video-01-arrival_2c34df78.mp4";
+const V2JOY_LOGO = "/manus-storage/v2joylogo-official_9302769f.webp";
 
 const ASSETS = {
-  heroPoster: "/manus-storage/tempo-h01-night-confident-hero_05e26f4e.jpg",
-  signalHero: "/manus-storage/tempo-h02-teal-signal-hero_bd3a2334.jpg",
-  pack3ml: "/manus-storage/tempo-p01-3ml-front_b95aa838.jpg",
-  pack5ml: "/manus-storage/tempo-pack-5ml-standalone-final_a9834962.jpg",
-  packDuo: "/manus-storage/tempo-p03-duo_f9127d21.jpg",
-  packCourse: "/manus-storage/tempo-pack-2x5ml-verified_194f0c5d.png",
-  packScale: "/manus-storage/tempo-p05-3ml-hand-scale_2e003621.jpg",
-  pocket: "/manus-storage/tempo-l01-pocket-leaving_e9a5bc11.jpg",
-  desk: "/manus-storage/tempo-l02-workday-desk_34391fc6.jpg",
-  travel: "/manus-storage/tempo-l03-weekend-travel_c0a929ea.jpg",
-  ritual: "/manus-storage/tempo-l04-evening-ritual-5ml_07ecb94a.jpg",
-  shelf: "/manus-storage/tempo-l05-bathroom-shelf-5ml_1ec02acb.jpg",
-  nightstand: "/manus-storage/tempo-l06-nightstand-5ml_a4946bc6.jpg",
-  homeAway: "/manus-storage/tempo-l07-duo-home-away_61475b1e.jpg",
-  gift: "/manus-storage/tempo-l08-gift-ready-duo_7b7e3f5d.jpg",
-  date: "/manus-storage/tempo-l09-date-table_dcf91e62.jpg",
-  return: "/manus-storage/tempo-l10-return-2x5ml_67ace95c.jpg",
-  info3ml: "/manus-storage/tempo-i01-3ml-trial-card_23f5ee50.jpg",
-  info5ml: "/manus-storage/tempo-i02-5ml-regular-card_afc4416f.jpg",
-  infoDuo: "/manus-storage/tempo-i03-duo-flex-card_1b58fe22.jpg",
-  infoValue: "/manus-storage/tempo-i04-value-ladder_fb1dba8a.jpg",
-  infoDiscreet: "/manus-storage/tempo-i05-discreet-delivery_eaa93635.jpg",
-  infoRitual: "/manus-storage/tempo-i06-ritual-story_36a868e2.jpg",
-  approvedPrimary: "/manus-storage/tempo-pack-primary-v2_0c76aa1c.png",
-  approvedUnboxing: "/manus-storage/tempo-pack-unboxing-v2_b2033bfd.png",
-  approvedScale: "/manus-storage/tempo-pack-scale-v2_1419d3e8.png",
-  masterTabletop: "/manus-storage/tempo-commercial-master_2b9e537a.jpg",
-  diaryExit: "/manus-storage/tempo-diary-rebuilt-01-exit_a13c1749.jpg",
-  diaryPause: "/manus-storage/tempo-diary-final-02-pause_5f867810.jpg",
-  diarySignal: "/manus-storage/tempo-diary-final-03-signal_a5aaa208.jpg",
-  diaryChoose: "/manus-storage/tempo-diary-final-04-choose_7af39b22.jpg",
-  diaryTogether: "/manus-storage/tempo-diary-final-05-together_fc4a7e52.jpg",
-  diaryArrival: "/manus-storage/tempo-diary-final-06-arrival_f6c3c434.jpg",
-  diaryEvening: "/manus-storage/tempo-diary-final-07-evening_6f754f7b.jpg",
-  diaryDetail: "/manus-storage/tempo-diary-final-08-detail_e88069c6.jpg",
-  diaryHomeAway: "/manus-storage/tempo-diary-final-09-home-away_4b81419e.jpg",
-  diaryReturn: "/manus-storage/tempo-diary-final-10-return_eaaf682b.jpg",
-  transparencyFormula: "/manus-storage/tempo-transparency-01-formula_2ad96b95.jpg",
-  transparencyOrigin: "/manus-storage/tempo-transparency-02-origin_998f7423.jpg",
-  transparencyLabel: "/manus-storage/tempo-transparency-03-label_5b6f90ba.jpg",
-  transparencyProof: "/manus-storage/tempo-transparency-04-proof_6ba9f88f.jpg",
-  botanicalStudies: "/manus-storage/tempo-provenance-01-botanical-studies_b1cbc1c5.jpg",
-  formulaStudy: "/manus-storage/tempo-provenance-02-formula_4c74c193.jpg",
-  vietnamMade: "/manus-storage/tempo-provenance-03-vietnam-made_a370a298.jpg",
-  openFile: "/manus-storage/tempo-provenance-04-open-file_a2a8f684.jpg",
-  ritualPreparation: "/manus-storage/tempo-ritual-01-quiet-preparation_606c7e0a.jpg",
-  ritualCarry: "/manus-storage/tempo-ritual-02-carry-signal_4c7ab5e4.jpg",
-  lifestyleExit: "/manus-storage/tempo-lifestyle-01-exit-evening_9c1f24f7.jpg",
-  lifestyleWalk: "/manus-storage/tempo-lifestyle-02-night-walk_745b948a.jpg",
-  lifestyleTogether: "/manus-storage/tempo-lifestyle-03-together-at-home_98385daf.jpg",
-  lifestyleMorning: "/manus-storage/tempo-lifestyle-04-morning-return_bb8916d6.jpg",
-  lifestyleObjects: "/manus-storage/tempo-l09-date-table_dcf91e62.jpg",
+  heroPoster: "/manus-storage/tempo-h01-night-confident-hero_f68102f9.webp",
+  signalHero: "/manus-storage/tempo-h02-teal-signal-hero_dc142bff.webp",
+  pack3ml: "/manus-storage/tempo-p01-3ml-front_137a0b85.webp",
+  pack5ml: "/manus-storage/tempo-pack-5ml-standalone-final_d1d4aa8e.webp",
+  packDuo: "/manus-storage/tempo-p03-duo_3224bc18.webp",
+  packCourse: "/manus-storage/tempo-pack-2x5ml-verified_bc1cb656.webp",
+  packScale: "/manus-storage/tempo-p05-3ml-hand-scale_c674fa35.webp",
+  pocket: "/manus-storage/tempo-l01-pocket-leaving_de403632.webp",
+  desk: "/manus-storage/tempo-l02-workday-desk_7f3834b7.webp",
+  travel: "/manus-storage/tempo-l03-weekend-travel_53a47eb8.webp",
+  ritual: "/manus-storage/tempo-l04-evening-ritual-5ml_a38f0f69.webp",
+  shelf: "/manus-storage/tempo-l05-bathroom-shelf-5ml_f0fb5e61.webp",
+  nightstand: "/manus-storage/tempo-l06-nightstand-5ml_061f4358.webp",
+  homeAway: "/manus-storage/tempo-l07-duo-home-away_332f6060.webp",
+  gift: "/manus-storage/tempo-l08-gift-ready-duo_ad772747.webp",
+  date: "/manus-storage/tempo-l09-date-table_a6786deb.webp",
+  return: "/manus-storage/tempo-l10-return-2x5ml_390ac415.webp",
+  info3ml: "/manus-storage/tempo-i01-3ml-trial-card_89e06759.webp",
+  info5ml: "/manus-storage/tempo-i02-5ml-regular-card_8c217537.webp",
+  infoDuo: "/manus-storage/tempo-i03-duo-flex-card_c7776606.webp",
+  infoValue: "/manus-storage/tempo-i04-value-ladder_643a4371.webp",
+  infoDiscreet: "/manus-storage/tempo-i05-discreet-delivery_dfa05618.webp",
+  infoRitual: "/manus-storage/tempo-i06-ritual-story_9717b3e9.webp",
+  approvedPrimary: "/manus-storage/tempo-pack-primary-v2_475160d1.webp",
+  approvedUnboxing: "/manus-storage/tempo-pack-unboxing-v2_797eacb4.webp",
+  approvedScale: "/manus-storage/tempo-pack-scale-v2_04ee12e5.webp",
+  masterTabletop: "/manus-storage/tempo-commercial-master_1dc72fe3.webp",
+  diaryExit: "/manus-storage/tempo-diary-rebuilt-01-exit_0f930150.webp",
+  diaryPause: "/manus-storage/tempo-diary-final-02-pause_37a3961a.webp",
+  diarySignal: "/manus-storage/tempo-diary-final-03-signal_8243be41.webp",
+  diaryChoose: "/manus-storage/tempo-diary-final-04-choose_44c1859e.webp",
+  diaryTogether: "/manus-storage/tempo-diary-final-05-together_5f84f06d.webp",
+  diaryArrival: "/manus-storage/tempo-diary-final-06-arrival_5db318f2.webp",
+  diaryEvening: "/manus-storage/tempo-diary-final-07-evening_097bcf0f.webp",
+  diaryDetail: "/manus-storage/tempo-diary-final-08-detail_8e1fbf7e.webp",
+  diaryHomeAway: "/manus-storage/tempo-diary-final-09-home-away_d469276e.webp",
+  diaryReturn: "/manus-storage/tempo-diary-final-10-return_a700cb68.webp",
+  transparencyFormula: "/manus-storage/tempo-transparency-01-formula_249721d9.webp",
+  transparencyOrigin: "/manus-storage/tempo-transparency-02-origin_25a569e7.webp",
+  transparencyLabel: "/manus-storage/tempo-transparency-03-label_9497592e.webp",
+  transparencyProof: "/manus-storage/tempo-transparency-04-proof_cf3834a3.webp",
+  botanicalStudies: "/manus-storage/tempo-provenance-01-botanical-studies_2391a2e1.webp",
+  formulaStudy: "/manus-storage/tempo-provenance-02-formula_e1e3ff78.webp",
+  vietnamMade: "/manus-storage/tempo-provenance-03-vietnam-made_ccf943a4.webp",
+  openFile: "/manus-storage/tempo-provenance-04-open-file_3404f077.webp",
+  ritualPreparation: "/manus-storage/tempo-ritual-01-quiet-preparation_c68f7133.webp",
+  ritualCarry: "/manus-storage/tempo-ritual-02-carry-signal_4205e67a.webp",
+  lifestyleExit: "/manus-storage/tempo-lifestyle-01-exit-evening_334132f2.webp",
+  lifestyleWalk: "/manus-storage/tempo-lifestyle-02-night-walk_46eab24c.webp",
+  lifestyleTogether: "/manus-storage/tempo-lifestyle-03-together-at-home_2ee3a59f.webp",
+  lifestyleMorning: "/manus-storage/tempo-lifestyle-04-morning-return_a7805e20.webp",
+  lifestyleObjects: "/manus-storage/tempo-l09-date-table_a6786deb.webp",
+  coupleKitchen: "/manus-storage/tempo-couple-01-kitchen-evening_df318ac9.webp",
+  coupleWalk: "/manus-storage/tempo-couple-02-walk-home_e372d5a3.webp",
+  designSignal: "/manus-storage/tempo-infographic-01-design-signal_56b6f161.webp",
+  botanicalField: "/manus-storage/tempo-infographic-02-botanical-field_3dc407b6.webp",
+  motionReservation: "/manus-storage/tempo-motion-01-reservation_302dc7af.mp4",
+  motionCarry: "/manus-storage/tempo-motion-02-carry_121f483d.mp4",
+  motionCraft: "/manus-storage/tempo-motion-03-craft_c0137201.mp4",
+  motionDate: "/manus-storage/tempo-motion-04-date-table_b2232978.mp4",
+  motionHero: "/manus-storage/tempo-motion-05-duo-hero_0afbb738.mp4",
 };
 
 type PreferredSku = "3ml" | "5ml" | "duo" | "course-2x5ml";
@@ -71,11 +79,18 @@ const productChoices = [
 
 const visualDiary = [
   { src: ASSETS.lifestyleExit, index: "01", kicker: "THE EXIT", title: "Rời ngày dài" },
-  { src: ASSETS.lifestyleWalk, index: "02", kicker: "THE WALK", title: "Để lại khoảng vội" },
+  { src: ASSETS.coupleWalk, index: "02", kicker: "THE WALK", title: "Để lại khoảng vội" },
   { src: ASSETS.lifestyleObjects, index: "03", kicker: "THE SIGNAL", title: "Mang điều vừa đủ" },
-  { src: ASSETS.lifestyleTogether, index: "04", kicker: "THE MOMENT", title: "Có mặt cho nhau" },
+  { src: ASSETS.coupleKitchen, index: "04", kicker: "THE MOMENT", title: "Có mặt cho nhau" },
   { src: ASSETS.ritualPreparation, index: "05", kicker: "THE PAUSE", title: "Giữ khoảng riêng" },
   { src: ASSETS.lifestyleMorning, index: "06", kicker: "THE RETURN", title: "Mang nhịp về lại" },
+] as const;
+
+const motionNotes = [
+  { step: "01", title: "Đặt nhịp", caption: "Một dấu hiệu nhỏ trước khi ra ngoài.", video: ASSETS.motionReservation, poster: ASSETS.designSignal, alt: "Tĩnh vật buổi tối với TEMPO và dấu hiệu thị giác teal" },
+  { step: "02", title: "Mang theo", caption: "Gọn cùng những vật dụng cần thiết.", video: ASSETS.motionCarry, poster: ASSETS.ritualCarry, alt: "TEMPO 3ml trong bối cảnh mang theo kín đáo" },
+  { step: "03", title: "Chạm chất liệu", caption: "Nhìn gần hơn vào vật dụng được thiết kế để cầm nắm.", video: ASSETS.motionCraft, poster: ASSETS.approvedUnboxing, alt: "Cận cảnh packaging TEMPO và chất liệu bề mặt" },
+  { step: "04", title: "Đến bàn hẹn", caption: "Một bối cảnh nhẹ nhàng cho buổi tối có chủ đích.", video: ASSETS.motionDate, poster: ASSETS.lifestyleObjects, alt: "Bàn hẹn buổi tối với vật dụng riêng tư" },
 ] as const;
 
 function goToWaitlist() {
@@ -98,14 +113,95 @@ function V2JoyBadge({ className = "" }: { className?: string }) {
   return <span className={`v2joy-badge ${className}`}><img src={V2JOY_LOGO} alt="V2JOY" /></span>;
 }
 
+function useReducedMotion() {
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setReducedMotion(mediaQuery.matches);
+    updatePreference();
+    mediaQuery.addEventListener("change", updatePreference);
+    return () => mediaQuery.removeEventListener("change", updatePreference);
+  }, []);
+
+  return reducedMotion;
+}
+
 function EditorialVideo() {
+  const reducedMotion = useReducedMotion();
   return <div className="video-frame">
-    <video autoPlay muted loop playsInline preload="metadata" poster={ASSETS.heroPoster} aria-label="TEMPO trong không gian chuẩn bị buổi tối">
-      <source src={VIDEO_ARRIVAL} type="video/mp4" />
+    <video autoPlay={!reducedMotion} muted loop playsInline preload="metadata" poster={ASSETS.heroPoster} data-motion-preference={reducedMotion ? "reduced" : "play"} aria-label="TEMPO trong không gian chuẩn bị buổi tối">
+      <source src={ASSETS.motionHero} type="video/mp4" />
     </video>
     <div className="video-frame__wash" />
-    <div className="video-frame__label"><span>MOTION / 01</span><span>THE ARRIVAL</span></div>
+    <div className="video-frame__label"><span>MOTION / 05</span><span>THE FIRST SIGNAL</span></div>
   </div>;
+}
+
+function MotionCarousel() {
+  const [activeMotion, setActiveMotion] = useState(0);
+  const [playbackState, setPlaybackState] = useState<"loading" | "playing" | "paused" | "error">("loading");
+  const [hasPlaybackError, setHasPlaybackError] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const reducedMotion = useReducedMotion();
+  const active = motionNotes[activeMotion];
+  useEffect(() => {
+    const video = videoRef.current;
+    setHasPlaybackError(false);
+    if (reducedMotion) {
+      setPlaybackState("paused");
+      return;
+    }
+    if (!video) return;
+    const syncPlaybackState = () => {
+      const nextState = video.error ? "error" : !video.paused && video.currentTime > 0 ? "playing" : "loading";
+      setPlaybackState(current => current === nextState ? current : nextState);
+      if (nextState === "playing" || nextState === "error") window.clearInterval(stateMonitor);
+    };
+    const initialSync = window.setTimeout(syncPlaybackState, 180);
+    const stateMonitor = window.setInterval(syncPlaybackState, 260);
+    video.addEventListener("playing", syncPlaybackState);
+    video.addEventListener("error", syncPlaybackState);
+    return () => {
+      window.clearTimeout(initialSync);
+      window.clearInterval(stateMonitor);
+      video.removeEventListener("playing", syncPlaybackState);
+      video.removeEventListener("error", syncPlaybackState);
+    };
+  }, [active.video, reducedMotion]);
+  const changeSlide = (direction: -1 | 1) => {
+    setPlaybackState("loading");
+    setHasPlaybackError(false);
+    setActiveMotion(current => (current + direction + motionNotes.length) % motionNotes.length);
+  };
+  const chooseSlide = (index: number) => {
+    setPlaybackState("loading");
+    setHasPlaybackError(false);
+    setActiveMotion(index);
+  };
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = event.changedTouches[0]?.clientX ?? null;
+  };
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    const startX = touchStartX.current;
+    const endX = event.changedTouches[0]?.clientX;
+    touchStartX.current = null;
+    if (startX === null || endX === undefined || Math.abs(endX - startX) < 44) return;
+    changeSlide(endX < startX ? 1 : -1);
+  };
+
+  return <section className="motion-carousel" aria-label="Bốn khoảnh khắc motion TEMPO" aria-roledescription="carousel">
+    <div className="motion-carousel__masthead"><p className="overline">MOTION NOTES / 04 SCENES</p><h2>Một nhịp chuyển.<br /><em>Bốn khoảnh khắc.</em></h2><p>Chạm để đi qua câu chuyện. Mỗi cảnh là một bối cảnh, không phải một lời hứa.</p></div>
+    <div className="motion-carousel__stage" data-playback-state={reducedMotion ? "reduced-motion" : playbackState} data-swipe="enabled" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      {(reducedMotion || hasPlaybackError) && <SafeImage src={active.poster} alt={active.alt} className="motion-carousel__fallback" />}
+      <video ref={videoRef} key={active.video} autoPlay={!reducedMotion} muted loop playsInline preload="metadata" poster={active.poster} aria-label={`Video ${active.step}: ${active.title}`} onPlaying={() => setPlaybackState("playing")} onTimeUpdate={({ currentTarget }) => { if (!currentTarget.paused && currentTarget.currentTime > 0) setPlaybackState("playing"); }} onPause={() => setPlaybackState("paused")} onError={() => { setPlaybackState("error"); setHasPlaybackError(true); }}><source src={active.video} type="video/mp4" /></video>
+      <div className="motion-carousel__wash" />
+      <div className="motion-carousel__copy"><span>{active.step} / 04</span><h3>{active.title}</h3><p>{active.caption}</p></div>
+      <div className="motion-carousel__controls"><button type="button" aria-label="Xem cảnh trước" onClick={() => changeSlide(-1)}><ChevronLeft size={20} /></button><button type="button" aria-label="Xem cảnh tiếp theo" onClick={() => changeSlide(1)}><ChevronRight size={20} /></button></div>
+      <div className="motion-carousel__dots" role="tablist" aria-label="Chọn cảnh motion">{motionNotes.map((note, index) => <button key={note.step} type="button" role="tab" aria-selected={activeMotion === index} aria-label={`Cảnh ${note.step}: ${note.title}`} onClick={() => chooseSlide(index)}><span /></button>)}</div>
+    </div>
+  </section>;
 }
 
 export default function Home() {
@@ -176,7 +272,9 @@ export default function Home() {
           <div className="story-copy"><p className="overline overline--dark">HOW / 01 · CARRY THE SIGNAL</p><h2>Nhỏ để đi cùng<br /><em>lịch hẹn của bạn.</em></h2><p>3ml. Gọn trong nhịp riêng.</p><button onClick={() => { setPreferredSku("3ml"); goToWaitlist(); }} type="button" className="text-button">Chọn nhịp 3ml <ArrowUpRight size={16} /></button></div>
         </section>
 
-        <section className="signal-break"><div><p className="overline">A QUIET SIGNAL</p><h2>Không cần vội.<br /><em>Chỉ cần có mặt.</em></h2><p>Một cuộc hẹn bắt đầu từ cách bạn dành thời gian cho nhau.</p></div><SafeImage src={ASSETS.lifestyleWalk} alt="Hai người đi cạnh nhau trên phố tối trong một buổi hẹn yên tĩnh" /><Signal className="signal-break-line" /></section>
+        <section className="signal-break"><div><p className="overline">A QUIET SIGNAL</p><h2>Không cần vội.<br /><em>Chỉ cần có mặt.</em></h2><p>Một cuộc hẹn bắt đầu từ cách bạn dành thời gian cho nhau.</p></div><SafeImage src={ASSETS.coupleWalk} alt="Một người nam và một người nữ trưởng thành đi cạnh nhau trên phố tối trong một buổi hẹn yên tĩnh" /><Signal className="signal-break-line" /></section>
+
+        <MotionCarousel />
 
         <section className="ingredient-origin" aria-labelledby="ingredient-origin-title">
           <div className="ingredient-origin__heading"><p className="overline overline--dark">HOW / BOTANICAL STUDIES + MADE IN VIETNAM</p><h2 id="ingredient-origin-title">Nhìn vào điều<br /><em>có thể kiểm tra.</em></h2><p>Chín dịch chiết thực vật trong danh mục INCI. <strong>TEMPO được sản xuất tại Việt Nam</strong> bởi NANOFRANCE, Ninh Bình.</p><a href="#inci-full" className="text-button">Mở danh mục INCI <ArrowDownRight size={16} /></a></div>
@@ -188,9 +286,18 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="infographic-pair" aria-labelledby="experience-visual-title">
+          <div className="infographic-pair__heading"><p className="overline overline--dark">DESIGN + BOTANICAL / VISUAL NOTES</p><h2 id="experience-visual-title">Thấy điều cần thấy.<br /><em>Đọc điều cần đọc.</em></h2><p>Hình ảnh giúp định hướng trải nghiệm. Nhãn và danh mục công bố mới là thông tin để đối chiếu.</p></div>
+          <div className="infographic-pair__grid">
+            <article><SafeImage src={ASSETS.designSignal} alt="Visual diễn giải thiết kế TEMPO với nắp graphite, form gọn và dấu hiệu teal" /><div><span>01 / DESIGN SIGNAL</span><h3>Gọn để<br /><em>mang theo.</em></h3><p>Form nhỏ, nắp che kín và khoảng nhãn dễ xem.</p></div></article>
+            <article><SafeImage src={ASSETS.botanicalField} alt="Visual diễn giải nhóm chiết xuất thực vật trên nền chất liệu thủ công Việt Nam" /><div><span>02 / BOTANICAL NOTE</span><h3>Danh mục<br /><em>để đối chiếu.</em></h3><p>Diễn giải hình ảnh nhóm chiết xuất thực vật trong INCI.</p></div></article>
+          </div>
+          <p className="infographic-pair__note"><LockKeyhole size={15} /> Hình ảnh thảo mộc gợi không khí Việt Nam và không xác nhận nguồn trồng, nước xuất xứ hay công dụng riêng của từng thành phần.</p>
+        </section>
+
         <section className="story-panel story-panel--ritual">
           <div className="story-copy"><p className="overline">HOW / 02 · BEFORE YOU GO</p><h2>Chuẩn bị một chút.<br /><em>Giữ lại khoảng riêng.</em></h2><p>Đọc nhãn. Chọn format. Đi theo nhịp của bạn.</p><ul><li><Clock3 size={16} /> Theo hướng dẫn công bố trên nhãn</li><li><LockKeyhole size={16} /> Một routine riêng tư</li></ul></div>
-          <div className="story-image"><SafeImage src={ASSETS.lifestyleTogether} alt="Hai người chuẩn bị đồ uống trong căn bếp ấm áp trước buổi tối" /><span className="image-index">A MOMENT / NOT A RUSH</span></div>
+          <div className="story-image"><SafeImage src={ASSETS.coupleKitchen} alt="Một người nam và một người nữ trưởng thành chuẩn bị đồ uống trong căn bếp ấm áp trước buổi tối" /><span className="image-index">A MOMENT / NOT A RUSH</span></div>
         </section>
 
         <section className="transparency-protocol" id="nguon-goc" aria-labelledby="transparency-title">
