@@ -14,3 +14,8 @@
 - [x] Lập shot list full-funnel cho packshot, infographic, lifestyle và bundle card theo từng SKU.
 - [x] Tạo bộ visual bán hàng TEMPO đa tỷ lệ cho ads, marketplace và landing; không dùng claim y khoa chưa được duyệt.
 - [x] Đóng gói asset, prompt và playbook triển khai theo từng bundle.
+
+- [ ] Đưa năm video landing do người dùng cung cấp vào kho asset web, kiểm tra nội dung và tối ưu định dạng phân phối.
+- [x] Mở rộng landing Night Confident thành hành trình storytelling nhiều chương, dùng đầy đủ packshot, lifestyle, hero và infographic TEMPO.
+- [ ] Chèn video vào các điểm nhịp phù hợp, có poster, nhãn ngữ cảnh, fallback ảnh và tuân thủ trải nghiệm mobile-first.
+- [ ] Kiểm thử desktop/mobile, tốc độ tải, tự phát video và form hàng chờ sau khi nâng cấp visual.
