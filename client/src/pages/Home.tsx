@@ -7,11 +7,10 @@ const V2JOY_LOGO = "/manus-storage/v2joylogo-official_9302769f.webp";
 const ASSETS = {
   heroPoster: "/manus-storage/tempo-h01-night-confident-hero_f68102f9.webp",
   signalHero: "/manus-storage/tempo-h02-teal-signal-hero_dc142bff.webp",
-  pack3ml: "/manus-storage/tempo-p01-3ml-front_137a0b85.webp",
+  pack3mlVerified: "/manus-storage/tempo-pack-3ml-verified_60cabc8e.png",
   pack5ml: "/manus-storage/tempo-pack-5ml-standalone-final_d1d4aa8e.webp",
-  packDuo: "/manus-storage/tempo-p03-duo_3224bc18.webp",
+  packDuoVerified: "/manus-storage/tempo-pack-duo-verified_5982e938.png",
   packCourse: "/manus-storage/tempo-pack-2x5ml-verified_bc1cb656.webp",
-  packScale: "/manus-storage/tempo-p05-3ml-hand-scale_c674fa35.webp",
   pocket: "/manus-storage/tempo-l01-pocket-leaving_de403632.webp",
   desk: "/manus-storage/tempo-l02-workday-desk_7f3834b7.webp",
   travel: "/manus-storage/tempo-l03-weekend-travel_53a47eb8.webp",
@@ -20,7 +19,6 @@ const ASSETS = {
   nightstand: "/manus-storage/tempo-l06-nightstand-5ml_061f4358.webp",
   homeAway: "/manus-storage/tempo-l07-duo-home-away_332f6060.webp",
   gift: "/manus-storage/tempo-l08-gift-ready-duo_ad772747.webp",
-  date: "/manus-storage/tempo-l09-date-table_a6786deb.webp",
   return: "/manus-storage/tempo-l10-return-2x5ml_390ac415.webp",
   info3ml: "/manus-storage/tempo-i01-3ml-trial-card_89e06759.webp",
   info5ml: "/manus-storage/tempo-i02-5ml-regular-card_8c217537.webp",
@@ -28,9 +26,6 @@ const ASSETS = {
   infoValue: "/manus-storage/tempo-i04-value-ladder_643a4371.webp",
   infoDiscreet: "/manus-storage/tempo-i05-discreet-delivery_dfa05618.webp",
   infoRitual: "/manus-storage/tempo-i06-ritual-story_9717b3e9.webp",
-  approvedPrimary: "/manus-storage/tempo-pack-primary-v2_475160d1.webp",
-  approvedUnboxing: "/manus-storage/tempo-pack-unboxing-v2_797eacb4.webp",
-  approvedScale: "/manus-storage/tempo-pack-scale-v2_04ee12e5.webp",
   masterTabletop: "/manus-storage/tempo-commercial-master_1dc72fe3.webp",
   diaryExit: "/manus-storage/tempo-diary-rebuilt-01-exit_0f930150.webp",
   diaryPause: "/manus-storage/tempo-diary-final-02-pause_37a3961a.webp",
@@ -42,21 +37,16 @@ const ASSETS = {
   diaryDetail: "/manus-storage/tempo-diary-final-08-detail_8e1fbf7e.webp",
   diaryHomeAway: "/manus-storage/tempo-diary-final-09-home-away_d469276e.webp",
   diaryReturn: "/manus-storage/tempo-diary-final-10-return_a700cb68.webp",
-  transparencyFormula: "/manus-storage/tempo-transparency-01-formula_249721d9.webp",
-  transparencyOrigin: "/manus-storage/tempo-transparency-02-origin_25a569e7.webp",
-  transparencyLabel: "/manus-storage/tempo-transparency-03-label_9497592e.webp",
-  transparencyProof: "/manus-storage/tempo-transparency-04-proof_cf3834a3.webp",
-  botanicalStudies: "/manus-storage/tempo-provenance-01-botanical-studies_2391a2e1.webp",
-  formulaStudy: "/manus-storage/tempo-provenance-02-formula_e1e3ff78.webp",
-  vietnamMade: "/manus-storage/tempo-provenance-03-vietnam-made_ccf943a4.webp",
-  openFile: "/manus-storage/tempo-provenance-04-open-file_3404f077.webp",
+  botanicalTraditional: "/manus-storage/tempo-botanical-01-traditional-herbarium_4de43fe9.jpg",
+  botanicalExtraction: "/manus-storage/tempo-botanical-02-extraction-studio_16445f75.jpg",
+  botanicalLedger: "/manus-storage/tempo-botanical-03-ingredient-ledger_0a16e037.jpg",
+  botanicalNight: "/manus-storage/tempo-botanical-04-materials-night_67d7f994.jpg",
   ritualPreparation: "/manus-storage/tempo-ritual-01-quiet-preparation_c68f7133.webp",
   ritualCarry: "/manus-storage/tempo-ritual-02-carry-signal_4205e67a.webp",
   lifestyleExit: "/manus-storage/tempo-lifestyle-01-exit-evening_334132f2.webp",
   lifestyleWalk: "/manus-storage/tempo-lifestyle-02-night-walk_46eab24c.webp",
   lifestyleTogether: "/manus-storage/tempo-lifestyle-03-together-at-home_2ee3a59f.webp",
   lifestyleMorning: "/manus-storage/tempo-lifestyle-04-morning-return_a7805e20.webp",
-  lifestyleObjects: "/manus-storage/tempo-l09-date-table_a6786deb.webp",
   coupleKitchen: "/manus-storage/tempo-couple-01-kitchen-evening_df318ac9.webp",
   coupleWalk: "/manus-storage/tempo-couple-02-walk-home_e372d5a3.webp",
   designSignal: "/manus-storage/tempo-infographic-01-design-signal_56b6f161.webp",
@@ -71,16 +61,16 @@ const ASSETS = {
 type PreferredSku = "3ml" | "5ml" | "duo" | "course-2x5ml";
 
 const productChoices = [
-  { id: "3ml" as const, step: "01", name: "TEMPO 3ml", title: "Nhịp làm quen", note: "Format gọn cho lịch hẹn đầu tiên", image: ASSETS.approvedScale },
+  { id: "3ml" as const, step: "01", name: "TEMPO 3ml", title: "Nhịp làm quen", note: "Format gọn cho lịch hẹn đầu tiên", image: ASSETS.pack3mlVerified },
   { id: "5ml" as const, step: "02", name: "TEMPO 5ml", title: "Nhịp đều đặn", note: "Format đầy đủ cho routine riêng tư", image: ASSETS.pack5ml },
-  { id: "duo" as const, step: "03", name: "TEMPO Duo", title: "Ở nhà, đi xa", note: "3ml mang theo + 5ml cho routine tại nhà", image: ASSETS.approvedUnboxing },
+  { id: "duo" as const, step: "03", name: "TEMPO Duo", title: "Ở nhà, đi xa", note: "3ml mang theo + 5ml cho routine tại nhà", image: ASSETS.packDuoVerified },
   { id: "course-2x5ml" as const, step: "04", name: "TEMPO 2×5ml", title: "Nhịp quay lại", note: "Bundle hai chai 5ml cho lựa chọn đầy đủ hơn", image: ASSETS.packCourse },
 ];
 
 const visualDiary = [
   { src: ASSETS.lifestyleExit, index: "01", kicker: "THE EXIT", title: "Rời ngày dài" },
   { src: ASSETS.coupleWalk, index: "02", kicker: "THE WALK", title: "Để lại khoảng vội" },
-  { src: ASSETS.lifestyleObjects, index: "03", kicker: "THE SIGNAL", title: "Mang điều vừa đủ" },
+  { src: ASSETS.lifestyleTogether, index: "03", kicker: "THE SIGNAL", title: "Mang điều vừa đủ" },
   { src: ASSETS.coupleKitchen, index: "04", kicker: "THE MOMENT", title: "Có mặt cho nhau" },
   { src: ASSETS.ritualPreparation, index: "05", kicker: "THE PAUSE", title: "Giữ khoảng riêng" },
   { src: ASSETS.lifestyleMorning, index: "06", kicker: "THE RETURN", title: "Mang nhịp về lại" },
@@ -88,9 +78,9 @@ const visualDiary = [
 
 const motionNotes = [
   { step: "01", title: "Đặt nhịp", caption: "Một dấu hiệu nhỏ trước khi ra ngoài.", video: ASSETS.motionReservation, poster: ASSETS.designSignal, alt: "Tĩnh vật buổi tối với TEMPO và dấu hiệu thị giác teal" },
-  { step: "02", title: "Mang theo", caption: "Gọn cùng những vật dụng cần thiết.", video: ASSETS.motionCarry, poster: ASSETS.ritualCarry, alt: "TEMPO 3ml trong bối cảnh mang theo kín đáo" },
-  { step: "03", title: "Chạm chất liệu", caption: "Nhìn gần hơn vào vật dụng được thiết kế để cầm nắm.", video: ASSETS.motionCraft, poster: ASSETS.approvedUnboxing, alt: "Cận cảnh packaging TEMPO và chất liệu bề mặt" },
-  { step: "04", title: "Đến bàn hẹn", caption: "Một bối cảnh nhẹ nhàng cho buổi tối có chủ đích.", video: ASSETS.motionDate, poster: ASSETS.lifestyleObjects, alt: "Bàn hẹn buổi tối với vật dụng riêng tư" },
+  { step: "02", title: "Mang theo", caption: "Gọn cùng những vật dụng cần thiết.", video: ASSETS.motionCarry, poster: ASSETS.pack3mlVerified, alt: "Packshot TEMPO 3ml có nhãn rõ ràng" },
+  { step: "03", title: "Chạm chất liệu", caption: "Nhìn gần hơn vào vật dụng được thiết kế để cầm nắm.", video: ASSETS.motionCraft, poster: ASSETS.packDuoVerified, alt: "Packshot TEMPO Duo có nhãn rõ ràng" },
+  { step: "04", title: "Đến bàn hẹn", caption: "Một bối cảnh nhẹ nhàng cho buổi tối có chủ đích.", video: ASSETS.motionDate, poster: ASSETS.lifestyleTogether, alt: "Khoảnh khắc buổi tối trong không gian riêng tư" },
 ] as const;
 
 function goToWaitlist() {
@@ -129,10 +119,53 @@ function useReducedMotion() {
 
 function EditorialVideo() {
   const reducedMotion = useReducedMotion();
-  return <div className="video-frame">
-    <video autoPlay={!reducedMotion} muted loop playsInline preload="metadata" poster={ASSETS.heroPoster} data-motion-preference={reducedMotion ? "reduced" : "play"} aria-label="TEMPO trong không gian chuẩn bị buổi tối">
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playbackState, setPlaybackState] = useState<"loading" | "playing" | "reduced" | "error">("loading");
+  const [hasPlaybackError, setHasPlaybackError] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (reducedMotion) {
+      video.pause();
+      setPlaybackState("reduced");
+      return;
+    }
+
+    let cancelled = false;
+    const startPlayback = () => {
+      const playAttempt = video.play();
+      if (!playAttempt) return;
+      playAttempt.then(() => {
+        if (!cancelled) {
+          setHasPlaybackError(false);
+          setPlaybackState("playing");
+        }
+      }).catch(() => {
+        if (!cancelled) {
+          setHasPlaybackError(true);
+          setPlaybackState("error");
+        }
+      });
+    };
+
+    setHasPlaybackError(false);
+    setPlaybackState("loading");
+    video.addEventListener("canplay", startPlayback, { once: true });
+    const retryTimer = window.setTimeout(startPlayback, 80);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(retryTimer);
+      video.removeEventListener("canplay", startPlayback);
+    };
+  }, [reducedMotion]);
+
+  return <div className="video-frame" data-playback-state={playbackState}>
+    <img className="video-frame__fallback" src={ASSETS.heroPoster} alt="" aria-hidden="true" />
+    <video ref={videoRef} autoPlay muted loop playsInline preload="auto" poster={ASSETS.heroPoster} data-motion-preference={reducedMotion ? "reduced" : "play"} aria-label="TEMPO trong không gian chuẩn bị buổi tối" onPlaying={() => { setHasPlaybackError(false); setPlaybackState("playing"); }} onError={() => { setHasPlaybackError(true); setPlaybackState("error"); }}>
       <source src={ASSETS.motionHero} type="video/mp4" />
     </video>
+    {hasPlaybackError && <span className="sr-only">Video không thể phát; ảnh thay thế đang hiển thị.</span>}
     <div className="video-frame__wash" />
     <div className="video-frame__label"><span>MOTION / 05</span><span>THE FIRST SIGNAL</span></div>
   </div>;
@@ -268,7 +301,7 @@ export default function Home() {
         </section>
 
         <section className="story-panel story-panel--pocket">
-          <div className="story-image"><SafeImage src={ASSETS.ritualCarry} alt="TEMPO 3ml bên điện thoại và vật dụng chuẩn bị trước khi đi" /><span className="image-index">3ML / CARRY THE SIGNAL</span></div>
+          <div className="story-image"><SafeImage src={ASSETS.pack3mlVerified} alt="Packshot TEMPO 3ml với nhãn TEMPO rõ ràng" /><span className="image-index">3ML / CARRY THE SIGNAL</span></div>
           <div className="story-copy"><p className="overline overline--dark">HOW / 01 · CARRY THE SIGNAL</p><h2>Nhỏ để đi cùng<br /><em>lịch hẹn của bạn.</em></h2><p>3ml. Gọn trong nhịp riêng.</p><button onClick={() => { setPreferredSku("3ml"); goToWaitlist(); }} type="button" className="text-button">Chọn nhịp 3ml <ArrowUpRight size={16} /></button></div>
         </section>
 
@@ -276,23 +309,15 @@ export default function Home() {
 
         <MotionCarousel />
 
-        <section className="ingredient-origin" aria-labelledby="ingredient-origin-title">
-          <div className="ingredient-origin__heading"><p className="overline overline--dark">HOW / BOTANICAL STUDIES + MADE IN VIETNAM</p><h2 id="ingredient-origin-title">Nhìn vào điều<br /><em>có thể kiểm tra.</em></h2><p>Chín dịch chiết thực vật trong danh mục INCI. <strong>TEMPO được sản xuất tại Việt Nam</strong> bởi NANOFRANCE, Ninh Bình.</p><a href="#inci-full" className="text-button">Mở danh mục INCI <ArrowDownRight size={16} /></a></div>
-          <div className="ingredient-origin__grid">
-            <article><SafeImage src={ASSETS.botanicalStudies} alt="Nghiên cứu hình ảnh diễn giải các chiết xuất thực vật trong danh mục INCI TEMPO" /><div><span>01 / BOTANICAL STUDIES</span><h3>Chiết xuất<br /><em>thực vật.</em></h3><p>Danh mục để bạn tự đối chiếu.</p></div></article>
-            <article><SafeImage src={ASSETS.formulaStudy} alt="TEMPO trong tĩnh vật công thức và danh mục thành phần" /><div><span>02 / FORMULA</span><h3>Đọc trước<br /><em>khi tin.</em></h3><p>Claim ghi nhãn: chăm sóc dưỡng ẩm da.</p></div></article>
-            <article><SafeImage src={ASSETS.vietnamMade} alt="TEMPO trong visual chất liệu Việt Nam đương đại minh hoạ nơi sản xuất" /><div><span>03 / MADE IN VIETNAM</span><h3>NANOFRANCE<br /><em>Ninh Bình.</em></h3><p>Nơi sản xuất có thể kiểm tra.</p></div></article>
-            <p className="ingredient-origin__note"><LockKeyhole size={16} /><span>Hình ảnh thảo mộc là diễn giải danh mục chiết xuất thực vật; hồ sơ hiện có không xác nhận vùng trồng hoặc nước xuất xứ của từng nguyên liệu.</span></p>
+        <section className="botanical-chapter" aria-labelledby="botanical-chapter-title">
+          <div className="botanical-chapter__heading"><p className="overline overline--dark">HOW / BOTANICAL NOTES</p><h2 id="botanical-chapter-title">Chất liệu quen.<br /><em>Cách đọc mới.</em></h2><p>Một nhịp hình ảnh đi từ vật liệu gợi nhớ thủ công, qua không gian chiết xuất đương đại, đến danh mục để bạn tự đối chiếu.</p><a href="#inci-full" className="text-button">Mở danh mục INCI <ArrowDownRight size={16} /></a></div>
+          <div className="botanical-chapter__grid">
+            <article className="botanical-card botanical-card--lead"><SafeImage src={ASSETS.botanicalTraditional} alt="Tĩnh vật lá, rễ và vật liệu thủ công Việt Nam được diễn giải theo phong cách đương đại" /><div><span>01 / THE MATERIAL</span><h3>Ngắm chất liệu.<br /><em>Không gán lời hứa.</em></h3><p>Hình ảnh là diễn giải cảm quan về các chiết xuất thực vật trong danh mục INCI.</p></div></article>
+            <article className="botanical-card"><SafeImage src={ASSETS.botanicalExtraction} alt="Không gian diễn giải chiết xuất đương đại với dụng cụ thủy tinh và vật liệu thực vật" /><div><span>02 / THE STUDIO</span><h3>Từ chất liệu<br /><em>đến công thức.</em></h3><p>Chín dịch chiết thực vật được liệt kê để đối chiếu.</p></div></article>
+            <article className="botanical-card"><SafeImage src={ASSETS.botanicalLedger} alt="Sổ ghi chép thành phần và vật liệu thực vật biểu đạt nguyên tắc minh bạch" /><div><span>03 / THE LEDGER</span><h3>Đọc trước<br /><em>khi tin.</em></h3><p>Nhãn, INCI và hồ sơ chính thức là nơi cần đọc kỹ.</p></div></article>
+            <article className="botanical-card botanical-card--night"><SafeImage src={ASSETS.botanicalNight} alt="Tĩnh vật thảo mộc và chất liệu sơn mài trong ánh sáng teal dịu" /><div><span>04 / THE SIGNAL</span><h3>Giữ lại điều<br /><em>có thể kiểm tra.</em></h3><p>TEMPO được sản xuất tại Việt Nam bởi NANOFRANCE, Ninh Bình.</p></div></article>
           </div>
-        </section>
-
-        <section className="infographic-pair" aria-labelledby="experience-visual-title">
-          <div className="infographic-pair__heading"><p className="overline overline--dark">DESIGN + BOTANICAL / VISUAL NOTES</p><h2 id="experience-visual-title">Thấy điều cần thấy.<br /><em>Đọc điều cần đọc.</em></h2><p>Hình ảnh giúp định hướng trải nghiệm. Nhãn và danh mục công bố mới là thông tin để đối chiếu.</p></div>
-          <div className="infographic-pair__grid">
-            <article><SafeImage src={ASSETS.designSignal} alt="Visual diễn giải thiết kế TEMPO với nắp graphite, form gọn và dấu hiệu teal" /><div><span>01 / DESIGN SIGNAL</span><h3>Gọn để<br /><em>mang theo.</em></h3><p>Form nhỏ, nắp che kín và khoảng nhãn dễ xem.</p></div></article>
-            <article><SafeImage src={ASSETS.botanicalField} alt="Visual diễn giải nhóm chiết xuất thực vật trên nền chất liệu thủ công Việt Nam" /><div><span>02 / BOTANICAL NOTE</span><h3>Danh mục<br /><em>để đối chiếu.</em></h3><p>Diễn giải hình ảnh nhóm chiết xuất thực vật trong INCI.</p></div></article>
-          </div>
-          <p className="infographic-pair__note"><LockKeyhole size={15} /> Hình ảnh thảo mộc gợi không khí Việt Nam và không xác nhận nguồn trồng, nước xuất xứ hay công dụng riêng của từng thành phần.</p>
+          <p className="botanical-chapter__note"><LockKeyhole size={16} /><span>Không gán vùng trồng, nước xuất xứ hay công dụng riêng cho từng nguyên liệu khi chưa có hồ sơ công khai xác nhận. Claim ghi nhãn: “Giúp chăm sóc dưỡng ẩm da.”</span></p>
         </section>
 
         <section className="story-panel story-panel--ritual">
@@ -307,14 +332,14 @@ export default function Home() {
           </div>
 
           <div className="transparency-hero">
-            <SafeImage src={ASSETS.transparencyFormula} alt="TEMPO 5ml trong visual công thức và thành phần công bố" />
+            <SafeImage src={ASSETS.botanicalLedger} alt="Sổ ghi chép thành phần minh hoạ việc đối chiếu công thức" />
             <div className="transparency-hero__copy"><span>01 / FORMULA</span><h3>Danh mục rõ ràng.<br /><em>Không cần đoán.</em></h3><p>INCI mở. Công dụng ghi nhãn: <strong>“Giúp chăm sóc dưỡng ẩm da.”</strong></p><a href="#inci-full" className="transparency-link">Xem INCI đầy đủ <ArrowDownRight size={16} /></a></div>
           </div>
 
           <div className="transparency-steps">
-            <article className="transparency-card transparency-card--origin"><SafeImage src={ASSETS.transparencyOrigin} alt="Visual truy xuất nguồn gốc TEMPO" /><div><span>02 / ORIGIN</span><h3>Sản xuất tại<br /><em>Việt Nam.</em></h3><p><b>Công ty TNHH SX Công nghệ cao NANOFRANCE</b><br />KCN Đồng Văn IV, Ninh Bình.</p></div></article>
-            <article className="transparency-card transparency-card--label"><SafeImage src={ASSETS.transparencyLabel} alt="Visual kiểm tra nhãn TEMPO" /><div><span>03 / LABEL</span><h3>Đọc nhãn trước<br /><em>khi bắt đầu.</em></h3><p>Tên SKU · dung tích · số lô · NSX/HSD · hướng dẫn.</p></div></article>
-            <article className="transparency-card transparency-card--proof"><SafeImage src={ASSETS.openFile} alt="Hồ sơ mở bán TEMPO được đặt cạnh sản phẩm" /><div><span>04 / OPEN FILE</span><h3>Hồ sơ mở bán<br /><em>được cập nhật.</em></h3><p>Xem, đối chiếu, rồi mới chọn.</p></div></article>
+            <article className="transparency-card transparency-card--origin"><SafeImage src={ASSETS.botanicalExtraction} alt="Không gian chiết xuất đương đại minh hoạ nơi đối chiếu thông tin" /><div><span>02 / ORIGIN</span><h3>Sản xuất tại<br /><em>Việt Nam.</em></h3><p><b>Công ty TNHH SX Công nghệ cao NANOFRANCE</b><br />KCN Đồng Văn IV, Ninh Bình.</p></div></article>
+            <article className="transparency-card transparency-card--label"><SafeImage src={ASSETS.botanicalTraditional} alt="Chất liệu thực vật và giấy ghi chép minh hoạ bước đọc nhãn" /><div><span>03 / LABEL</span><h3>Đọc nhãn trước<br /><em>khi bắt đầu.</em></h3><p>Tên SKU · dung tích · số lô · NSX/HSD · hướng dẫn.</p></div></article>
+            <article className="transparency-card transparency-card--proof"><SafeImage src={ASSETS.botanicalNight} alt="Tĩnh vật vật liệu thực vật trong ánh sáng dịu minh hoạ việc mở hồ sơ" /><div><span>04 / OPEN FILE</span><h3>Hồ sơ mở bán<br /><em>được cập nhật.</em></h3><p>Xem, đối chiếu, rồi mới chọn.</p></div></article>
           </div>
 
           <div className="transparency-inci" id="inci-full">
@@ -335,7 +360,7 @@ export default function Home() {
 
         <section className="info-ribbon info-ribbon--lifestyle" aria-label="Khoảnh khắc TEMPO xuất hiện trong ngày">
           <div className="info-ribbon__intro"><p className="overline">WHAT / FIND YOUR FORMAT</p><h2>Một vật nhỏ.<br /><em>Một ý định rõ.</em></h2><p>Format chỉ nên xuất hiện khi nó hợp với nhịp sống của bạn.</p><button className="teal-button" type="button" onClick={goToWaitlist}>Chọn pack trong form <ArrowDownRight size={17} /></button></div>
-          <div className="info-ribbon__cards"><SafeImage src={ASSETS.lifestyleObjects} alt="Vật dụng chuẩn bị cho một buổi hẹn với TEMPO 3ml là chi tiết phụ" /><SafeImage src={ASSETS.ritualCarry} alt="TEMPO 3ml trong bối cảnh mang theo trước cuộc hẹn" /></div>
+          <div className="info-ribbon__cards"><SafeImage src={ASSETS.lifestyleTogether} alt="Không gian yên tĩnh trước một buổi hẹn" /><SafeImage src={ASSETS.lifestyleMorning} alt="Buổi sáng yên tĩnh với tách cà phê và ánh sáng cửa sổ" /></div>
         </section>
 
         <section className="gallery-section" aria-label="Nhật ký visual TEMPO">
@@ -345,7 +370,7 @@ export default function Home() {
 
         <section className="design-proof">
           <div className="design-proof__copy"><p className="overline">DESIGN STUDIES / TRUE SCALE</p><h2>Chỉ giữ lại<br /><em>điều cần xem.</em></h2><p>Quy cách, tỷ lệ và trải nghiệm mở hộp — đủ để bạn đối chiếu trước khi chọn.</p><div className="design-proof__marks"><span>3ML / 5ML</span><span>TRUE SCALE</span><span>OPEN TO CHECK</span></div></div>
-          <div className="design-proof__images"><img src={ASSETS.approvedScale} alt="TEMPO 3ml đặt cạnh điện thoại để đánh giá kích thước" loading="lazy" /><img src={ASSETS.approvedUnboxing} alt="Mockup trải nghiệm mở hộp TEMPO" loading="lazy" /></div>
+          <div className="design-proof__images"><img src={ASSETS.pack3mlVerified} alt="TEMPO 3ml với chữ TEMPO rõ ràng trên chai và hộp" loading="lazy" /><img src={ASSETS.packDuoVerified} alt="TEMPO Duo có một chai 3ml và một chai 5ml với nhãn rõ ràng" loading="lazy" /></div>
         </section>
 
         <section className="discreet-section">
@@ -354,7 +379,7 @@ export default function Home() {
         </section>
 
         <section className="waitlist-section" id="waitlist">
-          <div className="waitlist-cinema"><SafeImage src={ASSETS.lifestyleObjects} alt="Đồ vật chuẩn bị cho một buổi hẹn với TEMPO là chi tiết phụ" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">THE FIRST 1,000</p><h2>Danh sách chờ<br /><em>đã mở.</em></h2><p>Giữ suất. Chờ thông tin mở bán chính thức.</p></div></div>
+          <div className="waitlist-cinema"><SafeImage src={ASSETS.lifestyleTogether} alt="Không gian riêng tư cho một buổi tối có chủ đích" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">THE FIRST 1,000</p><h2>Danh sách chờ<br /><em>đã mở.</em></h2><p>Giữ suất. Chờ thông tin mở bán chính thức.</p></div></div>
           <div className="waitlist-form-wrap">
             <div className="waitlist-topline"><span>PRIVATE ACCESS / 01</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 đã ghi nhận</span></div>
             <h2>Giữ một suất<br />cho nhịp của bạn.</h2>

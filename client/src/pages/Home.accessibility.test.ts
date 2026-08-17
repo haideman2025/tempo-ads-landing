@@ -9,13 +9,13 @@ describe("TEMPO landing accessibility baseline", () => {
     expect(source).toContain("<header className=\"night-header\">");
     expect(source).toContain("<main id=\"top\">");
     expect(source).toContain("<footer>");
-    expect(source).toContain('aria-labelledby="ingredient-origin-title"');
+    expect(source).toContain('aria-labelledby="botanical-chapter-title"');
     expect(source).toContain('aria-labelledby="transparency-title"');
   });
 
   it("provides meaningful alternatives and functional navigation for key visual controls", () => {
-    expect(source).toContain('alt="Nghiên cứu hình ảnh diễn giải các chiết xuất thực vật trong danh mục INCI TEMPO"');
-    expect(source).toContain('alt="TEMPO 3ml bên điện thoại và vật dụng chuẩn bị trước khi đi"');
+    expect(source).toContain('alt="Tĩnh vật lá, rễ và vật liệu thủ công Việt Nam được diễn giải theo phong cách đương đại"');
+    expect(source).toContain('alt="Packshot TEMPO 3ml với nhãn TEMPO rõ ràng"');
     expect(source).toContain('href="#inci-full"');
     expect(source).toContain('href="#story"');
   });

@@ -79,3 +79,9 @@
 - [x] Lưu artifact tổng hợp byte-size/response trong dự án và đọc lại QA sau cập nhật để xác nhận bằng chứng trước checkpoint.
 - [x] Tối ưu các JPEG/PNG trọng yếu thành biến thể WebP kích thước phù hợp, thay URL landing và đo lại tổng byte asset trước checkpoint.
 - [x] Tách bundle production vượt ngưỡng cảnh báo bằng cấu hình output chunks phù hợp, sau đó đo lại build để xác nhận tải ban đầu được cải thiện.
+
+- [x] Kiểm tra playback thực tế của video hero trên bản đang chạy, xác định nguyên nhân nền không phát và sửa đường dẫn/thuộc tính/fallback mà không che video.
+- [x] Lập danh mục cấm mọi asset bao bì thiếu chữ TEMPO, nhãn không hoàn chỉnh hoặc sai quy cách; thay toàn bộ điểm sử dụng bằng mockup bao bì đã duyệt.
+- [x] Xây dựng art direction mới cho chapter thảo mộc: truyền thống Việt Nam được diễn giải bằng visual, kết nối không gian chiết xuất hiện đại và trình bày ranh giới xuất xứ có kiểm chứng.
+- [x] Tạo và tích hợp toàn bộ visual/chương thảo mộc mới, bố cục giàu trust, ít chữ, mobile-first và không dùng lại packshot/ảnh thảo mộc lỗi.
+- [x] Bổ sung regression tests và kiểm thử UI desktop/mobile cho hero playback, asset packaging có chữ TEMPO, chapter thảo mộc mới và production build.
