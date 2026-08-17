@@ -91,3 +91,8 @@
 - [x] Nâng cấp carousel thành trải nghiệm visual chủ động gồm timeline câu chuyện, autoplay, swipe, trạng thái phát và điều hướng dễ hiểu trên mobile/desktop.
 - [x] Tạo infographic thảo dược mới có chữ tiếng Việt rõ ràng, tiết lộ đúng phạm vi INCI/cách đọc nhãn và không gán công dụng hoặc vùng nguyên liệu chưa có hồ sơ.
 - [x] Tích hợp copy bán hàng, visual và CTA mới; bổ sung test regression cùng kiểm thử form, video, mobile/desktop và production build.
+
+- [x] Phân tích 668/1.000 lượt mô phỏng khách hàng đã hoàn tất; ghi rõ 332 lượt còn lại thất bại do giới hạn hệ thống, không suy diễn thành dữ liệu khách hàng thật.
+- [x] Tổng hợp phát hiện thành danh sách ưu tiên về nội dung và trải nghiệm, loại bỏ mô tả framework/kỹ thuật khỏi tuyến hiển thị cho khách hàng cuối.
+- [ ] Tái biên tập và nâng cấp landing theo insight ưu tiên, giữ claim-safe, form hàng chờ thật và hành trình video đã xác minh.
+- [ ] Bổ sung regression test, kiểm tra desktop/mobile và production build cho trải nghiệm end-user đã tối ưu.
