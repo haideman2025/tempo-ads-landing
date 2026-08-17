@@ -94,5 +94,5 @@
 
 - [x] Phân tích 668/1.000 lượt mô phỏng khách hàng đã hoàn tất; ghi rõ 332 lượt còn lại thất bại do giới hạn hệ thống, không suy diễn thành dữ liệu khách hàng thật.
 - [x] Tổng hợp phát hiện thành danh sách ưu tiên về nội dung và trải nghiệm, loại bỏ mô tả framework/kỹ thuật khỏi tuyến hiển thị cho khách hàng cuối.
-- [ ] Tái biên tập và nâng cấp landing theo insight ưu tiên, giữ claim-safe, form hàng chờ thật và hành trình video đã xác minh.
-- [ ] Bổ sung regression test, kiểm tra desktop/mobile và production build cho trải nghiệm end-user đã tối ưu.
+- [x] Tái biên tập và nâng cấp landing theo insight ưu tiên, giữ claim-safe, form hàng chờ thật và hành trình video đã xác minh.
+- [x] Bổ sung regression test, kiểm tra desktop/mobile và production build cho trải nghiệm end-user đã tối ưu.

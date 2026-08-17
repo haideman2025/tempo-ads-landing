@@ -21,7 +21,7 @@ describe("TEMPO sales landing visual system", () => {
       expect(nextIndex).toBeGreaterThan(previousIndex);
       previousIndex = nextIndex;
     }
-    expect(source).toContain("MOTION STORY / 02 → 05");
+    expect(source).toContain("CÁCH TEMPO ĐI CÙNG BẠN");
     expect(source).toContain("CHƯƠNG {active.step} / 05");
   });
 
@@ -42,9 +42,9 @@ describe("TEMPO sales landing visual system", () => {
   });
 
   it("uses a full sales flow with Golden Circle narrative and four selectable formats", () => {
-    expect(source).toContain("WHY / 01 · THE PAUSE");
-    expect(source).toContain("HOW / INGREDIENTS MADE LEGIBLE");
-    expect(source).toContain("WHAT / CHOOSE YOUR FORMAT");
+    expect(source).toContain("VÌ SAO BẮT ĐẦU");
+    expect(source).toContain("THÀNH PHẦN DỄ ĐỌC");
+    expect(source).toContain("CHỌN QUY CÁCH");
     expect(source).toContain('id: "3ml" as const');
     expect(source).toContain('id: "5ml" as const');
     expect(source).toContain('id: "duo" as const');
@@ -88,7 +88,7 @@ describe("TEMPO sales landing visual system", () => {
 
   it("keeps product and lifestyle assets distinct while retaining a six-frame visual diary", () => {
     expect(source).toContain("const visualDiary = [");
-    expect(source).toContain("THE VISUAL DIARY / 06 CHAPTERS");
+    expect(source).toContain("6 KHOẢNH KHẮC TRONG ĐỜI SỐNG");
     expect(source).toContain("Không chỉ một ảnh.");
     expect(source).toContain("tempo-lifestyle-01-exit-evening_334132f2.webp");
     expect(source).toContain("tempo-couple-02-walk-home_e372d5a3.webp");
