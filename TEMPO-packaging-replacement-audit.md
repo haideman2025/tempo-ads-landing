@@ -25,3 +25,10 @@ Markup bản chạy vẫn công bố nguồn MP4 `tempo-motion-05-duo-hero`; s�
 | `tempo-botanical-04-materials-night` | Tĩnh vật tối với lá/rễ, khay sơn mài và sóng teal; không xuất hiện bao bì, chứng nhận, bản đồ hoặc claim. | Đạt |
 
 Các visual này được dùng như diễn giải hình ảnh, không phải bằng chứng cho vùng trồng, nước xuất xứ hoặc công dụng riêng của từng chiết xuất.
+
+## Kiểm tra infographic bán hàng có chữ
+
+| Visual | Kết quả kiểm tra trực quan | Trạng thái |
+| --- | --- | --- |
+| `tempo-infographic-03-botanical-index` | Chữ TEMPO, tiêu đề “9 CHIẾT XUẤT THỰC VẬT TRONG DANH MỤC INCI”, chín tên thành phần và ghi chú không gán công dụng riêng đều đọc rõ; không có chai hoặc claim y khoa. | Đạt |
+| `tempo-infographic-04-inci-order` | Thứ tự Purified Water → Alcohol (Ethanol) → Butylene Glycol → 9 chiết xuất thực vật → Panthenol và claim “Giúp chăm sóc dưỡng ẩm da.” hiển thị rõ; không có claim ngoài hồ sơ. | Đạt |

@@ -85,3 +85,9 @@
 - [x] Xây dựng art direction mới cho chapter thảo mộc: truyền thống Việt Nam được diễn giải bằng visual, kết nối không gian chiết xuất hiện đại và trình bày ranh giới xuất xứ có kiểm chứng.
 - [x] Tạo và tích hợp toàn bộ visual/chương thảo mộc mới, bố cục giàu trust, ít chữ, mobile-first và không dùng lại packshot/ảnh thảo mộc lỗi.
 - [x] Bổ sung regression tests và kiểm thử UI desktop/mobile cho hero playback, asset packaging có chữ TEMPO, chapter thảo mộc mới và production build.
+
+- [x] Kiểm kê và sắp lại 5 video theo thứ tự tên nguồn từ trên xuống dưới, thiết lập tự phát tuần tự thành câu chuyện sản phẩm mượt mà.
+- [x] Viết lại kiến trúc landing thành trang bán hàng hoàn chỉnh theo hành trình cảm xúc → giải pháp → thành phần → SKU → form đăng ký, bảo toàn mọi claim-safe và form hàng chờ thật.
+- [x] Nâng cấp carousel thành trải nghiệm visual chủ động gồm timeline câu chuyện, autoplay, swipe, trạng thái phát và điều hướng dễ hiểu trên mobile/desktop.
+- [x] Tạo infographic thảo dược mới có chữ tiếng Việt rõ ràng, tiết lộ đúng phạm vi INCI/cách đọc nhãn và không gán công dụng hoặc vùng nguyên liệu chưa có hồ sơ.
+- [x] Tích hợp copy bán hàng, visual và CTA mới; bổ sung test regression cùng kiểm thử form, video, mobile/desktop và production build.
