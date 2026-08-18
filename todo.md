@@ -121,3 +121,8 @@
 - [x] Bổ sung test schema/quota/event tracking và kiểm thử responsive, accessibility, production build cho checkout-form thử nghiệm.
 
 - [x] Đồng bộ tiến độ trải nghiệm 5 video TEMPO với bản triển khai hiện có; rà thứ tự cảnh, điểm chèn chapter, playback/fallback responsive và lưu checkpoint xác nhận.
+
+- [x] Thay năm video nền bằng các tệp người dùng cung cấp theo thứ tự 1-3 → 2-2 → 3-2 → 4-2 → 5-2 tại năm chapter câu chuyện tương ứng.
+- [x] Rà soát và khắc phục trải nghiệm hiển thị/video/CTA/form trên desktop và mobile; xác minh fallback, responsive, accessibility, regression test và production build.
+- [x] Khắc phục lỗi runtime của truy vấn quota `sum(quantity)` hoặc contract waitlist để form hàng chờ hiển thị trạng thái chính xác sau cập nhật schema.
+- [x] Bàn giao hướng dẫn trỏ landing TEMPO live sang tên miền riêng qua DNS và màn hình quản trị dự án.

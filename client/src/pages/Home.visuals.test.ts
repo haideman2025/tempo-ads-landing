@@ -9,11 +9,11 @@ const documentHtml = readFileSync(resolve(process.cwd(), "client/index.html"), "
 describe("TEMPO sales landing visual system", () => {
   it("orders the five supplied motion assets as story 01 through 05", () => {
     const assets = [
-      "tempo-motion-01-reservation_302dc7af.mp4",
-      "tempo-motion-02-carry_121f483d.mp4",
-      "tempo-motion-03-craft_c0137201.mp4",
-      "tempo-motion-04-date-table_b2232978.mp4",
-      "tempo-motion-05-duo-hero_0afbb738.mp4",
+      "1-3_488cdaeb.mp4",
+      "2-2_1c24d56b.mp4",
+      "3-2_1be35ced.mp4",
+      "4-2_5b3104ee.mp4",
+      "5-2_104c988a.mp4",
     ];
     let previousIndex = -1;
     for (const asset of assets) {
