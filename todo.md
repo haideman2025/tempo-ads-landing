@@ -119,3 +119,5 @@
 - [x] Cho phép chọn số lượng 1 hoặc 2 chai TEMPO 3ml; ghi dữ liệu số lượng, giá trị 349.000đ/chai và trừ quota theo số chai trong tổng lô 1.000 chai.
 - [x] Gửi sự kiện chuyển đổi có value theo số lượng đã được server chấp nhận; không gửi sự kiện khi form lỗi hoặc số lượng vượt quota.
 - [x] Bổ sung test schema/quota/event tracking và kiểm thử responsive, accessibility, production build cho checkout-form thử nghiệm.
+
+- [x] Đồng bộ tiến độ trải nghiệm 5 video TEMPO với bản triển khai hiện có; rà thứ tự cảnh, điểm chèn chapter, playback/fallback responsive và lưu checkpoint xác nhận.

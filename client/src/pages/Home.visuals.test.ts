@@ -23,6 +23,19 @@ describe("TEMPO sales landing visual system", () => {
     }
     expect(source).toContain("CÁCH TEMPO ĐI CÙNG BẠN");
     expect(source).toContain("CHƯƠNG {active.step} / 05");
+    const landingSequence = [
+      '<source src={ASSETS.motionReservation} type="video/mp4" />',
+      'SectionVideoBackdrop video={ASSETS.motionCarry}',
+      'SectionVideoBackdrop video={ASSETS.motionCraft}',
+      'SectionVideoBackdrop video={ASSETS.motionDate}',
+      'SectionVideoBackdrop video={ASSETS.motionHero}',
+    ];
+    let previousLandingIndex = -1;
+    for (const marker of landingSequence) {
+      const nextLandingIndex = source.indexOf(marker);
+      expect(nextLandingIndex).toBeGreaterThan(previousLandingIndex);
+      previousLandingIndex = nextLandingIndex;
+    }
   });
 
   it("keeps hero playback resilient and the motion timeline touch-accessible", () => {
