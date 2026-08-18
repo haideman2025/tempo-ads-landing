@@ -41,23 +41,24 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain("Dừng tự phát");
   });
 
-  it("uses a full sales flow with Golden Circle narrative and four selectable formats", () => {
+  it("uses a full sales flow with Golden Circle narrative and one launch format", () => {
     expect(source).toContain("VÌ SAO BẮT ĐẦU");
-    expect(source).toContain("THÀNH PHẦN DỄ ĐỌC");
-    expect(source).toContain("CHỌN QUY CÁCH");
+    expect(source).toContain("ĐỌC TRƯỚC KHI CHỌN");
+    expect(source).toContain("TEMPO 3ML / LÔ RA MẮT");
     expect(source).toContain('id: "3ml" as const');
-    expect(source).toContain('id: "5ml" as const');
-    expect(source).toContain('id: "duo" as const');
-    expect(source).toContain('id: "course-2x5ml" as const');
-    expect(source).toContain("Đây là đăng ký hàng chờ, chưa phải thanh toán hay xác nhận đặt hàng.");
-    expect(source).toContain("Giữ suất hàng chờ");
+    expect(source).not.toContain('id: "5ml" as const');
+    expect(source).not.toContain('id: "duo" as const');
+    expect(source).not.toContain('id: "course-2x5ml" as const');
+    expect(source).toContain("349.000đ/chai");
+    expect(source).toContain("khoảng 12–15 lần dùng");
+    expect(source).toContain("Nhận thông tin mua 3ml");
   });
 
   it("adds readable generated botanical and label infographics without unsupported ingredient claims", () => {
     expect(source).toContain("tempo-infographic-03-botanical-index_5d3af3b9.png");
     expect(source).toContain("tempo-infographic-04-inci-order_d4080563.png");
     expect(source).toContain("tempo-infographic-05-label-check_365134ff.png");
-    expect(source).toContain("Thảo dược có thể xem.");
+    expect(source).toContain("Biết mình đang chọn gì.");
     expect(source).toContain("Chín chiết xuất thực vật");
     expect(source).toContain("Giúp chăm sóc dưỡng ẩm da.");
     expect(source).toContain("Purified Water, Alcohol (Ethanol)");
@@ -71,14 +72,13 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain("KCN Đồng Văn IV, Ninh Bình.");
     expect(source).toContain("Chỉ dùng ngoài da.");
     expect(source).toContain("TEMPO là mỹ phẩm, không phải thuốc.");
-    expect(source).toContain("nhãn thành phẩm và hồ sơ chính thức");
+    expect(source).toContain("Nhãn thành phẩm, màu sắc và thông tin chính thức cần được đối chiếu");
   });
 
-  it("uses only verified TEMPO product packshots across formats", () => {
+  it("uses only the verified TEMPO 3ml packshot for the launch SKU", () => {
     expect(source).toContain('pack3mlVerified: "/manus-storage/tempo-pack-3ml-verified_60cabc8e.png"');
-    expect(source).toContain('packDuoVerified: "/manus-storage/tempo-pack-duo-verified_5982e938.png"');
-    expect(source).toContain('pack5ml: "/manus-storage/tempo-pack-5ml-standalone-final_d1d4aa8e.webp"');
-    expect(source).toContain('packCourse: "/manus-storage/tempo-pack-2x5ml-verified_bc1cb656.webp"');
+    expect(source).toContain('realSizePhone: "/manus-storage/tempo-launch-3ml-real-size-phone_0fcb73c1.jpg"');
+    expect(source).toContain('fineMist: "/manus-storage/tempo-launch-3ml-fine-mist_d0499407.jpg"');
     expect(source).not.toContain("tempo-pack-primary-v2_475160d1.webp");
     expect(source).not.toContain("tempo-pack-scale-v2_04ee12e5.webp");
     expect(source).not.toContain("tempo-pack-unboxing-v2_797eacb4.webp");

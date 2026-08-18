@@ -29,22 +29,21 @@ const ASSETS = {
   motionCraft: "/manus-storage/tempo-motion-03-craft_c0137201.mp4",
   motionDate: "/manus-storage/tempo-motion-04-date-table_b2232978.mp4",
   motionHero: "/manus-storage/tempo-motion-05-duo-hero_0afbb738.mp4",
+  realSizePhone: "/manus-storage/tempo-launch-3ml-real-size-phone_0fcb73c1.jpg",
+  fineMist: "/manus-storage/tempo-launch-3ml-fine-mist_d0499407.jpg",
 };
 
-type PreferredSku = "3ml" | "5ml" | "duo" | "course-2x5ml";
+type PreferredSku = "3ml";
 
 const productChoices = [
-  { id: "3ml" as const, step: "01", name: "TEMPO 3ml", title: "Nhịp làm quen", note: "Format gọn để bắt đầu tìm hiểu sản phẩm.", useCase: "Dành cho lần đầu cân nhắc TEMPO.", image: ASSETS.pack3mlVerified },
-  { id: "5ml" as const, step: "02", name: "TEMPO 5ml", title: "Nhịp đều đặn", note: "Format đầy đủ cho routine chăm sóc riêng tư.", useCase: "Dành cho người ưu tiên format chủ lực.", image: ASSETS.pack5ml },
-  { id: "duo" as const, step: "03", name: "TEMPO Duo", title: "Ở nhà, đi xa", note: "Một 3ml mang theo, một 5ml cho không gian ở nhà.", useCase: "Dành cho hai bối cảnh sử dụng khác nhau.", image: ASSETS.packDuoVerified },
-  { id: "course-2x5ml" as const, step: "04", name: "TEMPO 2×5ml", title: "Nhịp quay lại", note: "Hai chai 5ml trong lựa chọn đầy đủ hơn.", useCase: "Dành cho người muốn nhận thông tin về bundle.", image: ASSETS.packCourse },
+  { id: "3ml" as const, step: "01", name: "TEMPO 3ml", title: "Lô launch đầu tiên", note: "Chai 3ml nhỏ gọn cho khoảng 12–15 lần dùng theo hướng dẫn trên nhãn.", useCase: "1.000 chai đầu tiên — ưu tiên cho người muốn bắt đầu ngay.", image: ASSETS.pack3mlVerified },
 ];
 
 const motionNotes = [
   { step: "02", title: "Mang theo", caption: "Một format nhỏ trong hành trang trước khi ra ngoài.", video: ASSETS.motionCarry, poster: ASSETS.pack3mlVerified, alt: "TEMPO 3ml có nhãn TEMPO rõ ràng" },
   { step: "03", title: "Đọc chất liệu", caption: "Đi từ thiết kế đến danh mục thông tin có thể đối chiếu.", video: ASSETS.motionCraft, poster: ASSETS.botanicalLedger, alt: "Sổ ghi thành phần và vật liệu thực vật theo phong cách đương đại" },
   { step: "04", title: "Đến cuộc hẹn", caption: "Một khung cảnh bình tĩnh, đặt sự có mặt lên trước mọi vội vàng.", video: ASSETS.motionDate, poster: ASSETS.lifestyleTogether, alt: "Không gian buổi tối ấm áp dành cho hai người trưởng thành" },
-  { step: "05", title: "Chọn hệ nhịp", caption: "3ml và 5ml cho những bối cảnh riêng trong cùng một ritual.", video: ASSETS.motionHero, poster: ASSETS.packDuoVerified, alt: "TEMPO Duo với nhãn rõ ràng" },
+  { step: "05", title: "Giữ nhịp riêng", caption: "TEMPO 3ml gọn trong tay, sẵn sàng cho buổi tối bạn đã chọn.", video: ASSETS.motionHero, poster: ASSETS.pack3mlVerified, alt: "TEMPO 3ml với nhãn rõ ràng" },
 ] as const;
 
 const ingredientInfographics = [
@@ -103,11 +102,6 @@ function EditorialVideo() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    if (reducedMotion) {
-      video.pause();
-      setPlaybackState("reduced");
-      return;
-    }
     let cancelled = false;
     const startPlayback = () => {
       const playAttempt = video.play();
@@ -222,7 +216,7 @@ function MotionCarousel() {
 }
 
 export default function Home() {
-  const [preferredSku, setPreferredSku] = useState<PreferredSku>("5ml");
+  const [preferredSku, setPreferredSku] = useState<PreferredSku>("3ml");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [formResult, setFormResult] = useState<{ kind: "reserved" | "existing" | "full"; slot?: number } | null>(null);
   const status = trpc.waitlist.status.useQuery(undefined, { staleTime: 30_000, retry: 1 });
@@ -245,8 +239,8 @@ export default function Home() {
 
   return <div className="night-site">
     <header className="night-header">
-      <a href="#top" className="brand" aria-label="TEMPO by V2JOY"><V2JoyBadge /><span className="tempo-wordmark">TEMPO</span><small>ĐĂNG KÝ NHẬN TIN / 01</small></a>
-      <div className="header-center"><span>5 cảnh trong một buổi tối</span><i /> <span>Danh sách chờ 01.000</span></div>
+      <a href="#top" className="brand" aria-label="TEMPO by V2JOY"><V2JoyBadge /><span className="tempo-wordmark">TEMPO</span><small>3ML / LÔ ĐẦU TIÊN</small></a>
+      <div className="header-center"><span>TEMPO 3ml / lô đầu tiên</span><i /> <span>Còn {remaining.toLocaleString("vi-VN")} chai</span></div>
       <button type="button" onClick={goToWaitlist} className="header-cta">Giữ suất <ArrowUpRight size={15} /></button>
     </header>
 
@@ -256,41 +250,41 @@ export default function Home() {
         <div className="hero-wash" />
         <div className="hero-noise" />
         <div className="hero-copy">
-          <p className="overline">V2JOY / TEMPO / CẢNH 01</p>
-          <h1>Đêm nay,<br /><em>bạn chọn một nhịp khác.</em></h1>
-          <p className="hero-lead">Một lựa chọn chăm sóc kín đáo, bắt đầu từ việc dành thời gian cho điều quan trọng.</p>
-          <div className="hero-actions"><button onClick={goToWaitlist} type="button" className="teal-button">Vào danh sách chờ <ArrowDownRight size={18} /></button><a href="#story" className="ghost-link">Xem câu chuyện 01 → 05 <span>↓</span></a></div>
+          <p className="overline">V2JOY / TEMPO 3ML / LÔ ĐẦU TIÊN</p>
+          <h1>Đêm nay,<br /><em>chọn sự chuẩn bị vừa đủ.</em></h1>
+          <p className="hero-lead">TEMPO 3ml là chai xịt chăm sóc da nhỏ gọn cho những buổi tối bạn muốn chuẩn bị kỹ hơn. Lô đầu tiên gồm 1.000 chai, giá ra mắt 349.000đ/chai.</p>
+          <div className="hero-actions"><button onClick={goToWaitlist} type="button" className="teal-button">Đăng ký mua TEMPO 3ml <ArrowDownRight size={18} /></button><a href="#story" className="ghost-link">Xem TEMPO đi cùng bạn <span>↓</span></a></div>
         </div>
-        <div className="hero-counter"><b>{remaining.toLocaleString("vi-VN")}</b><span>lời mời đầu tiên<br />còn mở</span></div>
-        <div className="hero-footer"><span>CẢNH 01 / 05</span><Signal /><span>TEMPO 3ML · 5ML</span></div>
+        <div className="hero-counter"><b>{remaining.toLocaleString("vi-VN")}</b><span>chai 3ml<br />còn lại</span></div>
+        <div className="hero-footer"><span>CẢNH 01 / 05</span><Signal /><span>TEMPO 3ML · LÔ ĐẦU TIÊN</span></div>
       </section>
 
       <section className="commerce-intro" id="story" aria-labelledby="why-title">
         <div><p className="chapter">VÌ SAO BẮT ĐẦU</p><p className="commerce-intro__eyebrow">TRƯỚC KHI NÓI VỀ SẢN PHẨM</p></div>
-        <div><h2 id="why-title">Bớt một nhịp vội.<br /><em>Thêm một điều có mặt.</em></h2><p>V2JOY bắt đầu từ niềm tin rằng một cuộc hẹn đáng nhớ không cần phô trương. Nó cần sự chỉn chu, một khoảng dừng và sự quan tâm dành cho cả hai người.</p></div>
-        <div className="commerce-intro__side"><Clock3 size={20} /><p>TEMPO là một phần trong nghi thức chăm sóc trước buổi tối — không phải một lời hứa thay thế cho sự kết nối.</p></div>
+        <div><h2 id="why-title">Chuẩn bị kỹ hơn.<br /><em>Để buổi tối tự nhiên hơn.</em></h2><p>TEMPO dành cho người muốn có một bước chuẩn bị kín đáo trước cuộc hẹn. Một chai nhỏ, cách dùng rõ ràng và một lựa chọn không cần phô trương.</p></div>
+        <div className="commerce-intro__side"><Clock3 size={20} /><p>TEMPO là một sản phẩm chăm sóc da cho bước chuẩn bị trước buổi tối — không thay thế sự kết nối, giao tiếp và đồng thuận giữa hai người.</p></div>
       </section>
 
       <section className="cinema-section cinema-section--lifestyle">
         <SafeImage src={ASSETS.lifestyleExit} alt="Lối ra căn hộ trong ánh chiều, gợi khoảnh khắc rời ngày dài" className="cinema-section__image" />
-        <div className="cinema-section__copy"><p className="overline">CÁCH BẮT ĐẦU</p><h2>Một khoảng dừng.<br /><em>Một ý định rõ.</em></h2><p>Không đưa sự vội vàng vào một buổi tối dành cho hai người. Hãy bắt đầu bằng những điều nhỏ mà bạn có thể chủ động chuẩn bị.</p><span className="micro-note">TỰ CHỌN NHỊP / TỰ ĐỌC THÔNG TIN / TỰ QUYẾT ĐỊNH</span></div>
+        <div className="cinema-section__copy"><p className="overline">CÁCH BẮT ĐẦU</p><h2>Chủ động chuẩn bị.<br /><em>Không cần nói quá.</em></h2><p>Giữ mọi thứ đơn giản: đọc nhãn, dùng đúng hướng dẫn và để tâm đến cảm giác của chính bạn cùng người bên cạnh.</p><span className="micro-note">ĐỌC NHÃN / DÙNG ĐÚNG HƯỚNG DẪN / TỰ QUYẾT ĐỊNH</span></div>
       </section>
 
       <section className="story-panel story-panel--pocket">
         <div className="story-image"><SafeImage src={ASSETS.pack3mlVerified} alt="TEMPO 3ml với nhãn TEMPO rõ ràng trên thân chai và hộp" /><span className="image-index">3ML / MANG THEO MỖI NGÀY</span></div>
-        <div className="story-copy"><p className="overline overline--dark">TEMPO 3ML / MANG THEO</p><h2>Nhỏ để mang theo.<br /><em>Rõ để tự chọn.</em></h2><p>TEMPO 3ml là format gọn cho người muốn bắt đầu tìm hiểu. Bạn có thể chọn mối quan tâm trong form và đợi thông tin mở bán chính thức.</p><button onClick={() => { setPreferredSku("3ml"); goToWaitlist(); }} type="button" className="text-button">Quan tâm TEMPO 3ml <ArrowUpRight size={16} /></button></div>
+        <div className="story-copy"><p className="overline overline--dark">TEMPO 3ML / MANG THEO</p><h2>Nhỏ để mang theo.<br /><em>Dễ bắt đầu.</em></h2><p>TEMPO 3ml là phiên bản duy nhất của lô ra mắt. Chai gọn, dễ cất trong túi và có hướng dẫn rõ ràng để bạn bắt đầu đúng cách.</p><button onClick={() => { setPreferredSku("3ml"); goToWaitlist(); }} type="button" className="text-button">Đăng ký mua TEMPO 3ml <ArrowUpRight size={16} /></button></div>
       </section>
 
       <MotionCarousel />
 
       <section className="ingredient-atlas" aria-labelledby="ingredient-atlas-title">
-        <div className="ingredient-atlas__heading"><div><p className="overline overline--dark">THÀNH PHẦN DỄ ĐỌC</p><h2 id="ingredient-atlas-title">Thảo dược có thể xem.<br /><em>Thông tin có thể đọc.</em></h2></div><p>Chúng tôi trình bày thành phần bằng hình ảnh để dễ tiếp cận hơn, nhưng luôn giữ phần quan trọng nhất ở chữ: danh mục INCI, nhãn thành phẩm và hồ sơ chính thức.</p></div>
+        <div className="ingredient-atlas__heading"><div><p className="overline overline--dark">ĐỌC TRƯỚC KHI CHỌN</p><h2 id="ingredient-atlas-title">Biết mình đang chọn gì.<br /><em>Trước khi dùng.</em></h2></div><p>Bạn có thể xem thành phần bằng hình ảnh, rồi đối chiếu lại bằng chữ trên INCI và nhãn thành phẩm trước khi quyết định.</p></div>
         <div className="ingredient-atlas__grid">{ingredientInfographics.map(item => <article key={item.step}><SafeImage src={item.image} alt={item.alt} /><div><span>{item.step} / THÀNH PHẦN</span><h3>{item.title}</h3><p>{item.copy}</p></div></article>)}</div>
         <div className="ingredient-atlas__claim"><Leaf size={20} /><p><b>Claim ghi nhãn:</b> “Giúp chăm sóc dưỡng ẩm da.” Không gán vùng trồng, nước xuất xứ hoặc công dụng riêng cho từng chiết xuất khi chưa có hồ sơ công khai xác nhận.</p></div>
       </section>
 
       <section className="transparency-protocol" id="nguon-goc" aria-labelledby="transparency-title">
-        <div className="transparency-protocol__masthead"><div><p className="overline overline--dark">MINH BẠCH TRƯỚC KHI CHỌN</p><h2 id="transparency-title">Không cần tin vội.<br /><em>Hãy đọc cùng chúng tôi.</em></h2></div><p>TEMPO là mỹ phẩm. Mọi thông tin dưới đây được trình bày để bạn tự đối chiếu trước khi đăng ký nhận tin mở bán.</p></div>
+        <div className="transparency-protocol__masthead"><div><p className="overline overline--dark">ĐỌC RÕ TRƯỚC KHI MUA</p><h2 id="transparency-title">Đọc rõ rồi chọn.<br /><em>Không cần đoán.</em></h2></div><p>TEMPO là mỹ phẩm. Những thông tin dưới đây giúp bạn hiểu sản phẩm trước khi đăng ký mua lô 3ml đầu tiên.</p></div>
         <div className="transparency-hero"><SafeImage src={ASSETS.botanicalLedger} alt="Sổ ghi chép thành phần và vật liệu thực vật minh hoạ nguyên tắc đối chiếu công thức" /><div className="transparency-hero__copy"><span>01 / THÀNH PHẦN</span><h3>Danh mục rõ ràng.<br /><em>Không cần đoán.</em></h3><p>INCI mở; thành phần có Alcohol (Ethanol), Butylene Glycol, chín chiết xuất thực vật, Sodium Benzoate và Panthenol.</p><a href="#inci-full" className="transparency-link">Xem INCI đầy đủ <ArrowDownRight size={16} /></a></div></div>
         <div className="transparency-steps">
           <article className="transparency-card transparency-card--origin"><SafeImage src={ASSETS.botanicalExtraction} alt="Không gian chiết xuất đương đại minh hoạ quy trình đối chiếu thông tin sản phẩm" /><div><span>02 / NƠI SẢN XUẤT</span><h3>Sản xuất tại<br /><em>Việt Nam.</em></h3><p><b>Công ty TNHH SX Công nghệ cao NANOFRANCE</b><br />KCN Đồng Văn IV, Ninh Bình.</p></div></article>
@@ -302,7 +296,7 @@ export default function Home() {
       </section>
 
       <section className="product-protocol" aria-labelledby="protocol-title">
-        <div className="product-protocol__heading"><p className="overline">CÁCH DÙNG VÀ LƯU Ý</p><h2 id="protocol-title">Một cách chuẩn bị rõ ràng.<br /><em>Không cần nói quá.</em></h2><p>Hướng dẫn dưới đây là nội dung công bố trên nhãn. Luôn đọc nhãn thành phẩm và thực hiện theo thông tin được cập nhật chính thức.</p></div>
+        <div className="product-protocol__heading"><p className="overline">CÁCH DÙNG VÀ LƯU Ý</p><h2 id="protocol-title">Dùng đúng hướng dẫn.<br /><em>Chăm sóc da vừa đủ.</em></h2><p>Hãy đọc nhãn thành phẩm trước khi dùng và làm theo hướng dẫn chính thức đi kèm sản phẩm.</p></div>
         <div className="product-protocol__steps">
           <article><span>01</span><h3>Vệ sinh và lắc đều</h3><p>Vệ sinh sạch vùng da cần chăm sóc, sau đó lắc đều chai.</p></article>
           <article><span>02</span><h3>Giữ khoảng cách phù hợp</h3><p>Để chai cách vùng da khoảng 3–5cm và xịt lượng vừa đủ, khoảng 2–3 lần.</p></article>
@@ -312,9 +306,9 @@ export default function Home() {
         <div className="product-protocol__footer"><ShieldCheck size={20} /><p><b>TEMPO là mỹ phẩm, không phải thuốc.</b> Sản phẩm không thay thế hướng dẫn chuyên môn hoặc thuốc chữa bệnh.</p></div>
       </section>
 
-      <section className="product-block" id="san-pham">
-        <div className="product-block__top"><div><p className="overline overline--dark">CHỌN QUY CÁCH</p><h2>Chọn format<br /><em>đi cùng bối cảnh.</em></h2></div><p>Bốn lựa chọn dưới đây giúp bạn cho V2JOY biết format mình quan tâm. Đây chưa phải đơn hàng hay thông báo giá cuối cùng.</p></div>
-        <div className="format-grid">{productChoices.map(item => <article className="format-card" key={item.id}><div className="format-card__image"><SafeImage src={item.image} alt={`Packshot ${item.name} có nhãn TEMPO rõ ràng`} /></div><div className="format-card__copy"><span>{item.step} / {item.name}</span><h3>{item.title}</h3><p>{item.note}</p><small>{item.useCase}</small><button type="button" onClick={() => { setPreferredSku(item.id); goToWaitlist(); }}>Quan tâm {item.name} <ArrowUpRight size={15} /></button></div></article>)}</div>
+      <section className="real-size-section" aria-labelledby="real-size-title"><div className="real-size-section__heading"><p className="overline overline--dark">NHÌN THẤY KÍCH THƯỚC THẬT</p><h2 id="real-size-title">Nhỏ gọn để<br /><em>mang theo.</em></h2><p>Chai TEMPO 3ml được đặt cạnh điện thoại để bạn hình dung kích thước trong tay và trong túi. Số lần dùng phụ thuộc lượng dùng theo hướng dẫn trên nhãn.</p></div><div className="real-size-section__grid"><figure><SafeImage src={ASSETS.realSizePhone} alt="Chai TEMPO 3ml đặt cạnh điện thoại để minh họa kích thước thực tế" /><figcaption>01 / KÍCH THƯỚC THỰC TẾ</figcaption></figure><figure><SafeImage src={ASSETS.fineMist} alt="Chai TEMPO 3ml phun màn sương mịn trong studio" /><figcaption>02 / MÀN SƯƠNG MỊN</figcaption></figure></div></section>\n\n      <section className="product-block" id="san-pham">
+        <div className="product-block__top"><div><p className="overline overline--dark">TEMPO 3ML / LÔ RA MẮT</p><h2>Một phiên bản.<br /><em>Một quyết định dễ hơn.</em></h2></div><p>Lô ra mắt chỉ có TEMPO 3ml, giá 349.000đ/chai. Chỉ 1.000 chai đầu tiên được mở bán trong đợt này.</p></div>
+        <div className="format-grid">{productChoices.map(item => <article className="format-card" key={item.id}><div className="format-card__image"><SafeImage src={item.image} alt={`Packshot ${item.name} có nhãn TEMPO rõ ràng`} /></div><div className="format-card__copy"><span>{item.step} / {item.name}</span><h3>{item.title}</h3><p>{item.note}</p><small>{item.useCase}</small><button type="button" onClick={() => { setPreferredSku(item.id); goToWaitlist(); }}>Đăng ký mua {item.name} <ArrowUpRight size={15} /></button></div></article>)}</div>
       </section>
 
       <section className="visual-proof" aria-label="Mạch hình ảnh Night Confident">
@@ -323,18 +317,18 @@ export default function Home() {
       </section>
 
       <section className="waitlist-section" id="waitlist">
-        <div className="waitlist-cinema"><SafeImage src={ASSETS.lifestyleTogether} alt="Không gian riêng tư, ấm áp cho một buổi tối có chủ đích" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">1.000 SUẤT ĐẦU TIÊN</p><h2>Danh sách chờ<br /><em>đã mở.</em></h2><p>Chọn format bạn quan tâm. V2JOY chỉ liên hệ khi có thông tin mở bán chính thức.</p></div></div>
-        <div className="waitlist-form-wrap"><div className="waitlist-topline"><span>ĐĂNG KÝ HÀNG CHỜ / 01</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 đã ghi nhận</span></div><h2>Giữ một suất<br />cho nhịp của bạn.</h2><p className="form-intro">Đây là đăng ký hàng chờ, chưa phải thanh toán hay xác nhận đặt hàng. Thông tin của bạn được dùng để V2JOY liên hệ về đợt mở bán TEMPO.</p>
+        <div className="waitlist-cinema"><SafeImage src={ASSETS.lifestyleTogether} alt="Không gian riêng tư, ấm áp cho một buổi tối có chủ đích" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">1.000 CHAI TEMPO 3ML</p><h2>Lô đầu tiên<br /><em>đã sẵn sàng.</em></h2><p>Đăng ký để nhận thông tin mua, giao hàng và số lượng còn lại của phiên bản 3ml.</p></div></div>
+        <div className="waitlist-form-wrap"><div className="waitlist-topline"><span>NHẬN THÔNG TIN MUA / TEMPO 3ML</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 đã ghi nhận</span></div><h2>Giữ quyền mua<br />TEMPO 3ml.</h2><p className="form-intro">Đăng ký để được liên hệ xác nhận mua TEMPO 3ml. Đây chưa phải thanh toán; V2JOY sẽ liên hệ theo thứ tự đăng ký về giao hàng và số lượng còn lại. Giá ra mắt: 349.000đ/chai.</p>
           <form className="waitlist-form" onSubmit={submitWaitlist}>
             <div className="sku-choice" role="radiogroup" aria-label="Chọn format TEMPO quan tâm">{productChoices.map(item => <button key={item.id} type="button" role="radio" aria-checked={preferredSku === item.id} onClick={() => setPreferredSku(item.id)} className={preferredSku === item.id ? "is-active" : ""}><img src={item.image} alt="" loading="lazy" /><span>{item.name}</span><small>{item.title}</small></button>)}</div>
             <label>Họ và tên<input name="fullName" required autoComplete="name" placeholder="Tên của bạn" /></label>
             <label>Số điện thoại<input name="phone" required inputMode="tel" autoComplete="tel" placeholder="0xxxxxxxxx" /></label>
             <label>Email <em>(không bắt buộc)</em><input name="email" type="email" autoComplete="email" placeholder="ban@email.com" /></label>
             <label>Lời nhắn <em>(không bắt buộc)</em><textarea name="note" rows={3} maxLength={500} placeholder="Ví dụ: thời gian liên hệ phù hợp" /></label>
-            <label className="consent"><input name="marketingConsent" type="checkbox" required /><span>Tôi đồng ý để V2JOY lưu thông tin và liên hệ về danh sách chờ TEMPO. Tôi có thể yêu cầu xóa thông tin bất kỳ lúc nào.</span></label>
+            <label className="consent"><input name="marketingConsent" type="checkbox" required /><span>Tôi đồng ý để V2JOY lưu thông tin và liên hệ về việc mua TEMPO 3ml. Tôi có thể yêu cầu xóa thông tin bất kỳ lúc nào.</span></label>
             {join.error && <p className="form-error"><X size={15} /> {join.error.message}</p>}
-            {formResult && <div aria-live="polite" className={`form-result form-result--${formResult.kind}`}>{formResult.kind === "full" ? <><X size={17} /><span>Danh sách 1.000 suất hiện đã đủ. V2JOY sẽ cập nhật đợt tiếp theo.</span></> : <><Check size={17} /><span>{formResult.kind === "existing" ? "Số điện thoại này đã có trong danh sách chờ" : "Bạn đã được ghi nhận vào danh sách chờ"}{formResult.slot ? ` · Suất ${String(formResult.slot).padStart(4, "0")}` : ""}.</span></>}</div>}
-            <button className="submit-button" disabled={join.isPending || remaining === 0} type="submit">{join.isPending ? "Đang giữ suất…" : remaining === 0 ? "Danh sách đã đủ" : "Giữ suất hàng chờ"}<ArrowUpRight size={18} /></button>
+            {formResult && <div aria-live="polite" className={`form-result form-result--${formResult.kind}`}>{formResult.kind === "full" ? <><X size={17} /><span>1.000 chai đầu tiên đã đủ. V2JOY sẽ cập nhật đợt tiếp theo.</span></> : <><Check size={17} /><span>{formResult.kind === "existing" ? "Số điện thoại này đã được ghi nhận" : "Bạn đã được ghi nhận quyền nhận thông tin mua"}{formResult.slot ? ` · Suất ${String(formResult.slot).padStart(4, "0")}` : ""}.</span></>}</div>}
+            <button className="submit-button" disabled={join.isPending || remaining === 0} type="submit">{join.isPending ? "Đang giữ suất…" : remaining === 0 ? "Danh sách đã đủ" : "Nhận thông tin mua 3ml"}<ArrowUpRight size={18} /></button>
           </form><p className="data-note"><Mail size={14} /> Không yêu cầu địa chỉ hay thanh toán ở bước này. Thông tin chỉ dùng để liên hệ về TEMPO.</p>
         </div>
       </section>

@@ -96,3 +96,14 @@
 - [x] Tổng hợp phát hiện thành danh sách ưu tiên về nội dung và trải nghiệm, loại bỏ mô tả framework/kỹ thuật khỏi tuyến hiển thị cho khách hàng cuối.
 - [x] Tái biên tập và nâng cấp landing theo insight ưu tiên, giữ claim-safe, form hàng chờ thật và hành trình video đã xác minh.
 - [x] Bổ sung regression test, kiểm tra desktop/mobile và production build cho trải nghiệm end-user đã tối ưu.
+
+- [x] Chốt lại landing chỉ còn offer TEMPO 3ml cho lô launch 1.000 chai thật; ẩn bundle/5ml khỏi hành trình bán hàng.
+- [x] Xác minh giá launch 349.000đ và cách diễn giải công khai an toàn: 12–15 lần dùng, 2–3 xịt mỗi lần theo hướng dẫn; không công bố tổng 36 xịt khi chưa có xác nhận trực tiếp.
+- [x] Tạo visual chai 3ml cạnh vật dụng/thiết bị quen thuộc và visual xịt phun sương, không dùng ảnh bao bì AI sai nhãn.
+- [x] Viết lại toàn bộ nội dung landing theo mục tiêu bán 3ml, CTA mua hàng/đặt hàng và giới hạn lô đầu tiên.
+- [ ] Chuẩn bị bộ nội dung và cấu trúc Facebook Ads; chỉ thao tác tạo/chạy chiến dịch sau khi xác nhận tài khoản, ngân sách, giá và được người dùng xác nhận trước hành động nhạy cảm.
+- [x] Kiểm thử form/checkout hoặc CTA bán hàng, claim, responsive, asset và production build cho launch 3ml.
+
+- [x] Viết lại toàn bộ voice/copy hiển thị của landing launch 3ml theo hướng bán hàng trực tiếp, dễ hiểu, claim-safe và không còn mô tả framework/kỹ thuật.
+- [x] Chẩn đoán runtime video nền hero trên desktop/mobile, sửa autoplay/playback/fallback nếu cần và bảo đảm video không bị lớp CSS che khuất.
+- [x] Kiểm thử lại CTA đăng ký, video, copy, responsive, accessibility, test suite và production build; checkout thanh toán thật chưa được tích hợp.
