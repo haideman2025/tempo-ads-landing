@@ -52,7 +52,7 @@
 - [x] Tạo bộ visual nguyên liệu/truy xuất Việt Nam, bàn tay chuẩn bị và các keyframe nghi thức, nhất quán quy cách TEMPO và không gán xuất xứ sai cho thành phần.
 - [x] Thay các khối chữ dài bằng cảnh hình ảnh, nhãn ngắn, caption và accordion thông tin chi tiết chỉ mở khi người dùng cần.
 - [x] Kiểm thử desktop/mobile, tải asset, accessibility baseline, form hàng chờ qua regression test và lập checklist phát hành quảng cáo theo trạng thái hồ sơ thực tế.
-- [ ] Thực hiện một lượt đăng ký hàng chờ production bằng dữ liệu liên hệ hợp lệ có sự đồng ý của chủ dự án trước khi chính thức chạy ads; không tự seed dữ liệu kiểm thử vào 1.000 suất.
+- [x] Thực hiện một lượt đăng ký hàng chờ production bằng dữ liệu liên hệ hợp lệ có sự đồng ý của chủ dự án trước khi chính thức chạy ads; không tự seed dữ liệu kiểm thử vào 1.000 suất.
 
 - [x] Phân tích landing mẫu tempo-by-v2joy.netlify.app và hình tham chiếu để rút nguyên tắc về nhịp hình ảnh, khoảng thở, card và bố cục; không sao chép review/rating/số liệu chưa xác thực.
 - [x] Lập lại art direction lifestyle-first: giảm packshot lặp lại, ưu tiên không gian, khoảnh khắc chuẩn bị, chuyển nhịp và kết nối cảm xúc claim-safe.
@@ -131,14 +131,15 @@
 
 - [x] Loại các visual cặp đôi trùng lặp trong gallery/điểm chốt hàng chờ và bảo đảm chapter cuối không lặp keyframe đã dùng trước đó.
 - [x] Sửa runtime video nền để cả năm chapter trên domain live phát đúng asset 01→05 thay vì chỉ hero phát Video 01; bổ sung kiểm thử chống hồi quy.
-- [ ] Kiểm tra lại landing live trên desktop/mobile sau khi DNS và phiên bản mới đồng bộ; xác nhận video phát, bố cục không lặp, CTA/form không bị che.
+- [x] Kiểm tra lại landing live trên desktop/mobile sau khi DNS và phiên bản mới đồng bộ; xác nhận video phát, bố cục không lặp, CTA/form không bị che.
 
 - [x] Khắc phục playback thực tế cho video nền chapter 02–05 trên `www.v2joy.life`, bao gồm chính sách autoplay, lớp hiển thị và kiểm thử runtime.
 - [x] Chẩn đoán lại theo runtime production vì người dùng vẫn chỉ quan sát được Video 01 ở hero; thay giải pháp playback nếu cần để Video 02–05 phát nền tuần tự xuyên landing.
 - [x] Tái thiết kế bốn chapter Video 02–05 thành cảnh nền toàn khung, có nhãn chapter và storytelling ngắn rõ ràng để người dùng thấy ngay video khi cuộn landing.
 - [x] Kiểm thử lại playback và nhận diện thị giác của từng video 02–05 trên desktop/mobile sau khi thiết kế lại.
 - [x] Đo biến thiên khung hình thực tế của Video 02–05 trên production sau khi cuộn vào từng scene; không coi `play()` hoặc nhãn trạng thái là bằng chứng đủ.
-- [ ] Thay cơ chế render nếu video 02–05 không tạo chuyển động quan sát được trên thiết bị thực, rồi nghiệm thu lại theo từng scene.
+- [x] Thay cơ chế render nếu video 02–05 không tạo chuyển động quan sát được trên thiết bị thực, rồi nghiệm thu lại theo từng scene.
+- [x] Kiểm tra trực tiếp `www.v2joy.life` trên cả desktop và mobile sau khi bundle mới đồng bộ; lưu bằng chứng rằng Video 02–05 phát, bố cục không lặp và CTA/form không bị che trên domain live.
 - [x] Chuẩn hóa số điện thoại Việt Nam có dấu cách/dấu phân cách trước khi validation, thay lỗi JSON thô bằng thông báo tiếng Việt và cho phép form đăng ký thành công hợp lệ.
 - [x] Xác nhận lưu đăng ký vào database sẵn có, giữ quota theo tổng chai và phát Pixel Purchase duy nhất sau server trả về reservation thành công.
 - [x] Tích hợp kênh vận hành cho đăng ký mới: đồng bộ Google Sheets hoặc gửi thông báo Telegram sau khi nhận cấu hình/kết nối cần thiết.
