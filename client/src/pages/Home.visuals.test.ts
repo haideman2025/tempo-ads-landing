@@ -54,6 +54,13 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain("Dừng tự phát");
   });
 
+  it("uses the shared video frame contract and playback retry for every chapter backdrop", () => {
+    expect(source).toContain('className="video-frame section-video-backdrop"');
+    expect(source).toContain('autoPlay muted loop playsInline preload="metadata"');
+    expect(source).toContain('element.addEventListener("canplay", startPlayback, { once: true })');
+    expect(source).toContain('poster={ASSETS.fineMist} label="Video 05');
+  });
+
   it("uses a full sales flow with Golden Circle narrative, one launch format and a 1–2 bottle selector", () => {
     expect(source).toContain("VÌ SAO BẮT ĐẦU");
     expect(source).toContain("ĐỌC TRƯỚC KHI CHỌN");
@@ -113,6 +120,8 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).not.toContain("tempo-couple-02-walk-home_e372d5a3.webp");
     expect(source).not.toContain("tempo-lifestyle-03-together-at-home_2ee3a59f.webp");
     expect(source).toContain("tempo-lifestyle-04-morning-return_a7805e20.webp");
+    expect(source).toContain('{ src: ASSETS.signalHero, index: "05", kicker: "BUỔI TỐI"');
+    expect(source).not.toContain('{ src: ASSETS.lifestyleTogether, index: "05"');
     expect(source).toContain("gallery-grid--diary");
     expect(source).toContain("function SafeImage");
   });

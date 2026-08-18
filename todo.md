@@ -126,3 +126,9 @@
 - [x] Rà soát và khắc phục trải nghiệm hiển thị/video/CTA/form trên desktop và mobile; xác minh fallback, responsive, accessibility, regression test và production build.
 - [x] Khắc phục lỗi runtime của truy vấn quota `sum(quantity)` hoặc contract waitlist để form hàng chờ hiển thị trạng thái chính xác sau cập nhật schema.
 - [x] Bàn giao hướng dẫn trỏ landing TEMPO live sang tên miền riêng qua DNS và màn hình quản trị dự án.
+
+- [ ] Thiết lập `v2joy.life` làm tên miền chính trong màn hình Domains của landing; giữ `www.v2joy.life` như alias và chuyển hướng về domain gốc sau khi DNS xác minh.
+
+- [x] Loại các visual cặp đôi trùng lặp trong gallery/điểm chốt hàng chờ và bảo đảm chapter cuối không lặp keyframe đã dùng trước đó.
+- [ ] Sửa runtime video nền để cả năm chapter trên domain live phát đúng asset 01→05 thay vì chỉ hero phát Video 01; bổ sung kiểm thử chống hồi quy.
+- [ ] Kiểm tra lại landing live trên desktop/mobile sau khi DNS và phiên bản mới đồng bộ; xác nhận video phát, bố cục không lặp, CTA/form không bị che.
