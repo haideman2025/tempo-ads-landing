@@ -160,6 +160,19 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
   </div>;
 }
 
+function VideoStoryScene({ step, title, accent, copy, detail, video, poster, label }: { step: "02" | "03" | "04" | "05"; title: string; accent: string; copy: string; detail: string; video: string; poster: string; label: string }) {
+  return <section className={`video-story-scene video-story-scene--${step}`} aria-label={label}>
+    <SectionVideoBackdrop video={video} poster={poster} label={label} />
+    <div className="video-story-scene__wash" aria-hidden="true" />
+    <div className="video-story-scene__copy">
+      <p className="video-story-scene__eyebrow">CẢNH {step} / 05 <span>·</span> VIDEO NỀN</p>
+      <h2>{title}<br /><em>{accent}</em></h2>
+      <p>{copy}</p>
+      <div className="video-story-scene__detail"><span>ĐANG CHẠY NỀN</span><b>{detail}</b></div>
+    </div>
+  </section>;
+}
+
 function V2JoyBadge({ className = "" }: { className?: string }) {
   return <span className={`v2joy-badge ${className}`}><img src={V2JOY_LOGO} alt="V2JOY" /></span>;
 }
@@ -362,10 +375,7 @@ export default function Home() {
         <div className="commerce-intro__side"><Clock3 size={20} /><p>TEMPO là một sản phẩm chăm sóc da cho bước chuẩn bị trước buổi tối — không thay thế sự kết nối, giao tiếp và đồng thuận giữa hai người.</p></div>
       </section>
 
-      <section className="cinema-section cinema-section--lifestyle">
-        <SectionVideoBackdrop video={ASSETS.motionCarry} poster={ASSETS.lifestyleExit} label="Video 02: TEMPO 3ml được mang theo trước khi ra ngoài" />
-        <div className="cinema-section__copy"><p className="overline">CÁCH BẮT ĐẦU</p><h2>Chủ động chuẩn bị.<br /><em>Không cần nói quá.</em></h2><p>Giữ mọi thứ đơn giản: đọc nhãn, dùng đúng hướng dẫn và để tâm đến cảm giác của chính bạn cùng người bên cạnh.</p><span className="micro-note">ĐỌC NHÃN / DÙNG ĐÚNG HƯỚNG DẪN / TỰ QUYẾT ĐỊNH</span></div>
-      </section>
+      <VideoStoryScene step="02" title="Khép lại ngày dài." accent="Mang theo điều vừa đủ." copy="Bỏ chai vào túi. Rời khỏi lịch làm việc. Giữ một khoảng chuẩn bị riêng cho buổi tối mà bạn đã chọn." detail="MỘT CHAI NHỎ · MỘT NHỊP CHỦ ĐỘNG" video={ASSETS.motionCarry} poster={ASSETS.lifestyleExit} label="Video 02: TEMPO 3ml được mang theo trước khi ra ngoài" />
 
       <section className="story-panel story-panel--pocket">
         <div className="story-image"><SafeImage src={ASSETS.pack3mlVerified} alt="TEMPO 3ml với nhãn TEMPO rõ ràng trên thân chai và hộp" /><span className="image-index">3ML / MANG THEO MỖI NGÀY</span></div>
@@ -378,9 +388,11 @@ export default function Home() {
         <div className="ingredient-atlas__claim"><Leaf size={20} /><p><b>Claim ghi nhãn:</b> “Giúp chăm sóc dưỡng ẩm da.” Không gán vùng trồng, nước xuất xứ hoặc công dụng riêng cho từng chiết xuất khi chưa có hồ sơ công khai xác nhận.</p></div>
       </section>
 
+      <VideoStoryScene step="03" title="Dừng lại để đọc." accent="Biết trước khi chọn." copy="Sản phẩm chăm sóc da không cần được hứa quá. Bạn có thể xem thành phần, đối chiếu nhãn và chọn theo điều mình hiểu rõ." detail="ĐỌC INCI · ĐỐI CHIẾU NHÃN · TỰ QUYẾT ĐỊNH" video={ASSETS.motionCraft} poster={ASSETS.botanicalLedger} label="Video 03: chất liệu và thông tin TEMPO được đối chiếu" />
+
       <section className="transparency-protocol" id="nguon-goc" aria-labelledby="transparency-title">
         <div className="transparency-protocol__masthead"><div><p className="overline overline--dark">ĐỌC RÕ TRƯỚC KHI MUA</p><h2 id="transparency-title">Đọc rõ rồi chọn.<br /><em>Không cần đoán.</em></h2></div><p>TEMPO là mỹ phẩm. Những thông tin dưới đây giúp bạn hiểu sản phẩm trước khi đăng ký mua lô 3ml đầu tiên.</p></div>
-        <div className="transparency-hero"><SectionVideoBackdrop video={ASSETS.motionCraft} poster={ASSETS.botanicalLedger} label="Video 03: chất liệu và thông tin TEMPO được đối chiếu" /><div className="transparency-hero__copy"><span>01 / THÀNH PHẦN</span><h3>Danh mục rõ ràng.<br /><em>Không cần đoán.</em></h3><p>INCI mở; thành phần có Alcohol (Ethanol), Butylene Glycol, chín chiết xuất thực vật, Sodium Benzoate và Panthenol.</p><a href="#inci-full" className="transparency-link">Xem INCI đầy đủ <ArrowDownRight size={16} /></a></div></div>
+        <div className="transparency-hero transparency-hero--copy-only"><div className="transparency-hero__copy"><span>01 / THÀNH PHẦN</span><h3>Danh mục rõ ràng.<br /><em>Không cần đoán.</em></h3><p>INCI mở; thành phần có Alcohol (Ethanol), Butylene Glycol, chín chiết xuất thực vật, Sodium Benzoate và Panthenol.</p><a href="#inci-full" className="transparency-link">Xem INCI đầy đủ <ArrowDownRight size={16} /></a></div></div>
         <div className="transparency-steps">
           <article className="transparency-card transparency-card--origin"><SafeImage src={ASSETS.botanicalExtraction} alt="Không gian chiết xuất đương đại minh hoạ quy trình đối chiếu thông tin sản phẩm" /><div><span>02 / NƠI SẢN XUẤT</span><h3>Sản xuất tại<br /><em>Việt Nam.</em></h3><p><b>Công ty TNHH SX Công nghệ cao NANOFRANCE</b><br />KCN Đồng Văn IV, Ninh Bình.</p></div></article>
           <article className="transparency-card transparency-card--label"><SafeImage src={ASSETS.botanicalTraditional} alt="Vật liệu thực vật và giấy ghi chép minh hoạ bước đọc nhãn sản phẩm" /><div><span>03 / NHÃN SẢN PHẨM</span><h3>Đọc nhãn trước<br /><em>khi bắt đầu.</em></h3><p>Tên SKU · dung tích · INCI · số lô · NSX/HSD · hướng dẫn.</p></div></article>
@@ -406,18 +418,17 @@ export default function Home() {
         <div className="format-grid">{productChoices.map(item => <article className="format-card" key={item.id}><div className="format-card__image"><SafeImage src={item.image} alt={`Packshot ${item.name} có nhãn TEMPO rõ ràng`} /></div><div className="format-card__copy"><span>{item.step} / {item.name}</span><h3>{item.title}</h3><p>{item.note}</p><small>{item.useCase}</small><button type="button" onClick={goToWaitlist}>Đăng ký mua {item.name} <ArrowUpRight size={15} /></button></div></article>)}</div>
       </section>
 
-      <section className="motion-bridge" aria-label="Video 04: khoảnh khắc hẹn hò của TEMPO">
-        <SectionVideoBackdrop video={ASSETS.motionDate} poster={ASSETS.lifestyleTogether} label="Video 04: một khoảnh khắc buổi tối dành cho hai người trưởng thành" />
-        <div className="motion-bridge__copy"><span>CẢNH 04 / 05</span><h2>Đến cuộc hẹn.<br /><em>Giữ nhịp vừa đủ.</em></h2></div>
-      </section>
+      <VideoStoryScene step="04" title="Đến cuộc hẹn." accent="Giữ nhịp vừa đủ." copy="Sự chuẩn bị tốt nhất không chiếm lấy khoảnh khắc. Nó để lại chỗ cho cuộc trò chuyện, sự có mặt và lựa chọn của cả hai." detail="KÍN ĐÁO · BÌNH TĨNH · CÓ MẶT" video={ASSETS.motionDate} poster={ASSETS.lifestyleTogether} label="Video 04: một khoảnh khắc buổi tối dành cho hai người trưởng thành" />
 
       <section className="visual-proof" aria-label="Mạch hình ảnh Night Confident">
         <div className="visual-proof__heading"><p className="overline">6 KHOẢNH KHẮC TRONG ĐỜI SỐNG</p><h2>Không chỉ một ảnh.<br /><em>Mà là cả một buổi tối.</em></h2><p>Sáu khung hình nối nhau để kể bối cảnh; sản phẩm chỉ xuất hiện khi nó thật sự liên quan đến lựa chọn của bạn.</p></div>
         <div className="gallery-grid gallery-grid--diary">{visualDiary.map(frame => <figure key={frame.index}><SafeImage src={frame.src} alt={`${frame.index} / ${frame.kicker} — ${frame.title}`} /><div className="gallery-grid__copy"><span>{frame.index} / {frame.kicker}</span><h3>{frame.title}</h3></div></figure>)}</div>
       </section>
 
+      <VideoStoryScene step="05" title="Giữ nhịp riêng." accent="Bắt đầu khi bạn sẵn sàng." copy="TEMPO 3ml khép lại mạch chuyện bằng một lựa chọn nhỏ, rõ ràng và không phô trương — dành cho buổi tối bạn muốn chủ động hơn." detail="LÔ ĐẦU TIÊN · TEMPO 3ML · 1.000 CHAI" video={ASSETS.motionFinal} poster={ASSETS.fineMist} label="Video 05: TEMPO 3ml khép lại câu chuyện buổi tối" />
+
       <section className="waitlist-section" id="waitlist">
-        <div className="waitlist-cinema"><SectionVideoBackdrop video={ASSETS.motionFinal} poster={ASSETS.fineMist} label="Video 05: TEMPO 3ml khép lại câu chuyện buổi tối" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">CẢNH 05 / 05 · 1.000 CHAI TEMPO 3ML</p><h2>Lô đầu tiên<br /><em>đã sẵn sàng.</em></h2><p>Đăng ký để nhận thông tin mua, giao hàng và số lượng còn lại của phiên bản 3ml.</p></div></div>
+        <div className="waitlist-cinema"><img src={ASSETS.fineMist} alt="Chai TEMPO 3ml tạo màn sương mịn trong ánh sáng buổi tối" loading="lazy" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">SAU CẢNH 05 · 1.000 CHAI TEMPO 3ML</p><h2>Lô đầu tiên<br /><em>đã sẵn sàng.</em></h2><p>Đăng ký để nhận thông tin mua, giao hàng và số lượng còn lại của phiên bản 3ml.</p></div></div>
         <div className="waitlist-form-wrap"><div className="waitlist-topline"><span>NHẬN THÔNG TIN MUA / TEMPO 3ML</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 chai đã được giữ</span></div><h2>Giữ quyền mua<br />TEMPO 3ml.</h2><p className="form-intro">Đăng ký để được liên hệ xác nhận mua TEMPO 3ml. Mỗi lượt có thể giữ tối đa 2 chai, tùy số lượng còn lại. Đây chưa phải thanh toán; V2JOY sẽ liên hệ theo thứ tự đăng ký về giao hàng. Giá ra mắt: 349.000đ/chai.</p>
           <form className="waitlist-form" onSubmit={submitWaitlist}>
             <div className="launch-product-summary"><img src={ASSETS.pack3mlVerified} alt="" loading="lazy" /><div><span>TEMPO 3ml</span><small>349.000đ / chai · lô thử nghiệm đầu tiên</small></div></div>

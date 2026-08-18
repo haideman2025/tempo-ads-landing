@@ -25,10 +25,10 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain("CHƯƠNG {active.step} / 05");
     const landingSequence = [
       '<source src={ASSETS.motionReservation} type="video/mp4" />',
-      'SectionVideoBackdrop video={ASSETS.motionCarry}',
-      'SectionVideoBackdrop video={ASSETS.motionCraft}',
-      'SectionVideoBackdrop video={ASSETS.motionDate}',
-      'SectionVideoBackdrop video={ASSETS.motionFinal}',
+      '<VideoStoryScene step="02"',
+      '<VideoStoryScene step="03"',
+      '<VideoStoryScene step="04"',
+      '<VideoStoryScene step="05"',
     ];
     let previousLandingIndex = -1;
     for (const marker of landingSequence) {
@@ -65,7 +65,9 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).not.toContain('observer.observe(frame)');
     expect(source).toContain('data-playback-state={playbackState}');
     expect(source).toContain('(reducedMotion || hasPlaybackError) && <img className="video-frame__fallback"');
-    expect(source).toContain('poster={ASSETS.fineMist} label="Video 05');
+    expect(source).toContain('function VideoStoryScene');
+    expect(source).toContain('video={ASSETS.motionFinal}');
+    expect(source).toContain('className={`video-story-scene video-story-scene--${step}`}');
   });
 
   it("uses a full sales flow with Golden Circle narrative, one launch format and a 1–2 bottle selector", () => {
@@ -144,6 +146,8 @@ describe("TEMPO sales landing visual system", () => {
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain('.video-frame[data-playback-state="error"] video');
     expect(styles).toContain(".video-frame__motion-status");
+    expect(styles).toContain(".video-story-scene");
+    expect(styles).toContain(".video-story-scene__wash");
     expect(styles).toContain(".quantity-choice");
   });
 
