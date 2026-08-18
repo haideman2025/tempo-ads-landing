@@ -152,6 +152,17 @@ describe("TEMPO sales landing visual system", () => {
     expect(styles).toContain(".quantity-choice");
   });
 
+  it("uses the supplied full V2JOY logo without circular cropping across the landing and browser chrome", () => {
+    expect(source).toContain('const V2JOY_LOGO = "/manus-storage/v2joylogo-official_9302769f.webp"');
+    expect(source).toContain('function V2JoyBadge');
+    expect(source).toContain('<img src={V2JOY_LOGO} alt="V2JOY" />');
+    expect(source).toContain('<a href="#top" className="brand" aria-label="TEMPO by V2JOY"><V2JoyBadge />');
+    expect(source).toContain('<footer><div className="footer-brand"><V2JoyBadge />');
+    expect(styles).toContain('.v2joy-badge{display:inline-grid;place-items:center;flex:0 0 auto;width:42px;height:42px');
+    expect(styles).toContain('object-position:center;border-radius:8px');
+    expect(documentHtml).toContain('rel="icon" type="image/webp" href="/manus-storage/v2joylogo-official_9302769f.webp"');
+  });
+
   it("loads the configured Meta Pixel and fires purchase only after a reservation", () => {
     expect(documentHtml).toContain("connect.facebook.net/en_US/fbevents.js");
     expect(documentHtml).toContain("%VITE_META_PIXEL_ID%");
