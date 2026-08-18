@@ -134,6 +134,7 @@
 - [ ] Kiểm tra lại landing live trên desktop/mobile sau khi DNS và phiên bản mới đồng bộ; xác nhận video phát, bố cục không lặp, CTA/form không bị che.
 
 - [x] Khắc phục playback thực tế cho video nền chapter 02–05 trên `www.v2joy.life`, bao gồm chính sách autoplay, lớp hiển thị và kiểm thử runtime.
+- [x] Chẩn đoán lại theo runtime production vì người dùng vẫn chỉ quan sát được Video 01 ở hero; thay giải pháp playback nếu cần để Video 02–05 phát nền tuần tự xuyên landing.
 - [x] Chuẩn hóa số điện thoại Việt Nam có dấu cách/dấu phân cách trước khi validation, thay lỗi JSON thô bằng thông báo tiếng Việt và cho phép form đăng ký thành công hợp lệ.
 - [x] Xác nhận lưu đăng ký vào database sẵn có, giữ quota theo tổng chai và phát Pixel Purchase duy nhất sau server trả về reservation thành công.
 - [x] Tích hợp kênh vận hành cho đăng ký mới: đồng bộ Google Sheets hoặc gửi thông báo Telegram sau khi nhận cấu hình/kết nối cần thiết.

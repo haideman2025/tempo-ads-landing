@@ -87,7 +87,6 @@ function SafeImage({ src, alt, className = "", fallback = ASSETS.heroPoster }: {
 }
 
 function SectionVideoBackdrop({ video, poster, label }: { video: string; poster: string; label: string }) {
-  const frameRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reducedMotion = useReducedMotion();
   const [hasPlaybackError, setHasPlaybackError] = useState(false);
@@ -95,22 +94,20 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
 
   useEffect(() => {
     const element = videoRef.current;
-    const frame = frameRef.current;
-    if (!element || !frame) return;
+    if (!element) return;
     if (reducedMotion) {
       element.pause();
       setPlaybackState("reduced");
       return;
     }
     let cancelled = false;
-    let isVisible = true;
     let retryCount = 0;
     let retryTimer: number | undefined;
     let startPlayback = () => undefined;
     const scheduleRetry = () => {
-      if (cancelled || !isVisible) return;
+      if (cancelled) return;
       if (retryTimer !== undefined) window.clearTimeout(retryTimer);
-      if (retryCount >= 3) {
+      if (retryCount >= 4) {
         setHasPlaybackError(true);
         setPlaybackState("error");
         return;
@@ -119,7 +116,7 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
       retryTimer = window.setTimeout(startPlayback, 280 * retryCount);
     };
     startPlayback = () => {
-      if (cancelled || !isVisible) return;
+      if (cancelled) return;
       element.muted = true;
       element.defaultMuted = true;
       element.playsInline = true;
@@ -132,34 +129,29 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
           setPlaybackState("playing");
         }
       }).catch(() => {
-        if (!cancelled && isVisible) {
+        if (!cancelled) {
           setPlaybackState("loading");
           scheduleRetry();
         }
       });
     };
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisible = Boolean(entry?.isIntersecting);
-      if (isVisible) startPlayback();
-      else {
-        element.pause();
-        if (retryTimer !== undefined) window.clearTimeout(retryTimer);
-      }
-    }, { threshold: 0.05 });
+    setHasPlaybackError(false);
+    setPlaybackState("loading");
+    const eagerTimers = [0, 320, 1100, 2400].map(delay => window.setTimeout(startPlayback, delay));
+    element.addEventListener("loadedmetadata", startPlayback);
     element.addEventListener("loadeddata", startPlayback);
     element.addEventListener("canplay", startPlayback);
-    observer.observe(frame);
-    retryTimer = window.setTimeout(startPlayback, 240);
     return () => {
       cancelled = true;
       if (retryTimer !== undefined) window.clearTimeout(retryTimer);
+      eagerTimers.forEach(timer => window.clearTimeout(timer));
+      element.removeEventListener("loadedmetadata", startPlayback);
       element.removeEventListener("loadeddata", startPlayback);
       element.removeEventListener("canplay", startPlayback);
-      observer.disconnect();
     };
   }, [reducedMotion, video]);
 
-  return <div ref={frameRef} className="video-frame section-video-backdrop" data-playback-state={playbackState} aria-label={label}>
+  return <div className="video-frame section-video-backdrop" data-playback-state={playbackState} aria-label={label}>
     {(reducedMotion || hasPlaybackError) && <img className="video-frame__fallback" src={poster} alt="" aria-hidden="true" />}
     {!reducedMotion && <video ref={videoRef} autoPlay muted loop playsInline preload="auto" poster={poster} onPlaying={() => { setHasPlaybackError(false); setPlaybackState("playing"); }} onError={() => { setHasPlaybackError(true); setPlaybackState("error"); }}>
       <source src={video} type="video/mp4" />

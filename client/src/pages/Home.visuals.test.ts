@@ -56,12 +56,13 @@ describe("TEMPO sales landing visual system", () => {
   });
 
   it("uses the shared video frame contract and playback retry for every chapter backdrop", () => {
-    expect(source).toContain('ref={frameRef} className="video-frame section-video-backdrop"');
+    expect(source).toContain('className="video-frame section-video-backdrop"');
     expect(source).toContain('autoPlay muted loop playsInline preload="auto"');
+    expect(source).toContain('element.addEventListener("loadedmetadata", startPlayback)');
     expect(source).toContain('element.addEventListener("loadeddata", startPlayback)');
-    expect(source).toContain('observer.observe(frame)');
-    expect(source).toContain('threshold: 0.05');
-    expect(source).toContain('if (retryCount >= 3)');
+    expect(source).toContain('const eagerTimers = [0, 320, 1100, 2400]');
+    expect(source).toContain('if (retryCount >= 4)');
+    expect(source).not.toContain('observer.observe(frame)');
     expect(source).toContain('data-playback-state={playbackState}');
     expect(source).toContain('(reducedMotion || hasPlaybackError) && <img className="video-frame__fallback"');
     expect(source).toContain('poster={ASSETS.fineMist} label="Video 05');
