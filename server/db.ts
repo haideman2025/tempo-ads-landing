@@ -1,8 +1,8 @@
-import { count, eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, tempoWaitlistEntries, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
-import { getRemainingSlots, isWaitlistFull, WAITLIST_CAPACITY, type WaitlistInput } from "./waitlist";
+import { getRemainingSlots, hasRemainingCapacity, WAITLIST_CAPACITY, type WaitlistInput } from "./waitlist";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -94,7 +94,9 @@ export async function getTempoWaitlistStatus() {
   const db = await getDb();
   if (!db) throw new Error("Database is unavailable");
 
-  const [result] = await db.select({ claimed: count() }).from(tempoWaitlistEntries);
+  const [result] = await db
+    .select({ claimed: sql<number>`coalesce(sum(${tempoWaitlistEntries.quantity}), 0)` })
+    .from(tempoWaitlistEntries);
   const claimed = Number(result?.claimed ?? 0);
   return { claimed, remaining: getRemainingSlots(claimed), capacity: WAITLIST_CAPACITY };
 }
@@ -117,7 +119,7 @@ export async function reserveTempoWaitlistSlot(input: WaitlistInput) {
   // A rare collision is re-read and retried, keeping the 1,000-seat cap database-enforced.
   for (let attempt = 0; attempt < 4; attempt += 1) {
     const { claimed } = await getTempoWaitlistStatus();
-    if (isWaitlistFull(claimed)) return { kind: "full" as const };
+    if (!hasRemainingCapacity(claimed, input.quantity)) return { kind: "full" as const };
 
     const slotNumber = claimed + 1;
     try {
@@ -127,13 +129,19 @@ export async function reserveTempoWaitlistSlot(input: WaitlistInput) {
         phone: input.phone,
         email: input.email || null,
         preferredSku: input.preferredSku,
+        quantity: input.quantity,
         note: input.note || null,
         marketingConsent: true,
         consentedAt: new Date(),
       });
       const entry = await getTempoWaitlistEntryByPhone(input.phone);
       if (!entry) throw new Error("Waitlist entry could not be confirmed");
-      return { kind: "reserved" as const, entry };
+      return {
+        kind: "reserved" as const,
+        entry,
+        quantity: input.quantity,
+        totalValue: input.quantity * 349_000,
+      };
     } catch (error) {
       const duplicate = await getTempoWaitlistEntryByPhone(input.phone);
       if (duplicate) return { kind: "existing" as const, entry: duplicate };

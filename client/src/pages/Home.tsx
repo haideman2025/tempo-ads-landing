@@ -33,8 +33,6 @@ const ASSETS = {
   fineMist: "/manus-storage/tempo-launch-3ml-fine-mist_d0499407.jpg",
 };
 
-type PreferredSku = "3ml";
-
 const productChoices = [
   { id: "3ml" as const, step: "01", name: "TEMPO 3ml", title: "Lô launch đầu tiên", note: "Chai 3ml nhỏ gọn cho khoảng 12–15 lần dùng theo hướng dẫn trên nhãn.", useCase: "1.000 chai đầu tiên — ưu tiên cho người muốn bắt đầu ngay.", image: ASSETS.pack3mlVerified },
 ];
@@ -75,6 +73,29 @@ function SafeImage({ src, alt, className = "", fallback = ASSETS.heroPoster }: {
     currentTarget.dataset.fallbackApplied = "true";
     currentTarget.src = fallback;
   }} />;
+}
+
+function SectionVideoBackdrop({ video, poster, label }: { video: string; poster: string; label: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const element = videoRef.current;
+    if (!element || reducedMotion) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) void element.play().catch(() => undefined);
+      else element.pause();
+    }, { threshold: 0.18 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [reducedMotion, video]);
+
+  return <div className="section-video-backdrop" aria-hidden="true">
+    <img src={poster} alt="" />
+    {!reducedMotion && <video ref={videoRef} muted loop playsInline preload="metadata" poster={poster} aria-label={label} onError={({ currentTarget }) => { currentTarget.dataset.failed = "true"; }}>
+      <source src={video} type="video/mp4" />
+    </video>}
+  </div>;
 }
 
 function V2JoyBadge({ className = "" }: { className?: string }) {
@@ -216,22 +237,36 @@ function MotionCarousel() {
 }
 
 export default function Home() {
-  const [preferredSku, setPreferredSku] = useState<PreferredSku>("3ml");
+  const [quantity, setQuantity] = useState<1 | 2>(1);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [formResult, setFormResult] = useState<{ kind: "reserved" | "existing" | "full"; slot?: number } | null>(null);
+  const [formResult, setFormResult] = useState<{ kind: "reserved" | "existing" | "full"; slot?: number; quantity?: number } | null>(null);
   const status = trpc.waitlist.status.useQuery(undefined, { staleTime: 30_000, retry: 1 });
   const join = trpc.waitlist.join.useMutation();
   const claimed = status.data?.claimed ?? 0;
   const remaining = status.data?.remaining ?? 1000;
+  const totalValue = quantity * 349_000;
+
+  useEffect(() => {
+    if (remaining < quantity) setQuantity(1);
+  }, [quantity, remaining]);
 
   function submitWaitlist(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
-    join.mutate({ fullName: String(data.get("fullName") ?? ""), phone: String(data.get("phone") ?? ""), email: String(data.get("email") ?? ""), preferredSku, note: String(data.get("note") ?? ""), marketingConsent: data.get("marketingConsent") === "on" }, {
+    join.mutate({ fullName: String(data.get("fullName") ?? ""), phone: String(data.get("phone") ?? ""), email: String(data.get("email") ?? ""), preferredSku: "3ml", quantity, note: String(data.get("note") ?? ""), marketingConsent: data.get("marketingConsent") === "on" }, {
       onSuccess: result => {
-        setFormResult({ kind: result.kind, slot: result.entry?.slotNumber });
-        if (result.kind === "reserved") form.reset();
+        setFormResult({ kind: result.kind, slot: result.entry?.slotNumber, quantity: result.kind === "reserved" ? result.quantity : result.entry?.quantity });
+        if (result.kind === "reserved") {
+          window.fbq?.("track", "Purchase", {
+            value: result.totalValue,
+            currency: "VND",
+            content_ids: ["tempo-3ml"],
+            content_type: "product",
+            num_items: result.quantity,
+          });
+          form.reset();
+        }
         void status.refetch();
       },
     });
@@ -266,16 +301,14 @@ export default function Home() {
       </section>
 
       <section className="cinema-section cinema-section--lifestyle">
-        <SafeImage src={ASSETS.lifestyleExit} alt="Lối ra căn hộ trong ánh chiều, gợi khoảnh khắc rời ngày dài" className="cinema-section__image" />
+        <SectionVideoBackdrop video={ASSETS.motionCarry} poster={ASSETS.lifestyleExit} label="Video 02: TEMPO 3ml được mang theo trước khi ra ngoài" />
         <div className="cinema-section__copy"><p className="overline">CÁCH BẮT ĐẦU</p><h2>Chủ động chuẩn bị.<br /><em>Không cần nói quá.</em></h2><p>Giữ mọi thứ đơn giản: đọc nhãn, dùng đúng hướng dẫn và để tâm đến cảm giác của chính bạn cùng người bên cạnh.</p><span className="micro-note">ĐỌC NHÃN / DÙNG ĐÚNG HƯỚNG DẪN / TỰ QUYẾT ĐỊNH</span></div>
       </section>
 
       <section className="story-panel story-panel--pocket">
         <div className="story-image"><SafeImage src={ASSETS.pack3mlVerified} alt="TEMPO 3ml với nhãn TEMPO rõ ràng trên thân chai và hộp" /><span className="image-index">3ML / MANG THEO MỖI NGÀY</span></div>
-        <div className="story-copy"><p className="overline overline--dark">TEMPO 3ML / MANG THEO</p><h2>Nhỏ để mang theo.<br /><em>Dễ bắt đầu.</em></h2><p>TEMPO 3ml là phiên bản duy nhất của lô ra mắt. Chai gọn, dễ cất trong túi và có hướng dẫn rõ ràng để bạn bắt đầu đúng cách.</p><button onClick={() => { setPreferredSku("3ml"); goToWaitlist(); }} type="button" className="text-button">Đăng ký mua TEMPO 3ml <ArrowUpRight size={16} /></button></div>
+        <div className="story-copy"><p className="overline overline--dark">TEMPO 3ML / MANG THEO</p><h2>Nhỏ để mang theo.<br /><em>Dễ bắt đầu.</em></h2><p>TEMPO 3ml là phiên bản duy nhất của lô ra mắt. Chai gọn, dễ cất trong túi và có hướng dẫn rõ ràng để bạn bắt đầu đúng cách.</p><button onClick={goToWaitlist} type="button" className="text-button">Đăng ký mua TEMPO 3ml <ArrowUpRight size={16} /></button></div>
       </section>
-
-      <MotionCarousel />
 
       <section className="ingredient-atlas" aria-labelledby="ingredient-atlas-title">
         <div className="ingredient-atlas__heading"><div><p className="overline overline--dark">ĐỌC TRƯỚC KHI CHỌN</p><h2 id="ingredient-atlas-title">Biết mình đang chọn gì.<br /><em>Trước khi dùng.</em></h2></div><p>Bạn có thể xem thành phần bằng hình ảnh, rồi đối chiếu lại bằng chữ trên INCI và nhãn thành phẩm trước khi quyết định.</p></div>
@@ -285,7 +318,7 @@ export default function Home() {
 
       <section className="transparency-protocol" id="nguon-goc" aria-labelledby="transparency-title">
         <div className="transparency-protocol__masthead"><div><p className="overline overline--dark">ĐỌC RÕ TRƯỚC KHI MUA</p><h2 id="transparency-title">Đọc rõ rồi chọn.<br /><em>Không cần đoán.</em></h2></div><p>TEMPO là mỹ phẩm. Những thông tin dưới đây giúp bạn hiểu sản phẩm trước khi đăng ký mua lô 3ml đầu tiên.</p></div>
-        <div className="transparency-hero"><SafeImage src={ASSETS.botanicalLedger} alt="Sổ ghi chép thành phần và vật liệu thực vật minh hoạ nguyên tắc đối chiếu công thức" /><div className="transparency-hero__copy"><span>01 / THÀNH PHẦN</span><h3>Danh mục rõ ràng.<br /><em>Không cần đoán.</em></h3><p>INCI mở; thành phần có Alcohol (Ethanol), Butylene Glycol, chín chiết xuất thực vật, Sodium Benzoate và Panthenol.</p><a href="#inci-full" className="transparency-link">Xem INCI đầy đủ <ArrowDownRight size={16} /></a></div></div>
+        <div className="transparency-hero"><SectionVideoBackdrop video={ASSETS.motionCraft} poster={ASSETS.botanicalLedger} label="Video 03: chất liệu và thông tin TEMPO được đối chiếu" /><div className="transparency-hero__copy"><span>01 / THÀNH PHẦN</span><h3>Danh mục rõ ràng.<br /><em>Không cần đoán.</em></h3><p>INCI mở; thành phần có Alcohol (Ethanol), Butylene Glycol, chín chiết xuất thực vật, Sodium Benzoate và Panthenol.</p><a href="#inci-full" className="transparency-link">Xem INCI đầy đủ <ArrowDownRight size={16} /></a></div></div>
         <div className="transparency-steps">
           <article className="transparency-card transparency-card--origin"><SafeImage src={ASSETS.botanicalExtraction} alt="Không gian chiết xuất đương đại minh hoạ quy trình đối chiếu thông tin sản phẩm" /><div><span>02 / NƠI SẢN XUẤT</span><h3>Sản xuất tại<br /><em>Việt Nam.</em></h3><p><b>Công ty TNHH SX Công nghệ cao NANOFRANCE</b><br />KCN Đồng Văn IV, Ninh Bình.</p></div></article>
           <article className="transparency-card transparency-card--label"><SafeImage src={ASSETS.botanicalTraditional} alt="Vật liệu thực vật và giấy ghi chép minh hoạ bước đọc nhãn sản phẩm" /><div><span>03 / NHÃN SẢN PHẨM</span><h3>Đọc nhãn trước<br /><em>khi bắt đầu.</em></h3><p>Tên SKU · dung tích · INCI · số lô · NSX/HSD · hướng dẫn.</p></div></article>
@@ -308,7 +341,12 @@ export default function Home() {
 
       <section className="real-size-section" aria-labelledby="real-size-title"><div className="real-size-section__heading"><p className="overline overline--dark">NHÌN THẤY KÍCH THƯỚC THẬT</p><h2 id="real-size-title">Nhỏ gọn để<br /><em>mang theo.</em></h2><p>Chai TEMPO 3ml được đặt cạnh điện thoại để bạn hình dung kích thước trong tay và trong túi. Số lần dùng phụ thuộc lượng dùng theo hướng dẫn trên nhãn.</p></div><div className="real-size-section__grid"><figure><SafeImage src={ASSETS.realSizePhone} alt="Chai TEMPO 3ml đặt cạnh điện thoại để minh họa kích thước thực tế" /><figcaption>01 / KÍCH THƯỚC THỰC TẾ</figcaption></figure><figure><SafeImage src={ASSETS.fineMist} alt="Chai TEMPO 3ml phun màn sương mịn trong studio" /><figcaption>02 / MÀN SƯƠNG MỊN</figcaption></figure></div></section>\n\n      <section className="product-block" id="san-pham">
         <div className="product-block__top"><div><p className="overline overline--dark">TEMPO 3ML / LÔ RA MẮT</p><h2>Một phiên bản.<br /><em>Một quyết định dễ hơn.</em></h2></div><p>Lô ra mắt chỉ có TEMPO 3ml, giá 349.000đ/chai. Chỉ 1.000 chai đầu tiên được mở bán trong đợt này.</p></div>
-        <div className="format-grid">{productChoices.map(item => <article className="format-card" key={item.id}><div className="format-card__image"><SafeImage src={item.image} alt={`Packshot ${item.name} có nhãn TEMPO rõ ràng`} /></div><div className="format-card__copy"><span>{item.step} / {item.name}</span><h3>{item.title}</h3><p>{item.note}</p><small>{item.useCase}</small><button type="button" onClick={() => { setPreferredSku(item.id); goToWaitlist(); }}>Đăng ký mua {item.name} <ArrowUpRight size={15} /></button></div></article>)}</div>
+        <div className="format-grid">{productChoices.map(item => <article className="format-card" key={item.id}><div className="format-card__image"><SafeImage src={item.image} alt={`Packshot ${item.name} có nhãn TEMPO rõ ràng`} /></div><div className="format-card__copy"><span>{item.step} / {item.name}</span><h3>{item.title}</h3><p>{item.note}</p><small>{item.useCase}</small><button type="button" onClick={goToWaitlist}>Đăng ký mua {item.name} <ArrowUpRight size={15} /></button></div></article>)}</div>
+      </section>
+
+      <section className="motion-bridge" aria-label="Video 04: khoảnh khắc hẹn hò của TEMPO">
+        <SectionVideoBackdrop video={ASSETS.motionDate} poster={ASSETS.lifestyleTogether} label="Video 04: một khoảnh khắc buổi tối dành cho hai người trưởng thành" />
+        <div className="motion-bridge__copy"><span>CẢNH 04 / 05</span><h2>Đến cuộc hẹn.<br /><em>Giữ nhịp vừa đủ.</em></h2></div>
       </section>
 
       <section className="visual-proof" aria-label="Mạch hình ảnh Night Confident">
@@ -317,18 +355,19 @@ export default function Home() {
       </section>
 
       <section className="waitlist-section" id="waitlist">
-        <div className="waitlist-cinema"><SafeImage src={ASSETS.lifestyleTogether} alt="Không gian riêng tư, ấm áp cho một buổi tối có chủ đích" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">1.000 CHAI TEMPO 3ML</p><h2>Lô đầu tiên<br /><em>đã sẵn sàng.</em></h2><p>Đăng ký để nhận thông tin mua, giao hàng và số lượng còn lại của phiên bản 3ml.</p></div></div>
-        <div className="waitlist-form-wrap"><div className="waitlist-topline"><span>NHẬN THÔNG TIN MUA / TEMPO 3ML</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 đã ghi nhận</span></div><h2>Giữ quyền mua<br />TEMPO 3ml.</h2><p className="form-intro">Đăng ký để được liên hệ xác nhận mua TEMPO 3ml. Đây chưa phải thanh toán; V2JOY sẽ liên hệ theo thứ tự đăng ký về giao hàng và số lượng còn lại. Giá ra mắt: 349.000đ/chai.</p>
+        <div className="waitlist-cinema"><SectionVideoBackdrop video={ASSETS.motionReservation} poster={ASSETS.lifestyleTogether} label="Video 05: TEMPO 3ml khép lại câu chuyện buổi tối" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">CẢNH 05 / 05 · 1.000 CHAI TEMPO 3ML</p><h2>Lô đầu tiên<br /><em>đã sẵn sàng.</em></h2><p>Đăng ký để nhận thông tin mua, giao hàng và số lượng còn lại của phiên bản 3ml.</p></div></div>
+        <div className="waitlist-form-wrap"><div className="waitlist-topline"><span>NHẬN THÔNG TIN MUA / TEMPO 3ML</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 chai đã được giữ</span></div><h2>Giữ quyền mua<br />TEMPO 3ml.</h2><p className="form-intro">Đăng ký để được liên hệ xác nhận mua TEMPO 3ml. Mỗi lượt có thể giữ tối đa 2 chai, tùy số lượng còn lại. Đây chưa phải thanh toán; V2JOY sẽ liên hệ theo thứ tự đăng ký về giao hàng. Giá ra mắt: 349.000đ/chai.</p>
           <form className="waitlist-form" onSubmit={submitWaitlist}>
-            <div className="sku-choice" role="radiogroup" aria-label="Chọn format TEMPO quan tâm">{productChoices.map(item => <button key={item.id} type="button" role="radio" aria-checked={preferredSku === item.id} onClick={() => setPreferredSku(item.id)} className={preferredSku === item.id ? "is-active" : ""}><img src={item.image} alt="" loading="lazy" /><span>{item.name}</span><small>{item.title}</small></button>)}</div>
+            <div className="launch-product-summary"><img src={ASSETS.pack3mlVerified} alt="" loading="lazy" /><div><span>TEMPO 3ml</span><small>349.000đ / chai · lô thử nghiệm đầu tiên</small></div></div>
+            <fieldset className="quantity-choice" aria-describedby="quantity-total"><legend>Chọn số lượng</legend><div role="radiogroup" aria-label="Chọn số lượng TEMPO 3ml">{([1, 2] as const).map(option => <button key={option} type="button" role="radio" aria-checked={quantity === option} disabled={remaining < option} onClick={() => setQuantity(option)} className={quantity === option ? "is-active" : ""}><span>{option} chai</span><small>{(option * 349_000).toLocaleString("vi-VN")}đ</small></button>)}</div><p id="quantity-total">Tổng dự kiến: <b>{totalValue.toLocaleString("vi-VN")}đ</b> · số lượng còn lại: {remaining.toLocaleString("vi-VN")} chai.</p></fieldset>
             <label>Họ và tên<input name="fullName" required autoComplete="name" placeholder="Tên của bạn" /></label>
             <label>Số điện thoại<input name="phone" required inputMode="tel" autoComplete="tel" placeholder="0xxxxxxxxx" /></label>
             <label>Email <em>(không bắt buộc)</em><input name="email" type="email" autoComplete="email" placeholder="ban@email.com" /></label>
             <label>Lời nhắn <em>(không bắt buộc)</em><textarea name="note" rows={3} maxLength={500} placeholder="Ví dụ: thời gian liên hệ phù hợp" /></label>
             <label className="consent"><input name="marketingConsent" type="checkbox" required /><span>Tôi đồng ý để V2JOY lưu thông tin và liên hệ về việc mua TEMPO 3ml. Tôi có thể yêu cầu xóa thông tin bất kỳ lúc nào.</span></label>
             {join.error && <p className="form-error"><X size={15} /> {join.error.message}</p>}
-            {formResult && <div aria-live="polite" className={`form-result form-result--${formResult.kind}`}>{formResult.kind === "full" ? <><X size={17} /><span>1.000 chai đầu tiên đã đủ. V2JOY sẽ cập nhật đợt tiếp theo.</span></> : <><Check size={17} /><span>{formResult.kind === "existing" ? "Số điện thoại này đã được ghi nhận" : "Bạn đã được ghi nhận quyền nhận thông tin mua"}{formResult.slot ? ` · Suất ${String(formResult.slot).padStart(4, "0")}` : ""}.</span></>}</div>}
-            <button className="submit-button" disabled={join.isPending || remaining === 0} type="submit">{join.isPending ? "Đang giữ suất…" : remaining === 0 ? "Danh sách đã đủ" : "Nhận thông tin mua 3ml"}<ArrowUpRight size={18} /></button>
+            {formResult && <div aria-live="polite" className={`form-result form-result--${formResult.kind}`}>{formResult.kind === "full" ? <><X size={17} /><span>Số chai còn lại không đủ cho lựa chọn này. V2JOY sẽ cập nhật đợt tiếp theo khi lô đầu tiên đã đủ.</span></> : <><Check size={17} /><span>{formResult.kind === "existing" ? "Số điện thoại này đã được ghi nhận" : `Bạn đã được ghi nhận quyền mua ${formResult.quantity} chai`}{formResult.slot ? ` · Suất ${String(formResult.slot).padStart(4, "0")}` : ""}.</span></>}</div>}
+            <button className="submit-button" disabled={join.isPending || remaining < quantity} type="submit">{join.isPending ? "Đang giữ số lượng…" : remaining < quantity ? "Số lượng còn lại không đủ" : `Giữ ${quantity} chai · ${totalValue.toLocaleString("vi-VN")}đ`}<ArrowUpRight size={18} /></button>
           </form><p className="data-note"><Mail size={14} /> Không yêu cầu địa chỉ hay thanh toán ở bước này. Thông tin chỉ dùng để liên hệ về TEMPO.</p>
         </div>
       </section>
@@ -342,6 +381,6 @@ export default function Home() {
       ].map(([question, answer], index) => <article key={question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}><span>{String(index + 1).padStart(2, "0")}</span><b>{question}</b><ChevronDown size={18} /></button>{openFaq === index && <p>{answer}</p>}</article>)}</div></section>
     </main>
     <footer><div className="footer-brand"><V2JoyBadge /><span>TEMPO</span></div><p>Night Confident · đăng ký hàng chờ trước mở bán</p><p>Sản phẩm là mỹ phẩm, không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.</p></footer>
-    <div className="mobile-sticky"><div><span>{remaining.toLocaleString("vi-VN")} suất đầu</span><b>TEMPO / WAITLIST</b></div><button type="button" onClick={goToWaitlist}>Giữ suất <ArrowUpRight size={16} /></button></div>
+    <div className="mobile-sticky"><div><span>{remaining.toLocaleString("vi-VN")} chai còn lại</span><b>TEMPO / WAITLIST</b></div><button type="button" onClick={goToWaitlist}>Giữ chai <ArrowUpRight size={16} /></button></div>
   </div>;
 }

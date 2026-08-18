@@ -41,7 +41,7 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain("Dừng tự phát");
   });
 
-  it("uses a full sales flow with Golden Circle narrative and one launch format", () => {
+  it("uses a full sales flow with Golden Circle narrative, one launch format and a 1–2 bottle selector", () => {
     expect(source).toContain("VÌ SAO BẮT ĐẦU");
     expect(source).toContain("ĐỌC TRƯỚC KHI CHỌN");
     expect(source).toContain("TEMPO 3ML / LÔ RA MẮT");
@@ -51,7 +51,10 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).not.toContain('id: "course-2x5ml" as const');
     expect(source).toContain("349.000đ/chai");
     expect(source).toContain("khoảng 12–15 lần dùng");
-    expect(source).toContain("Nhận thông tin mua 3ml");
+    expect(source).toContain('const [quantity, setQuantity] = useState<1 | 2>(1)');
+    expect(source).toContain('aria-label="Chọn số lượng TEMPO 3ml"');
+    expect(source).toContain("Tổng dự kiến:");
+    expect(source).toContain("Mỗi lượt có thể giữ tối đa 2 chai");
   });
 
   it("adds readable generated botanical and label infographics without unsupported ingredient claims", () => {
@@ -111,5 +114,16 @@ describe("TEMPO sales landing visual system", () => {
     expect(styles).toContain("touch-action:pan-y");
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain('.video-frame[data-playback-state="error"] video');
+    expect(styles).toContain(".quantity-choice");
+  });
+
+  it("loads the configured Meta Pixel and fires purchase only after a reservation", () => {
+    expect(documentHtml).toContain("connect.facebook.net/en_US/fbevents.js");
+    expect(documentHtml).toContain("%VITE_META_PIXEL_ID%");
+    expect(documentHtml).toContain("fbq('track', 'PageView')");
+    expect(source).toContain('if (result.kind === "reserved")');
+    expect(source).toContain('window.fbq?.("track", "Purchase"');
+    expect(source).toContain("currency: \"VND\"");
+    expect(source).toContain('content_ids: ["tempo-3ml"]');
   });
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getRemainingSlots, isWaitlistFull, WAITLIST_CAPACITY, waitlistInputSchema } from "./waitlist";
+import { getRemainingSlots, hasRemainingCapacity, isWaitlistFull, WAITLIST_CAPACITY, waitlistInputSchema } from "./waitlist";
 
 describe("TEMPO waitlist validation", () => {
   it("accepts a compliant 3ml pre-order waitlist request", () => {
@@ -8,10 +8,31 @@ describe("TEMPO waitlist validation", () => {
       phone: "0912345678",
       email: "an@example.com",
       preferredSku: "3ml",
+      quantity: 1,
       note: "Liên hệ vào buổi tối.",
       marketingConsent: true,
     });
     expect(result.success).toBe(true);
+  });
+
+  it("accepts one or two 3ml bottles and rejects a quantity outside the launch limit", () => {
+    for (const quantity of [1, 2]) {
+      expect(waitlistInputSchema.safeParse({
+        fullName: "Nguyễn Minh An",
+        phone: "0912345678",
+        preferredSku: "3ml",
+        quantity,
+        marketingConsent: true,
+      }).success).toBe(true);
+    }
+
+    expect(waitlistInputSchema.safeParse({
+      fullName: "Nguyễn Minh An",
+      phone: "0912345678",
+      preferredSku: "3ml",
+      quantity: 3,
+      marketingConsent: true,
+    }).success).toBe(false);
   });
 
   it("rejects formats outside the 3ml launch SKU", () => {
@@ -20,6 +41,7 @@ describe("TEMPO waitlist validation", () => {
         fullName: "Nguyễn Minh An",
         phone: "0912345678",
         preferredSku,
+        quantity: 1,
         marketingConsent: true,
       });
       expect(result.success).toBe(false);
@@ -31,6 +53,7 @@ describe("TEMPO waitlist validation", () => {
       fullName: "A",
       phone: "12345",
       preferredSku: "3ml",
+      quantity: 1,
       marketingConsent: false,
     });
     expect(result.success).toBe(false);
@@ -42,5 +65,12 @@ describe("TEMPO waitlist validation", () => {
     expect(getRemainingSlots(1000)).toBe(0);
     expect(getRemainingSlots(1005)).toBe(0);
     expect(isWaitlistFull(1000)).toBe(true);
+  });
+
+  it("never permits a two-bottle reservation when only one bottle remains", () => {
+    expect(hasRemainingCapacity(998, 2)).toBe(true);
+    expect(hasRemainingCapacity(999, 1)).toBe(true);
+    expect(hasRemainingCapacity(999, 2)).toBe(false);
+    expect(hasRemainingCapacity(1000, 1)).toBe(false);
   });
 });

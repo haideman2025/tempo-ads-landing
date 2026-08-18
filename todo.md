@@ -110,3 +110,12 @@
 
 - [x] Thay mọi điểm dùng visual hai người đàn ông bằng cảnh hẹn hò nam–nữ trưởng thành, tự nhiên và kín đáo; không có chữ được tạo trong ảnh.
 - [x] Cập nhật regression test, kiểm tra desktop/mobile và production build cho visual hẹn hò thay thế.
+
+- [x] Kiểm kê và sắp năm video TEMPO theo thứ tự câu chuyện xuyên suốt toàn landing, không chỉ trong carousel.
+- [x] Tích hợp từng video làm nền cho chapter tương ứng với autoplay muted/playInline, poster/fallback và giới hạn tải phù hợp trên mobile.
+- [x] Kiểm thử runtime playback theo từng chapter, fallback, responsive, accessibility, regression test và production build trước phát hành.
+
+- [x] Tích hợp Meta Pixel 1955804598438163 trên landing và chỉ gửi sự kiện chuyển đổi sau khi form đăng ký thành công.
+- [x] Cho phép chọn số lượng 1 hoặc 2 chai TEMPO 3ml; ghi dữ liệu số lượng, giá trị 349.000đ/chai và trừ quota theo số chai trong tổng lô 1.000 chai.
+- [x] Gửi sự kiện chuyển đổi có value theo số lượng đã được server chấp nhận; không gửi sự kiện khi form lỗi hoặc số lượng vượt quota.
+- [x] Bổ sung test schema/quota/event tracking và kiểm thử responsive, accessibility, production build cho checkout-form thử nghiệm.

@@ -24,8 +24,8 @@ describe("TEMPO sales landing accessibility baseline", () => {
   });
 
   it("makes waitlist selections, FAQ and consent readable to assistive technology", () => {
-    expect(source).toContain('role="radiogroup" aria-label="Chọn format TEMPO quan tâm"');
-    expect(source).toContain('role="radio" aria-checked={preferredSku === item.id}');
+    expect(source).toContain('role="radiogroup" aria-label="Chọn số lượng TEMPO 3ml"');
+    expect(source).toContain('role="radio" aria-checked={quantity === option}');
     expect(source).toContain('aria-expanded={openFaq === index}');
     expect(source).toContain("marketingConsent");
     expect(source).toContain('aria-live="polite"');

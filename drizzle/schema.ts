@@ -33,6 +33,7 @@ export const tempoWaitlistEntries = mysqlTable("tempo_waitlist_entries", {
   phone: varchar("phone", { length: 24 }).notNull(),
   email: varchar("email", { length: 320 }),
   preferredSku: mysqlEnum("preferred_sku", ["3ml", "5ml", "duo", "course-2x5ml"]).notNull(),
+  quantity: int("quantity").notNull().default(1),
   note: text("note"),
   marketingConsent: boolean("marketing_consent").notNull().default(false),
   consentedAt: timestamp("consented_at").notNull(),
@@ -44,6 +45,7 @@ export const tempoWaitlistEntries = mysqlTable("tempo_waitlist_entries", {
   uniqueIndex("tempo_waitlist_phone_unique").on(table.phone),
   uniqueIndex("tempo_waitlist_slot_unique").on(table.slotNumber),
   check("tempo_waitlist_slot_range", sql`${table.slotNumber} between 1 and 1000`),
+  check("tempo_waitlist_quantity_range", sql`${table.quantity} between 1 and 2`),
 ]);
 
 export type TempoWaitlistEntry = typeof tempoWaitlistEntries.$inferSelect;

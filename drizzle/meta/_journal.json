@@ -22,6 +22,13 @@
       "when": 1786785245312,
       "tag": "0002_nifty_mordo",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1787035564834,
+      "tag": "0003_concerned_yellow_claw",
+      "breakpoints": true
     }
   ]
 }

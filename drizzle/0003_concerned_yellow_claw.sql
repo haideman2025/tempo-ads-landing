@@ -1,0 +1,2 @@
+ALTER TABLE `tempo_waitlist_entries` ADD `quantity` int DEFAULT 1 NOT NULL;--> statement-breakpoint
+ALTER TABLE `tempo_waitlist_entries` ADD CONSTRAINT `tempo_waitlist_quantity_range` CHECK (`tempo_waitlist_entries`.`quantity` between 1 and 2);
