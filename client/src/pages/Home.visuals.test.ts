@@ -28,7 +28,7 @@ describe("TEMPO sales landing visual system", () => {
       'SectionVideoBackdrop video={ASSETS.motionCarry}',
       'SectionVideoBackdrop video={ASSETS.motionCraft}',
       'SectionVideoBackdrop video={ASSETS.motionDate}',
-      'SectionVideoBackdrop video={ASSETS.motionHero}',
+      'SectionVideoBackdrop video={ASSETS.motionFinal}',
     ];
     let previousLandingIndex = -1;
     for (const marker of landingSequence) {
@@ -42,8 +42,9 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain("const videoRef = useRef<HTMLVideoElement>(null)");
     expect(source).toContain("const playAttempt = video.play()");
     expect(source).toContain("autoPlay muted loop playsInline preload=\"auto\"");
-    expect(source).toContain("data-playback-state={playbackState}");
-    expect(source).toContain("video-frame__fallback");
+    expect(source).toContain('data-playback-state={playbackState}');
+    expect(source).toContain('video-frame__fallback');
+    expect(source).toContain('VIDEO ĐANG PHÁT');
     expect(source).toContain("function MotionCarousel");
     expect(source).toContain("aria-roledescription=\"carousel\"");
     expect(source).toContain("role=\"tablist\"");
@@ -59,6 +60,8 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain('autoPlay muted loop playsInline preload="auto"');
     expect(source).toContain('element.addEventListener("loadeddata", startPlayback)');
     expect(source).toContain('observer.observe(frame)');
+    expect(source).toContain('threshold: 0.05');
+    expect(source).toContain('if (retryCount >= 3)');
     expect(source).toContain('data-playback-state={playbackState}');
     expect(source).toContain('(reducedMotion || hasPlaybackError) && <img className="video-frame__fallback"');
     expect(source).toContain('poster={ASSETS.fineMist} label="Video 05');
@@ -139,6 +142,7 @@ describe("TEMPO sales landing visual system", () => {
     expect(styles).toContain("touch-action:pan-y");
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain('.video-frame[data-playback-state="error"] video');
+    expect(styles).toContain(".video-frame__motion-status");
     expect(styles).toContain(".quantity-choice");
   });
 

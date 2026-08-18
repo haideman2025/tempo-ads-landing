@@ -130,10 +130,10 @@
 - [ ] Thiết lập `v2joy.life` làm tên miền chính trong màn hình Domains của landing; giữ `www.v2joy.life` như alias và chuyển hướng về domain gốc sau khi DNS xác minh.
 
 - [x] Loại các visual cặp đôi trùng lặp trong gallery/điểm chốt hàng chờ và bảo đảm chapter cuối không lặp keyframe đã dùng trước đó.
-- [ ] Sửa runtime video nền để cả năm chapter trên domain live phát đúng asset 01→05 thay vì chỉ hero phát Video 01; bổ sung kiểm thử chống hồi quy.
+- [x] Sửa runtime video nền để cả năm chapter trên domain live phát đúng asset 01→05 thay vì chỉ hero phát Video 01; bổ sung kiểm thử chống hồi quy.
 - [ ] Kiểm tra lại landing live trên desktop/mobile sau khi DNS và phiên bản mới đồng bộ; xác nhận video phát, bố cục không lặp, CTA/form không bị che.
 
-- [ ] Khắc phục playback thực tế cho video nền chapter 02–05 trên `www.v2joy.life`, bao gồm chính sách autoplay, lớp hiển thị và kiểm thử runtime.
+- [x] Khắc phục playback thực tế cho video nền chapter 02–05 trên `www.v2joy.life`, bao gồm chính sách autoplay, lớp hiển thị và kiểm thử runtime.
 - [x] Chuẩn hóa số điện thoại Việt Nam có dấu cách/dấu phân cách trước khi validation, thay lỗi JSON thô bằng thông báo tiếng Việt và cho phép form đăng ký thành công hợp lệ.
 - [x] Xác nhận lưu đăng ký vào database sẵn có, giữ quota theo tổng chai và phát Pixel Purchase duy nhất sau server trả về reservation thành công.
 - [x] Tích hợp kênh vận hành cho đăng ký mới: đồng bộ Google Sheets hoặc gửi thông báo Telegram sau khi nhận cấu hình/kết nối cần thiết.

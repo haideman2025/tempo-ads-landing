@@ -28,7 +28,7 @@ const ASSETS = {
   motionCarry: "/manus-storage/2-2_1c24d56b.mp4",
   motionCraft: "/manus-storage/3-2_1be35ced.mp4",
   motionDate: "/manus-storage/4-2_5b3104ee.mp4",
-  motionHero: "/manus-storage/5-2_104c988a.mp4",
+  motionFinal: "/manus-storage/5-2_104c988a.mp4",
   realSizePhone: "/manus-storage/tempo-launch-3ml-real-size-phone_0fcb73c1.jpg",
   fineMist: "/manus-storage/tempo-launch-3ml-fine-mist_d0499407.jpg",
 };
@@ -41,7 +41,7 @@ const motionNotes = [
   { step: "02", title: "Mang theo", caption: "Một format nhỏ trong hành trang trước khi ra ngoài.", video: ASSETS.motionCarry, poster: ASSETS.pack3mlVerified, alt: "TEMPO 3ml có nhãn TEMPO rõ ràng" },
   { step: "03", title: "Đọc chất liệu", caption: "Đi từ thiết kế đến danh mục thông tin có thể đối chiếu.", video: ASSETS.motionCraft, poster: ASSETS.botanicalLedger, alt: "Sổ ghi thành phần và vật liệu thực vật theo phong cách đương đại" },
   { step: "04", title: "Đến cuộc hẹn", caption: "Một khung cảnh bình tĩnh, đặt sự có mặt lên trước mọi vội vàng.", video: ASSETS.motionDate, poster: ASSETS.lifestyleTogether, alt: "Không gian buổi tối ấm áp dành cho hai người trưởng thành" },
-  { step: "05", title: "Giữ nhịp riêng", caption: "TEMPO 3ml gọn trong tay, sẵn sàng cho buổi tối bạn đã chọn.", video: ASSETS.motionHero, poster: ASSETS.pack3mlVerified, alt: "TEMPO 3ml với nhãn rõ ràng" },
+  { step: "05", title: "Giữ nhịp riêng", caption: "TEMPO 3ml gọn trong tay, sẵn sàng cho buổi tối bạn đã chọn.", video: ASSETS.motionFinal, poster: ASSETS.pack3mlVerified, alt: "TEMPO 3ml với nhãn rõ ràng" },
 ] as const;
 
 const ingredientInfographics = [
@@ -103,7 +103,23 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
       return;
     }
     let cancelled = false;
-    const startPlayback = () => {
+    let isVisible = true;
+    let retryCount = 0;
+    let retryTimer: number | undefined;
+    let startPlayback = () => undefined;
+    const scheduleRetry = () => {
+      if (cancelled || !isVisible) return;
+      if (retryTimer !== undefined) window.clearTimeout(retryTimer);
+      if (retryCount >= 3) {
+        setHasPlaybackError(true);
+        setPlaybackState("error");
+        return;
+      }
+      retryCount += 1;
+      retryTimer = window.setTimeout(startPlayback, 280 * retryCount);
+    };
+    startPlayback = () => {
+      if (cancelled || !isVisible) return;
       element.muted = true;
       element.defaultMuted = true;
       element.playsInline = true;
@@ -111,27 +127,32 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
       if (!playAttempt) return;
       playAttempt.then(() => {
         if (!cancelled) {
+          retryCount = 0;
           setHasPlaybackError(false);
           setPlaybackState("playing");
         }
       }).catch(() => {
-        if (!cancelled) {
-          setHasPlaybackError(true);
-          setPlaybackState("error");
+        if (!cancelled && isVisible) {
+          setPlaybackState("loading");
+          scheduleRetry();
         }
       });
     };
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) startPlayback();
-      else element.pause();
-    }, { threshold: 0.18 });
+      isVisible = Boolean(entry?.isIntersecting);
+      if (isVisible) startPlayback();
+      else {
+        element.pause();
+        if (retryTimer !== undefined) window.clearTimeout(retryTimer);
+      }
+    }, { threshold: 0.05 });
     element.addEventListener("loadeddata", startPlayback);
     element.addEventListener("canplay", startPlayback);
     observer.observe(frame);
-    const retryTimer = window.setTimeout(startPlayback, 240);
+    retryTimer = window.setTimeout(startPlayback, 240);
     return () => {
       cancelled = true;
-      window.clearTimeout(retryTimer);
+      if (retryTimer !== undefined) window.clearTimeout(retryTimer);
       element.removeEventListener("loadeddata", startPlayback);
       element.removeEventListener("canplay", startPlayback);
       observer.disconnect();
@@ -143,6 +164,7 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
     {!reducedMotion && <video ref={videoRef} autoPlay muted loop playsInline preload="auto" poster={poster} onPlaying={() => { setHasPlaybackError(false); setPlaybackState("playing"); }} onError={() => { setHasPlaybackError(true); setPlaybackState("error"); }}>
       <source src={video} type="video/mp4" />
     </video>}
+    {playbackState === "playing" && <span className="video-frame__motion-status" aria-hidden="true">VIDEO ĐANG PHÁT</span>}
   </div>;
 }
 
@@ -403,7 +425,7 @@ export default function Home() {
       </section>
 
       <section className="waitlist-section" id="waitlist">
-        <div className="waitlist-cinema"><SectionVideoBackdrop video={ASSETS.motionHero} poster={ASSETS.fineMist} label="Video 05: TEMPO 3ml khép lại câu chuyện buổi tối" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">CẢNH 05 / 05 · 1.000 CHAI TEMPO 3ML</p><h2>Lô đầu tiên<br /><em>đã sẵn sàng.</em></h2><p>Đăng ký để nhận thông tin mua, giao hàng và số lượng còn lại của phiên bản 3ml.</p></div></div>
+        <div className="waitlist-cinema"><SectionVideoBackdrop video={ASSETS.motionFinal} poster={ASSETS.fineMist} label="Video 05: TEMPO 3ml khép lại câu chuyện buổi tối" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">CẢNH 05 / 05 · 1.000 CHAI TEMPO 3ML</p><h2>Lô đầu tiên<br /><em>đã sẵn sàng.</em></h2><p>Đăng ký để nhận thông tin mua, giao hàng và số lượng còn lại của phiên bản 3ml.</p></div></div>
         <div className="waitlist-form-wrap"><div className="waitlist-topline"><span>NHẬN THÔNG TIN MUA / TEMPO 3ML</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 chai đã được giữ</span></div><h2>Giữ quyền mua<br />TEMPO 3ml.</h2><p className="form-intro">Đăng ký để được liên hệ xác nhận mua TEMPO 3ml. Mỗi lượt có thể giữ tối đa 2 chai, tùy số lượng còn lại. Đây chưa phải thanh toán; V2JOY sẽ liên hệ theo thứ tự đăng ký về giao hàng. Giá ra mắt: 349.000đ/chai.</p>
           <form className="waitlist-form" onSubmit={submitWaitlist}>
             <div className="launch-product-summary"><img src={ASSETS.pack3mlVerified} alt="" loading="lazy" /><div><span>TEMPO 3ml</span><small>349.000đ / chai · lô thử nghiệm đầu tiên</small></div></div>
