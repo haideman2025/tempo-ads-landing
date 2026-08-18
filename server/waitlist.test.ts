@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getRemainingSlots, hasRemainingCapacity, isWaitlistFull, WAITLIST_CAPACITY, waitlistInputSchema } from "./waitlist";
+import { getRemainingSlots, hasRemainingCapacity, isWaitlistFull, normalizeVietnamesePhone, WAITLIST_CAPACITY, waitlistInputSchema } from "./waitlist";
 
 describe("TEMPO waitlist validation", () => {
   it("accepts a compliant 3ml pre-order waitlist request", () => {
@@ -13,6 +13,19 @@ describe("TEMPO waitlist validation", () => {
       marketingConsent: true,
     });
     expect(result.success).toBe(true);
+  });
+
+  it("normalizes Vietnamese phone numbers with common visual separators", () => {
+    const result = waitlistInputSchema.safeParse({
+      fullName: "Năng Lượng Mr",
+      phone: "0376 676 575",
+      preferredSku: "3ml",
+      quantity: 2,
+      marketingConsent: true,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.phone).toBe("0376676575");
+    expect(normalizeVietnamesePhone("0376-676-575")).toBe("0376676575");
   });
 
   it("accepts one or two 3ml bottles and rejects a quantity outside the launch limit", () => {

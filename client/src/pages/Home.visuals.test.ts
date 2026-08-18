@@ -55,9 +55,12 @@ describe("TEMPO sales landing visual system", () => {
   });
 
   it("uses the shared video frame contract and playback retry for every chapter backdrop", () => {
-    expect(source).toContain('className="video-frame section-video-backdrop"');
-    expect(source).toContain('autoPlay muted loop playsInline preload="metadata"');
-    expect(source).toContain('element.addEventListener("canplay", startPlayback, { once: true })');
+    expect(source).toContain('ref={frameRef} className="video-frame section-video-backdrop"');
+    expect(source).toContain('autoPlay muted loop playsInline preload="auto"');
+    expect(source).toContain('element.addEventListener("loadeddata", startPlayback)');
+    expect(source).toContain('observer.observe(frame)');
+    expect(source).toContain('data-playback-state={playbackState}');
+    expect(source).toContain('(reducedMotion || hasPlaybackError) && <img className="video-frame__fallback"');
     expect(source).toContain('poster={ASSETS.fineMist} label="Video 05');
   });
 
@@ -147,5 +150,12 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain('window.fbq?.("track", "Purchase"');
     expect(source).toContain("currency: \"VND\"");
     expect(source).toContain('content_ids: ["tempo-3ml"]');
+  });
+
+  it("normalizes phone formatting before submit and never exposes raw validation JSON", () => {
+    expect(source).toContain('function normalizePhoneForSubmit(phone: string)');
+    expect(source).toContain('phone: normalizePhoneForSubmit(String(data.get("phone") ?? ""))');
+    expect(source).toContain('getWaitlistErrorMessage(join.error)');
+    expect(source).not.toContain('{join.error.message}');
   });
 });

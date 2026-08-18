@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { getTempoWaitlistStatus, reserveTempoWaitlistSlot } from "./db";
+import { notifyTempoReservation } from "./telegram";
 import { waitlistInputSchema } from "./waitlist";
 
 export const appRouter = router({
@@ -20,7 +21,21 @@ export const appRouter = router({
   }),
   waitlist: router({
     status: publicProcedure.query(() => getTempoWaitlistStatus()),
-    join: publicProcedure.input(waitlistInputSchema).mutation(({ input }) => reserveTempoWaitlistSlot(input)),
+    join: publicProcedure.input(waitlistInputSchema).mutation(async ({ input }) => {
+      const result = await reserveTempoWaitlistSlot(input);
+      if (result.kind === "reserved") {
+        await notifyTempoReservation({
+          fullName: result.entry.fullName,
+          phone: result.entry.phone,
+          email: result.entry.email,
+          quantity: result.quantity,
+          totalValue: result.totalValue,
+          slotNumber: result.entry.slotNumber,
+          note: result.entry.note,
+        });
+      }
+      return result;
+    }),
   }),
 });
 

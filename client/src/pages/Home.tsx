@@ -63,6 +63,17 @@ function goToWaitlist() {
   document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function normalizePhoneForSubmit(phone: string) {
+  return phone.replace(/[\s().-]/g, "").trim();
+}
+
+function getWaitlistErrorMessage(error: { message?: string } | null) {
+  const message = error?.message ?? "";
+  if (message.includes("phone") || message.includes("điện thoại")) return "Vui lòng kiểm tra lại số điện thoại Việt Nam. Bạn có thể nhập liền hoặc có khoảng trắng.";
+  if (message.includes("email")) return "Email chưa đúng định dạng. Bạn có thể để trống trường này nếu không muốn cung cấp.";
+  return "Chưa thể ghi nhận đăng ký lúc này. Vui lòng thử lại sau ít phút.";
+}
+
 function Signal({ className = "" }: { className?: string }) {
   return <svg className={`signal ${className}`} viewBox="0 0 560 80" fill="none" aria-hidden="true"><path d="M0 43H58c30 0 29-23 56-23 29 0 25 43 56 43 33 0 25-35 56-35 35 0 23 30 58 30 29 0 27-20 57-20 27 0 30 13 56 13h56" /></svg>;
 }
@@ -76,41 +87,60 @@ function SafeImage({ src, alt, className = "", fallback = ASSETS.heroPoster }: {
 }
 
 function SectionVideoBackdrop({ video, poster, label }: { video: string; poster: string; label: string }) {
+  const frameRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reducedMotion = useReducedMotion();
   const [hasPlaybackError, setHasPlaybackError] = useState(false);
+  const [playbackState, setPlaybackState] = useState<"loading" | "playing" | "error" | "reduced">("loading");
 
   useEffect(() => {
     const element = videoRef.current;
-    if (!element || reducedMotion) return;
+    const frame = frameRef.current;
+    if (!element || !frame) return;
+    if (reducedMotion) {
+      element.pause();
+      setPlaybackState("reduced");
+      return;
+    }
     let cancelled = false;
     const startPlayback = () => {
+      element.muted = true;
+      element.defaultMuted = true;
+      element.playsInline = true;
       const playAttempt = element.play();
       if (!playAttempt) return;
       playAttempt.then(() => {
-        if (!cancelled) setHasPlaybackError(false);
+        if (!cancelled) {
+          setHasPlaybackError(false);
+          setPlaybackState("playing");
+        }
       }).catch(() => {
-        if (!cancelled) setHasPlaybackError(true);
+        if (!cancelled) {
+          setHasPlaybackError(true);
+          setPlaybackState("error");
+        }
       });
     };
     const observer = new IntersectionObserver(([entry]) => {
       if (entry?.isIntersecting) startPlayback();
       else element.pause();
     }, { threshold: 0.18 });
-    element.addEventListener("canplay", startPlayback, { once: true });
-    observer.observe(element);
-    const retryTimer = window.setTimeout(startPlayback, 120);
+    element.addEventListener("loadeddata", startPlayback);
+    element.addEventListener("canplay", startPlayback);
+    observer.observe(frame);
+    const retryTimer = window.setTimeout(startPlayback, 240);
     return () => {
       cancelled = true;
       window.clearTimeout(retryTimer);
+      element.removeEventListener("loadeddata", startPlayback);
       element.removeEventListener("canplay", startPlayback);
       observer.disconnect();
     };
   }, [reducedMotion, video]);
 
-  return <div className="video-frame section-video-backdrop" data-playback-state={hasPlaybackError ? "error" : "playing"} aria-label={label}>
-    <img className="video-frame__fallback" src={poster} alt="" aria-hidden="true" />
-    {!reducedMotion && <video ref={videoRef} autoPlay muted loop playsInline preload="metadata" poster={poster} onPlaying={() => setHasPlaybackError(false)} onError={() => setHasPlaybackError(true)}>
+  return <div ref={frameRef} className="video-frame section-video-backdrop" data-playback-state={playbackState} aria-label={label}>
+    {(reducedMotion || hasPlaybackError) && <img className="video-frame__fallback" src={poster} alt="" aria-hidden="true" />}
+    {!reducedMotion && <video ref={videoRef} autoPlay muted loop playsInline preload="auto" poster={poster} onPlaying={() => { setHasPlaybackError(false); setPlaybackState("playing"); }} onError={() => { setHasPlaybackError(true); setPlaybackState("error"); }}>
       <source src={video} type="video/mp4" />
     </video>}
   </div>;
@@ -272,7 +302,7 @@ export default function Home() {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
-    join.mutate({ fullName: String(data.get("fullName") ?? ""), phone: String(data.get("phone") ?? ""), email: String(data.get("email") ?? ""), preferredSku: "3ml", quantity, note: String(data.get("note") ?? ""), marketingConsent: data.get("marketingConsent") === "on" }, {
+    join.mutate({ fullName: String(data.get("fullName") ?? ""), phone: normalizePhoneForSubmit(String(data.get("phone") ?? "")), email: String(data.get("email") ?? ""), preferredSku: "3ml", quantity, note: String(data.get("note") ?? ""), marketingConsent: data.get("marketingConsent") === "on" }, {
       onSuccess: result => {
         setFormResult({ kind: result.kind, slot: result.entry?.slotNumber, quantity: result.kind === "reserved" ? result.quantity : result.entry?.quantity });
         if (result.kind === "reserved") {
@@ -383,7 +413,7 @@ export default function Home() {
             <label>Email <em>(không bắt buộc)</em><input name="email" type="email" autoComplete="email" placeholder="ban@email.com" /></label>
             <label>Lời nhắn <em>(không bắt buộc)</em><textarea name="note" rows={3} maxLength={500} placeholder="Ví dụ: thời gian liên hệ phù hợp" /></label>
             <label className="consent"><input name="marketingConsent" type="checkbox" required /><span>Tôi đồng ý để V2JOY lưu thông tin và liên hệ về việc mua TEMPO 3ml. Tôi có thể yêu cầu xóa thông tin bất kỳ lúc nào.</span></label>
-            {join.error && <p className="form-error"><X size={15} /> {join.error.message}</p>}
+            {join.error && <p className="form-error" role="alert"><X size={15} /> {getWaitlistErrorMessage(join.error)}</p>}
             {formResult && <div aria-live="polite" className={`form-result form-result--${formResult.kind}`}>{formResult.kind === "full" ? <><X size={17} /><span>Số chai còn lại không đủ cho lựa chọn này. V2JOY sẽ cập nhật đợt tiếp theo khi lô đầu tiên đã đủ.</span></> : <><Check size={17} /><span>{formResult.kind === "existing" ? "Số điện thoại này đã được ghi nhận" : `Bạn đã được ghi nhận quyền mua ${formResult.quantity} chai`}{formResult.slot ? ` · Suất ${String(formResult.slot).padStart(4, "0")}` : ""}.</span></>}</div>}
             <button className="submit-button" disabled={join.isPending || remaining < quantity} type="submit">{join.isPending ? "Đang giữ số lượng…" : remaining < quantity ? "Số lượng còn lại không đủ" : `Giữ ${quantity} chai · ${totalValue.toLocaleString("vi-VN")}đ`}<ArrowUpRight size={18} /></button>
           </form><p className="data-note"><Mail size={14} /> Không yêu cầu địa chỉ hay thanh toán ở bước này. Thông tin chỉ dùng để liên hệ về TEMPO.</p>
