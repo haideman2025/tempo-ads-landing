@@ -101,9 +101,12 @@
 - [x] Xác minh giá launch 349.000đ và cách diễn giải công khai an toàn: 12–15 lần dùng, 2–3 xịt mỗi lần theo hướng dẫn; không công bố tổng 36 xịt khi chưa có xác nhận trực tiếp.
 - [x] Tạo visual chai 3ml cạnh vật dụng/thiết bị quen thuộc và visual xịt phun sương, không dùng ảnh bao bì AI sai nhãn.
 - [x] Viết lại toàn bộ nội dung landing theo mục tiêu bán 3ml, CTA mua hàng/đặt hàng và giới hạn lô đầu tiên.
-- [ ] Chuẩn bị bộ nội dung và cấu trúc Facebook Ads; chỉ thao tác tạo/chạy chiến dịch sau khi xác nhận tài khoản, ngân sách, giá và được người dùng xác nhận trước hành động nhạy cảm.
+- [x] Chuẩn bị bộ nội dung và cấu trúc Facebook Ads; playbook đã hoàn tất, còn tạo/chạy chiến dịch chờ xác nhận tài khoản, ngân sách, giá và hành động nhạy cảm.
 - [x] Kiểm thử form/checkout hoặc CTA bán hàng, claim, responsive, asset và production build cho launch 3ml.
 
 - [x] Viết lại toàn bộ voice/copy hiển thị của landing launch 3ml theo hướng bán hàng trực tiếp, dễ hiểu, claim-safe và không còn mô tả framework/kỹ thuật.
 - [x] Chẩn đoán runtime video nền hero trên desktop/mobile, sửa autoplay/playback/fallback nếu cần và bảo đảm video không bị lớp CSS che khuất.
 - [x] Kiểm thử lại CTA đăng ký, video, copy, responsive, accessibility, test suite và production build; checkout thanh toán thật chưa được tích hợp.
+
+- [x] Thay mọi điểm dùng visual hai người đàn ông bằng cảnh hẹn hò nam–nữ trưởng thành, tự nhiên và kín đáo; không có chữ được tạo trong ảnh.
+- [x] Cập nhật regression test, kiểm tra desktop/mobile và production build cho visual hẹn hò thay thế.

@@ -91,8 +91,11 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain("6 KHOẢNH KHẮC TRONG ĐỜI SỐNG");
     expect(source).toContain("Không chỉ một ảnh.");
     expect(source).toContain("tempo-lifestyle-01-exit-evening_334132f2.webp");
-    expect(source).toContain("tempo-couple-02-walk-home_e372d5a3.webp");
-    expect(source).toContain("tempo-lifestyle-03-together-at-home_2ee3a59f.webp");
+    expect(source).toContain("tempo-couple-04-walk-home-woman-man_8da9bbe8.png");
+    expect(source).toContain("tempo-couple-03-kitchen-evening-woman-man_9c71be8e.png");
+    expect(source).not.toContain("tempo-couple-01-kitchen-evening_df318ac9.webp");
+    expect(source).not.toContain("tempo-couple-02-walk-home_e372d5a3.webp");
+    expect(source).not.toContain("tempo-lifestyle-03-together-at-home_2ee3a59f.webp");
     expect(source).toContain("tempo-lifestyle-04-morning-return_a7805e20.webp");
     expect(source).toContain("gallery-grid--diary");
     expect(source).toContain("function SafeImage");
