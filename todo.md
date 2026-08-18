@@ -137,6 +137,8 @@
 - [x] Chẩn đoán lại theo runtime production vì người dùng vẫn chỉ quan sát được Video 01 ở hero; thay giải pháp playback nếu cần để Video 02–05 phát nền tuần tự xuyên landing.
 - [x] Tái thiết kế bốn chapter Video 02–05 thành cảnh nền toàn khung, có nhãn chapter và storytelling ngắn rõ ràng để người dùng thấy ngay video khi cuộn landing.
 - [x] Kiểm thử lại playback và nhận diện thị giác của từng video 02–05 trên desktop/mobile sau khi thiết kế lại.
+- [x] Đo biến thiên khung hình thực tế của Video 02–05 trên production sau khi cuộn vào từng scene; không coi `play()` hoặc nhãn trạng thái là bằng chứng đủ.
+- [ ] Thay cơ chế render nếu video 02–05 không tạo chuyển động quan sát được trên thiết bị thực, rồi nghiệm thu lại theo từng scene.
 - [x] Chuẩn hóa số điện thoại Việt Nam có dấu cách/dấu phân cách trước khi validation, thay lỗi JSON thô bằng thông báo tiếng Việt và cho phép form đăng ký thành công hợp lệ.
 - [x] Xác nhận lưu đăng ký vào database sẵn có, giữ quota theo tổng chai và phát Pixel Purchase duy nhất sau server trả về reservation thành công.
 - [x] Tích hợp kênh vận hành cho đăng ký mới: đồng bộ Google Sheets hoặc gửi thông báo Telegram sau khi nhận cấu hình/kết nối cần thiết.

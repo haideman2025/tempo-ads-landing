@@ -88,18 +88,12 @@ function SafeImage({ src, alt, className = "", fallback = ASSETS.heroPoster }: {
 
 function SectionVideoBackdrop({ video, poster, label }: { video: string; poster: string; label: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const reducedMotion = useReducedMotion();
   const [hasPlaybackError, setHasPlaybackError] = useState(false);
-  const [playbackState, setPlaybackState] = useState<"loading" | "playing" | "error" | "reduced">("loading");
+  const [playbackState, setPlaybackState] = useState<"loading" | "playing" | "error">("loading");
 
   useEffect(() => {
     const element = videoRef.current;
     if (!element) return;
-    if (reducedMotion) {
-      element.pause();
-      setPlaybackState("reduced");
-      return;
-    }
     let cancelled = false;
     let retryCount = 0;
     let retryTimer: number | undefined;
@@ -149,13 +143,13 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
       element.removeEventListener("loadeddata", startPlayback);
       element.removeEventListener("canplay", startPlayback);
     };
-  }, [reducedMotion, video]);
+  }, [video]);
 
   return <div className="video-frame section-video-backdrop" data-playback-state={playbackState} aria-label={label}>
-    {(reducedMotion || hasPlaybackError) && <img className="video-frame__fallback" src={poster} alt="" aria-hidden="true" />}
-    {!reducedMotion && <video ref={videoRef} autoPlay muted loop playsInline preload="auto" poster={poster} onPlaying={() => { setHasPlaybackError(false); setPlaybackState("playing"); }} onError={() => { setHasPlaybackError(true); setPlaybackState("error"); }}>
+    {hasPlaybackError && <img className="video-frame__fallback" src={poster} alt="" aria-hidden="true" />}
+    <video ref={videoRef} autoPlay muted loop playsInline preload="auto" poster={poster} onPlaying={() => { setHasPlaybackError(false); setPlaybackState("playing"); }} onError={() => { setHasPlaybackError(true); setPlaybackState("error"); }}>
       <source src={video} type="video/mp4" />
-    </video>}
+    </video>
     {playbackState === "playing" && <span className="video-frame__motion-status" aria-hidden="true">VIDEO ĐANG PHÁT</span>}
   </div>;
 }

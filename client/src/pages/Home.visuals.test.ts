@@ -64,7 +64,8 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain('if (retryCount >= 4)');
     expect(source).not.toContain('observer.observe(frame)');
     expect(source).toContain('data-playback-state={playbackState}');
-    expect(source).toContain('(reducedMotion || hasPlaybackError) && <img className="video-frame__fallback"');
+    expect(source).toContain('hasPlaybackError && <img className="video-frame__fallback"');
+    expect(source).toContain('<video ref={videoRef} autoPlay muted loop playsInline preload="auto"');
     expect(source).toContain('function VideoStoryScene');
     expect(source).toContain('video={ASSETS.motionFinal}');
     expect(source).toContain('className={`video-story-scene video-story-scene--${step}`}');
