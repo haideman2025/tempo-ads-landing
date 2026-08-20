@@ -345,7 +345,7 @@ export default function Home() {
     <header className="night-header">
       <a href="#top" className="brand" aria-label="TEMPO by V2JOY"><V2JoyBadge /><span className="tempo-wordmark">TEMPO</span><small>3ML / LÔ ĐẦU TIÊN</small></a>
       <div className="header-center"><span>TEMPO 3ml / lô đầu tiên</span><i /> <span>Còn {remaining.toLocaleString("vi-VN")} chai</span></div>
-      <button type="button" onClick={goToWaitlist} className="header-cta">Giữ suất <ArrowUpRight size={15} /></button>
+      <button type="button" onClick={goToWaitlist} className="header-cta">Hàng chờ <ArrowUpRight size={15} /></button>
     </header>
 
     <main id="top">
@@ -357,7 +357,8 @@ export default function Home() {
           <p className="overline">V2JOY / TEMPO 3ML / LÔ ĐẦU TIÊN</p>
           <h1>Đêm nay,<br /><em>chọn sự chuẩn bị vừa đủ.</em></h1>
           <p className="hero-lead">TEMPO 3ml là chai xịt chăm sóc da nhỏ gọn cho những buổi tối bạn muốn chuẩn bị kỹ hơn. Lô đầu tiên gồm 1.000 chai, giá ra mắt 349.000đ/chai.</p>
-          <div className="hero-actions"><button onClick={goToWaitlist} type="button" className="teal-button">Đăng ký mua TEMPO 3ml <ArrowDownRight size={18} /></button><a href="#story" className="ghost-link">Xem TEMPO đi cùng bạn <span>↓</span></a></div>
+          <ul className="hero-quick-facts" aria-label="Thông tin nhanh về TEMPO 3ml"><li>349.000đ / chai</li><li>3ml · khoảng 12–15 lần dùng</li><li>Hàng chờ · chưa thanh toán</li></ul>
+          <div className="hero-actions"><button onClick={goToWaitlist} type="button" className="teal-button">Đăng ký hàng chờ · chưa thanh toán <ArrowDownRight size={18} /></button><a href="#story" className="ghost-link">Xem TEMPO đi cùng bạn <span>↓</span></a></div>
         </div>
         <div className="hero-counter"><b>{remaining.toLocaleString("vi-VN")}</b><span>chai 3ml<br />còn lại</span></div>
         <div className="hero-footer"><span>CẢNH 01 / 05</span><Signal /><span>TEMPO 3ML · LÔ ĐẦU TIÊN</span></div>
@@ -431,11 +432,11 @@ export default function Home() {
             <label>Số điện thoại<input name="phone" required inputMode="tel" autoComplete="tel" placeholder="0xxxxxxxxx" /></label>
             <label>Email <em>(không bắt buộc)</em><input name="email" type="email" autoComplete="email" placeholder="ban@email.com" /></label>
             <label>Lời nhắn <em>(không bắt buộc)</em><textarea name="note" rows={3} maxLength={500} placeholder="Ví dụ: thời gian liên hệ phù hợp" /></label>
-            <label className="consent"><input name="marketingConsent" type="checkbox" required /><span>Tôi đồng ý để V2JOY lưu thông tin và liên hệ về việc mua TEMPO 3ml. Tôi có thể yêu cầu xóa thông tin bất kỳ lúc nào.</span></label>
+            <label className="consent"><input name="marketingConsent" type="checkbox" required /><span>Tôi đồng ý để V2JOY lưu thông tin nhằm xác nhận quyền mua TEMPO 3ml và cập nhật mở bán. Tôi có thể yêu cầu xóa thông tin bất kỳ lúc nào.</span></label>
             {join.error && <p className="form-error" role="alert"><X size={15} /> {getWaitlistErrorMessage(join.error)}</p>}
-            {formResult && <div aria-live="polite" className={`form-result form-result--${formResult.kind}`}>{formResult.kind === "full" ? <><X size={17} /><span>Số chai còn lại không đủ cho lựa chọn này. V2JOY sẽ cập nhật đợt tiếp theo khi lô đầu tiên đã đủ.</span></> : <><Check size={17} /><span>{formResult.kind === "existing" ? "Số điện thoại này đã được ghi nhận" : `Bạn đã được ghi nhận quyền mua ${formResult.quantity} chai`}{formResult.slot ? ` · Suất ${String(formResult.slot).padStart(4, "0")}` : ""}.</span></>}</div>}
+            {formResult && <div aria-live="polite" className={`form-result form-result--${formResult.kind}`}>{formResult.kind === "full" ? <><X size={17} /><span>Số chai còn lại không đủ cho lựa chọn này. V2JOY sẽ cập nhật đợt tiếp theo khi lô đầu tiên đã đủ.</span></> : <><Check size={17} /><span>{formResult.kind === "existing" ? "Số điện thoại này đã được ghi nhận" : `Bạn đã được ghi nhận quyền mua ${formResult.quantity} chai`}{formResult.slot ? ` · Suất ${String(formResult.slot).padStart(4, "0")}` : ""}. V2JOY sẽ liên hệ khi có thông tin mở bán.</span></>}</div>}
             <button className="submit-button" disabled={join.isPending || remaining < quantity} type="submit">{join.isPending ? "Đang giữ số lượng…" : remaining < quantity ? "Số lượng còn lại không đủ" : `Giữ ${quantity} chai · ${totalValue.toLocaleString("vi-VN")}đ`}<ArrowUpRight size={18} /></button>
-          </form><p className="data-note"><Mail size={14} /> Không yêu cầu địa chỉ hay thanh toán ở bước này. Thông tin chỉ dùng để liên hệ về TEMPO.</p>
+          </form><p className="data-note"><Mail size={14} /> Không yêu cầu địa chỉ hay thanh toán ở bước này. Thông tin chỉ dùng để xác nhận quyền mua và liên hệ về TEMPO.</p>
         </div>
       </section>
 
@@ -448,6 +449,6 @@ export default function Home() {
       ].map(([question, answer], index) => <article key={question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}><span>{String(index + 1).padStart(2, "0")}</span><b>{question}</b><ChevronDown size={18} /></button>{openFaq === index && <p>{answer}</p>}</article>)}</div></section>
     </main>
     <footer><div className="footer-brand"><V2JoyBadge /><span>TEMPO</span></div><p>Night Confident · đăng ký hàng chờ trước mở bán</p><p>Sản phẩm là mỹ phẩm, không phải là thuốc và không có tác dụng thay thế thuốc chữa bệnh.</p></footer>
-    <div className="mobile-sticky"><div><span>{remaining.toLocaleString("vi-VN")} chai còn lại</span><b>TEMPO / WAITLIST</b></div><button type="button" onClick={goToWaitlist}>Giữ chai <ArrowUpRight size={16} /></button></div>
+    <div className="mobile-sticky"><div><span>{remaining.toLocaleString("vi-VN")} chai còn lại</span><b>TEMPO / HÀNG CHỜ</b></div><button type="button" onClick={goToWaitlist}>Đăng ký <ArrowUpRight size={16} /></button></div>
   </div>;
 }

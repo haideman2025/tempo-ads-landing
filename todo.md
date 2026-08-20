@@ -142,6 +142,10 @@
 - [x] Kiểm tra trực tiếp `www.v2joy.life` trên cả desktop và mobile sau khi bundle mới đồng bộ; lưu bằng chứng rằng Video 02–05 phát, bố cục không lặp và CTA/form không bị che trên domain live.
 - [x] Kiểm kê các điểm dùng logo trên landing và xác nhận asset logo V2JOY thương hiệu chính xác cần dùng.
 - [x] Thay và chuẩn hóa logo V2JOY ở header, hero, badge, footer/favicons liên quan; kiểm tra desktop/mobile rồi phát hành.
+- [x] Xác lập mười chân dung audit định tính và tiêu chí đánh giá landing TEMPO trước khi chạy Facebook Ads test.
+- [x] Hoàn thành audit landing qua mười góc nhìn, phân loại điểm nghẽn theo mức ưu tiên và tránh trình bày kết quả như dữ liệu khách hàng thật.
+- [x] Triển khai các sửa đổi UX/copy ưu tiên cao phát hiện từ audit, kèm regression test và kiểm thử responsive.
+- [x] Xây dựng bộ content Facebook Ads thử nghiệm claim-safe bám offer TEMPO 3ml, gồm hook, primary text, headline, CTA và giả thuyết test.
 - [x] Chuẩn hóa số điện thoại Việt Nam có dấu cách/dấu phân cách trước khi validation, thay lỗi JSON thô bằng thông báo tiếng Việt và cho phép form đăng ký thành công hợp lệ.
 - [x] Xác nhận lưu đăng ký vào database sẵn có, giữ quota theo tổng chai và phát Pixel Purchase duy nhất sau server trả về reservation thành công.
 - [x] Tích hợp kênh vận hành cho đăng ký mới: đồng bộ Google Sheets hoặc gửi thông báo Telegram sau khi nhận cấu hình/kết nối cần thiết.

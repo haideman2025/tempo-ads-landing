@@ -85,6 +85,10 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain('aria-label="Chọn số lượng TEMPO 3ml"');
     expect(source).toContain("Tổng dự kiến:");
     expect(source).toContain("Mỗi lượt có thể giữ tối đa 2 chai");
+    expect(source).toContain('className="hero-quick-facts"');
+    expect(source).toContain("Hàng chờ · chưa thanh toán");
+    expect(source).toContain("Đăng ký hàng chờ · chưa thanh toán");
+    expect(source).toContain("xác nhận quyền mua TEMPO 3ml và cập nhật mở bán");
   });
 
   it("adds readable generated botanical and label infographics without unsupported ingredient claims", () => {
