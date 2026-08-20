@@ -177,6 +177,13 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain('content_ids: ["tempo-3ml"]');
   });
 
+  it("loads the Tempo By V2JOY Clarity project and explicitly masks the waitlist form", () => {
+    expect(documentHtml).toContain('https://www.clarity.ms/tag/');
+    expect(documentHtml).toContain('"y468d5yk1c"');
+    expect(source).toContain('<form className="waitlist-form" data-clarity-mask="true"');
+    expect(source).toContain("V2JOY dùng Microsoft Clarity để cải thiện trải nghiệm");
+  });
+
   it("normalizes phone formatting before submit and never exposes raw validation JSON", () => {
     expect(source).toContain('function normalizePhoneForSubmit(phone: string)');
     expect(source).toContain('phone: normalizePhoneForSubmit(String(data.get("phone") ?? ""))');

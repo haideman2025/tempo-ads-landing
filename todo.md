@@ -149,3 +149,5 @@
 - [x] Chuẩn hóa số điện thoại Việt Nam có dấu cách/dấu phân cách trước khi validation, thay lỗi JSON thô bằng thông báo tiếng Việt và cho phép form đăng ký thành công hợp lệ.
 - [x] Xác nhận lưu đăng ký vào database sẵn có, giữ quota theo tổng chai và phát Pixel Purchase duy nhất sau server trả về reservation thành công.
 - [x] Tích hợp kênh vận hành cho đăng ký mới: đồng bộ Google Sheets hoặc gửi thông báo Telegram sau khi nhận cấu hình/kết nối cần thiết.
+- [x] Kiểm tra quyền truy cập Microsoft Clarity, tạo hoặc chọn project cho `v2joy.life` và lấy mã tracking chính xác.
+- [ ] Tích hợp Microsoft Clarity cùng Meta Pixel theo cách không thu nội dung trường form nhạy cảm; kiểm thử script trên production.
