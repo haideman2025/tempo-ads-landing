@@ -127,7 +127,7 @@
 - [x] Khắc phục lỗi runtime của truy vấn quota `sum(quantity)` hoặc contract waitlist để form hàng chờ hiển thị trạng thái chính xác sau cập nhật schema.
 - [x] Bàn giao hướng dẫn trỏ landing TEMPO live sang tên miền riêng qua DNS và màn hình quản trị dự án.
 
-- [ ] Thiết lập `v2joy.life` làm tên miền chính trong màn hình Domains của landing; giữ `www.v2joy.life` như alias và chuyển hướng về domain gốc sau khi DNS xác minh.
+- [x] Thiết lập `v2joy.life` làm tên miền chính trong màn hình Domains của landing; giữ `www.v2joy.life` như alias và chuyển hướng về domain gốc sau khi DNS xác minh.
 
 - [x] Loại các visual cặp đôi trùng lặp trong gallery/điểm chốt hàng chờ và bảo đảm chapter cuối không lặp keyframe đã dùng trước đó.
 - [x] Sửa runtime video nền để cả năm chapter trên domain live phát đúng asset 01→05 thay vì chỉ hero phát Video 01; bổ sung kiểm thử chống hồi quy.
@@ -150,4 +150,4 @@
 - [x] Xác nhận lưu đăng ký vào database sẵn có, giữ quota theo tổng chai và phát Pixel Purchase duy nhất sau server trả về reservation thành công.
 - [x] Tích hợp kênh vận hành cho đăng ký mới: đồng bộ Google Sheets hoặc gửi thông báo Telegram sau khi nhận cấu hình/kết nối cần thiết.
 - [x] Kiểm tra quyền truy cập Microsoft Clarity, tạo hoặc chọn project cho `v2joy.life` và lấy mã tracking chính xác.
-- [ ] Tích hợp Microsoft Clarity cùng Meta Pixel theo cách không thu nội dung trường form nhạy cảm; kiểm thử script trên production.
+- [x] Tích hợp Microsoft Clarity cùng Meta Pixel theo cách không thu nội dung trường form nhạy cảm; kiểm thử script trên production.

@@ -21,3 +21,14 @@ Mã tracking được Microsoft Clarity hiển thị trong phần **Settings →
 | Thêm `data-clarity-mask="true"` cho toàn bộ form hàng chờ. | Thuộc tính này che node và mọi phần tử con trước khi dữ liệu được tải lên Clarity. |
 
 Nguồn chính thức: [Masking content](https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-masking) và [Clarity client API](https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-api), truy cập ngày 20-08-2026.
+
+## Kiểm tra production sau phát hành
+
+| Kiểm tra | Kết quả |
+|---|---|
+| HTML `https://www.v2joy.life` | Có script `https://www.clarity.ms/tag/` với đúng project ID `y468d5yk1c`, đồng thời vẫn có Meta Pixel. |
+| Endpoint Clarity | `GET https://www.clarity.ms/tag/y468d5yk1c` trả HTTP 200. |
+| Form hàng chờ | Thẻ `<form>` dùng `data-clarity-mask="true"`; không có custom event Clarity nào gửi họ tên, điện thoại hoặc email. |
+| Tên miền chính | `https://v2joy.life` trả HTTP 200; `https://www.v2joy.life` trả HTTP 301 về domain gốc. |
+
+Kết luận: mã Clarity đã được phát hành cho đúng project và áp dụng masking tường minh cho vùng nhập thông tin hàng chờ. Việc session/heatmap xuất hiện trong dashboard có thể cần một khoảng thời gian xử lý sau lượt truy cập thật đầu tiên.
