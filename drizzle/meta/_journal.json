@@ -29,6 +29,13 @@
       "when": 1787035564834,
       "tag": "0003_concerned_yellow_claw",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1787274314486,
+      "tag": "0004_real_excalibur",
+      "breakpoints": true
     }
   ]
 }

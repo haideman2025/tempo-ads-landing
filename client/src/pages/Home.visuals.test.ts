@@ -57,15 +57,16 @@ describe("TEMPO sales landing visual system", () => {
 
   it("uses the shared video frame contract and playback retry for every chapter backdrop", () => {
     expect(source).toContain('className="video-frame section-video-backdrop"');
-    expect(source).toContain('autoPlay muted loop playsInline preload="auto"');
+    expect(source).toContain('autoPlay={shouldLoad} muted loop playsInline preload={shouldLoad ? "metadata" : "none"}');
     expect(source).toContain('element.addEventListener("loadedmetadata", startPlayback)');
     expect(source).toContain('element.addEventListener("loadeddata", startPlayback)');
     expect(source).toContain('const eagerTimers = [0, 320, 1100, 2400]');
     expect(source).toContain('if (retryCount >= 4)');
-    expect(source).not.toContain('observer.observe(frame)');
+    expect(source).toContain('observer.observe(frame)');
+    expect(source).toContain('rootMargin: "720px 0px"');
     expect(source).toContain('data-playback-state={playbackState}');
     expect(source).toContain('hasPlaybackError && <img className="video-frame__fallback"');
-    expect(source).toContain('<video ref={videoRef} autoPlay muted loop playsInline preload="auto"');
+    expect(source).toContain('<video ref={videoRef} autoPlay={shouldLoad} muted loop playsInline preload={shouldLoad ? "metadata" : "none"}');
     expect(source).toContain('function VideoStoryScene');
     expect(source).toContain('video={ASSETS.motionFinal}');
     expect(source).toContain('className={`video-story-scene video-story-scene--${step}`}');
@@ -84,7 +85,7 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain('const [quantity, setQuantity] = useState<1 | 2>(1)');
     expect(source).toContain('aria-label="Chọn số lượng TEMPO 3ml"');
     expect(source).toContain("Tổng dự kiến:");
-    expect(source).toContain("Mỗi lượt có thể giữ tối đa 2 chai");
+    expect(source).toContain("Đây là danh sách chờ, chưa thanh toán");
     expect(source).toContain('className="hero-quick-facts"');
     expect(source).toContain("Hàng chờ · chưa thanh toán");
     expect(source).toContain("Đăng ký hàng chờ · chưa thanh toán");
@@ -175,6 +176,10 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain('window.fbq?.("track", "Purchase"');
     expect(source).toContain("currency: \"VND\"");
     expect(source).toContain('content_ids: ["tempo-3ml"]');
+    expect(source).toContain('window.fbq?.("track", "ViewContent"');
+    expect(source).toContain('window.fbq?.("trackCustom", "Scroll50")');
+    expect(source).toContain('window.fbq?.("trackCustom", "FormStart")');
+    expect(source).toContain('window.fbq?.("trackCustom", "ReservationSuccess"');
   });
 
   it("loads the Tempo By V2JOY Clarity project and explicitly masks the waitlist form", () => {
@@ -182,6 +187,7 @@ describe("TEMPO sales landing visual system", () => {
     expect(documentHtml).toContain('"y468d5yk1c"');
     expect(source).toContain('<form className="waitlist-form" data-clarity-mask="true"');
     expect(source).toContain("V2JOY dùng Microsoft Clarity để cải thiện trải nghiệm");
+    expect(source).toContain('window.clarity?.("event", "FormStart")');
   });
 
   it("normalizes phone formatting before submit and never exposes raw validation JSON", () => {
@@ -189,5 +195,12 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).toContain('phone: normalizePhoneForSubmit(String(data.get("phone") ?? ""))');
     expect(source).toContain('getWaitlistErrorMessage(join.error)');
     expect(source).not.toContain('{join.error.message}');
+  });
+
+  it("places a masked fast-path form before the long story and persists only campaign attribution for new reservations", () => {
+    expect(source.indexOf('className="express-waitlist" id="waitlist"')).toBeLessThan(source.indexOf('className="commerce-intro" id="story"'));
+    expect(source).toContain('window.localStorage.getItem("tempo-attribution")');
+    expect(source).toContain('...attributionRef.current');
+    expect(styles).toContain('.express-waitlist{display:grid');
   });
 });

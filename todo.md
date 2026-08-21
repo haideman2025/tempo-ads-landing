@@ -157,3 +157,6 @@
 - [ ] Kiểm kê dữ liệu Pixel, Clarity, Meta Ads và reservation theo một khung thời gian; phân loại dữ liệu quan sát được, dữ liệu thiếu và độ trễ báo cáo.
 - [ ] Phân tích nguyên nhân funnel chưa chuyển đổi mà không quy kết sai giữa reach, click, session, form submit và Purchase Pixel.
 - [ ] Đề xuất các ưu tiên tracking, landing và creative ads có thể kiểm chứng trong vòng test tiếp theo.
+- [x] Chuẩn hóa funnel xác thực: Meta 2.051 Reach, 2.115 Impressions, 237 Link clicks và Clarity 237 sessions/235 unique visitors; không còn dùng Reach làm proxy cho lượt vào web.
+- [x] Chẩn đoán và xử lý rớt chuyển đổi sau Link clicks từ Facebook App: active time 15 giây, scroll depth 34,94%, 1,14 pages per session và LCP 6,1 giây.
+- [x] Kiểm tra và xử lý các lỗi JavaScript Clarity ghi nhận trước khi đánh giá UX; bổ sung event funnel không chứa PII để đo FormStart và ReservationSuccess.

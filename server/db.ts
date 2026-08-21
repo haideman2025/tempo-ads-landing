@@ -133,6 +133,12 @@ export async function reserveTempoWaitlistSlot(input: WaitlistInput) {
         note: input.note || null,
         marketingConsent: true,
         consentedAt: new Date(),
+        utmSource: input.utmSource || null,
+        utmMedium: input.utmMedium || null,
+        utmCampaign: input.utmCampaign || null,
+        utmContent: input.utmContent || null,
+        utmTerm: input.utmTerm || null,
+        fbclid: input.fbclid || null,
       });
       const entry = await getTempoWaitlistEntryByPhone(input.phone);
       if (!entry) throw new Error("Waitlist entry could not be confirmed");

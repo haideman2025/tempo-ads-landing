@@ -2,6 +2,12 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { ArrowDownRight, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, CircleCheck, Clock3, Leaf, LockKeyhole, Mail, Pause, Play, ShieldCheck, X } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 
+declare global {
+  interface Window {
+    clarity?: (action: string, value?: unknown) => void;
+  }
+}
+
 const V2JOY_LOGO = "/manus-storage/v2joylogo-official_9302769f.webp";
 
 const ASSETS = {
@@ -60,7 +66,37 @@ const visualDiary = [
 ] as const;
 
 function goToWaitlist() {
+  window.fbq?.("trackCustom", "WaitlistCTA");
+  window.clarity?.("event", "WaitlistCTA");
   document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+type TempoAttribution = {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  fbclid?: string;
+};
+
+function captureTempoAttribution(): TempoAttribution {
+  const fields: Array<keyof TempoAttribution> = ["utmSource", "utmMedium", "utmCampaign", "utmContent", "utmTerm", "fbclid"];
+  const parameterNames: Record<keyof TempoAttribution, string> = {
+    utmSource: "utm_source", utmMedium: "utm_medium", utmCampaign: "utm_campaign", utmContent: "utm_content", utmTerm: "utm_term", fbclid: "fbclid",
+  };
+  const current = Object.fromEntries(fields.flatMap(field => {
+    const value = new URLSearchParams(window.location.search).get(parameterNames[field])?.trim();
+    return value ? [[field, value]] : [];
+  })) as TempoAttribution;
+  try {
+    const stored = JSON.parse(window.localStorage.getItem("tempo-attribution") ?? "{}") as TempoAttribution;
+    const attribution = { ...stored, ...current };
+    window.localStorage.setItem("tempo-attribution", JSON.stringify(attribution));
+    return attribution;
+  } catch {
+    return current;
+  }
 }
 
 function normalizePhoneForSubmit(phone: string) {
@@ -87,13 +123,28 @@ function SafeImage({ src, alt, className = "", fallback = ASSETS.heroPoster }: {
 }
 
 function SectionVideoBackdrop({ video, poster, label }: { video: string; poster: string; label: string }) {
+  const frameRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasPlaybackError, setHasPlaybackError] = useState(false);
   const [playbackState, setPlaybackState] = useState<"loading" | "playing" | "error">("loading");
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        setShouldLoad(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: "720px 0px" });
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const element = videoRef.current;
-    if (!element) return;
+    if (!element || !shouldLoad) return;
     let cancelled = false;
     let retryCount = 0;
     let retryTimer: number | undefined;
@@ -143,12 +194,13 @@ function SectionVideoBackdrop({ video, poster, label }: { video: string; poster:
       element.removeEventListener("loadeddata", startPlayback);
       element.removeEventListener("canplay", startPlayback);
     };
-  }, [video]);
+  }, [shouldLoad, video]);
 
-  return <div className="video-frame section-video-backdrop" data-playback-state={playbackState} aria-label={label}>
+  return <div ref={frameRef} className="video-frame section-video-backdrop" data-playback-state={playbackState} aria-label={label}>
     {hasPlaybackError && <img className="video-frame__fallback" src={poster} alt="" aria-hidden="true" />}
-    <video ref={videoRef} autoPlay muted loop playsInline preload="auto" poster={poster} onPlaying={() => { setHasPlaybackError(false); setPlaybackState("playing"); }} onError={() => { setHasPlaybackError(true); setPlaybackState("error"); }}>
-      <source src={video} type="video/mp4" />
+    {!shouldLoad && <img className="video-frame__fallback" src={poster} alt="" aria-hidden="true" />}
+    <video ref={videoRef} autoPlay={shouldLoad} muted loop playsInline preload={shouldLoad ? "metadata" : "none"} poster={poster} onPlaying={() => { setHasPlaybackError(false); setPlaybackState("playing"); }} onError={() => { setHasPlaybackError(true); setPlaybackState("error"); }}>
+      {shouldLoad && <source src={video} type="video/mp4" />}
     </video>
     {playbackState === "playing" && <span className="video-frame__motion-status" aria-hidden="true">VIDEO ĐANG PHÁT</span>}
   </div>;
@@ -314,16 +366,43 @@ export default function Home() {
   const claimed = status.data?.claimed ?? 0;
   const remaining = status.data?.remaining ?? 1000;
   const totalValue = quantity * 349_000;
+  const attributionRef = useRef<TempoAttribution>({});
+  const formStartedRef = useRef(false);
+  const scrollTrackedRef = useRef(false);
 
   useEffect(() => {
     if (remaining < quantity) setQuantity(1);
   }, [quantity, remaining]);
 
+  useEffect(() => {
+    attributionRef.current = captureTempoAttribution();
+    window.fbq?.("track", "ViewContent", { content_ids: ["tempo-3ml"], content_type: "product", value: 349_000, currency: "VND" });
+    window.clarity?.("event", "ViewContent");
+    const trackScrollDepth = () => {
+      const documentHeight = document.documentElement.scrollHeight;
+      if (!scrollTrackedRef.current && window.scrollY + window.innerHeight >= documentHeight * 0.5) {
+        scrollTrackedRef.current = true;
+        window.fbq?.("trackCustom", "Scroll50");
+        window.clarity?.("event", "Scroll50");
+      }
+    };
+    window.addEventListener("scroll", trackScrollDepth, { passive: true });
+    trackScrollDepth();
+    return () => window.removeEventListener("scroll", trackScrollDepth);
+  }, []);
+
+  function trackFormStart() {
+    if (formStartedRef.current) return;
+    formStartedRef.current = true;
+    window.fbq?.("trackCustom", "FormStart");
+    window.clarity?.("event", "FormStart");
+  }
+
   function submitWaitlist(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
-    join.mutate({ fullName: String(data.get("fullName") ?? ""), phone: normalizePhoneForSubmit(String(data.get("phone") ?? "")), email: String(data.get("email") ?? ""), preferredSku: "3ml", quantity, note: String(data.get("note") ?? ""), marketingConsent: data.get("marketingConsent") === "on" }, {
+    join.mutate({ fullName: String(data.get("fullName") ?? ""), phone: normalizePhoneForSubmit(String(data.get("phone") ?? "")), email: String(data.get("email") ?? ""), preferredSku: "3ml", quantity, note: String(data.get("note") ?? ""), marketingConsent: data.get("marketingConsent") === "on", ...attributionRef.current }, {
       onSuccess: result => {
         setFormResult({ kind: result.kind, slot: result.entry?.slotNumber, quantity: result.kind === "reserved" ? result.quantity : result.entry?.quantity });
         if (result.kind === "reserved") {
@@ -334,6 +413,8 @@ export default function Home() {
             content_type: "product",
             num_items: result.quantity,
           });
+          window.fbq?.("trackCustom", "ReservationSuccess", { quantity: result.quantity, value: result.totalValue, currency: "VND" });
+          window.clarity?.("event", "ReservationSuccess");
           form.reset();
         }
         void status.refetch();
@@ -362,6 +443,16 @@ export default function Home() {
         </div>
         <div className="hero-counter"><b>{remaining.toLocaleString("vi-VN")}</b><span>chai 3ml<br />còn lại</span></div>
         <div className="hero-footer"><span>CẢNH 01 / 05</span><Signal /><span>TEMPO 3ML · LÔ ĐẦU TIÊN</span></div>
+      </section>
+
+      <section className="express-waitlist" id="waitlist" aria-labelledby="express-waitlist-title">
+        <div className="express-waitlist__intro"><p className="overline overline--dark">ĐĂNG KÝ TRƯỚC KHI XEM TIẾP</p><h2 id="express-waitlist-title">Giữ quyền mua<br /><em>TEMPO 3ml.</em></h2><p>349.000đ/chai · khoảng 12–15 lần dùng. Đây là danh sách chờ, chưa thanh toán; V2JOY liên hệ theo thứ tự đăng ký.</p><p className="express-waitlist__trust"><LockKeyhole size={16} /> Không yêu cầu địa chỉ ở bước này. Nội dung nhập được che khi phân tích hành vi.</p></div>
+        <div className="express-waitlist__form"><div className="waitlist-topline"><span>NHẬN THÔNG TIN MUA / TEMPO 3ML</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 chai đã được giữ</span></div><form className="waitlist-form" data-clarity-mask="true" onFocus={trackFormStart} onSubmit={submitWaitlist}>
+          <div className="launch-product-summary"><img src={ASSETS.pack3mlVerified} alt="" loading="lazy" /><div><span>TEMPO 3ml</span><small>349.000đ / chai · lô thử nghiệm đầu tiên</small></div></div>
+          <fieldset className="quantity-choice" aria-describedby="quantity-total-express"><legend>Chọn số lượng</legend><div role="radiogroup" aria-label="Chọn số lượng TEMPO 3ml">{([1, 2] as const).map(option => <button key={option} type="button" role="radio" aria-checked={quantity === option} disabled={remaining < option} onClick={() => setQuantity(option)} className={quantity === option ? "is-active" : ""}><span>{option} chai</span><small>{(option * 349_000).toLocaleString("vi-VN")}đ</small></button>)}</div><p id="quantity-total-express">Tổng dự kiến: <b>{totalValue.toLocaleString("vi-VN")}đ</b> · số lượng còn lại: {remaining.toLocaleString("vi-VN")} chai.</p></fieldset>
+          <label>Họ và tên<input name="fullName" required autoComplete="name" placeholder="Tên của bạn" /></label><label>Số điện thoại<input name="phone" required inputMode="tel" autoComplete="tel" placeholder="0xxxxxxxxx" /></label><label>Email <em>(không bắt buộc)</em><input name="email" type="email" autoComplete="email" placeholder="ban@email.com" /></label><label>Lời nhắn <em>(không bắt buộc)</em><textarea name="note" rows={3} maxLength={500} placeholder="Ví dụ: thời gian liên hệ phù hợp" /></label><label className="consent"><input name="marketingConsent" type="checkbox" required /><span>Tôi đồng ý để V2JOY lưu thông tin nhằm xác nhận quyền mua TEMPO 3ml và cập nhật mở bán. Tôi có thể yêu cầu xóa thông tin bất kỳ lúc nào.</span></label>
+          {join.error && <p className="form-error" role="alert"><X size={15} /> {getWaitlistErrorMessage(join.error)}</p>}{formResult && <div aria-live="polite" className={`form-result form-result--${formResult.kind}`}>{formResult.kind === "full" ? <><X size={17} /><span>Số chai còn lại không đủ cho lựa chọn này. V2JOY sẽ cập nhật đợt tiếp theo khi lô đầu tiên đã đủ.</span></> : <><Check size={17} /><span>{formResult.kind === "existing" ? "Số điện thoại này đã được ghi nhận" : `Bạn đã được ghi nhận quyền mua ${formResult.quantity} chai`}{formResult.slot ? ` · Suất ${String(formResult.slot).padStart(4, "0")}` : ""}. V2JOY sẽ liên hệ khi có thông tin mở bán.</span></>}</div>}<button className="submit-button" disabled={join.isPending || remaining < quantity} type="submit">{join.isPending ? "Đang giữ số lượng…" : remaining < quantity ? "Số lượng còn lại không đủ" : `Giữ ${quantity} chai · ${totalValue.toLocaleString("vi-VN")}đ`}<ArrowUpRight size={18} /></button>
+        </form><p className="data-note"><Mail size={14} /> Không yêu cầu địa chỉ hay thanh toán ở bước này. Thông tin chỉ dùng để xác nhận quyền mua và liên hệ về TEMPO.</p><p className="data-note data-note--clarity">V2JOY dùng Microsoft Clarity để cải thiện trải nghiệm; nội dung bạn nhập trong form được che khi phân tích hành vi.</p></div>
       </section>
 
       <section className="commerce-intro" id="story" aria-labelledby="why-title">
@@ -422,10 +513,10 @@ export default function Home() {
 
       <VideoStoryScene step="05" title="Giữ nhịp riêng." accent="Bắt đầu khi bạn sẵn sàng." copy="TEMPO 3ml khép lại mạch chuyện bằng một lựa chọn nhỏ, rõ ràng và không phô trương — dành cho buổi tối bạn muốn chủ động hơn." detail="LÔ ĐẦU TIÊN · TEMPO 3ML · 1.000 CHAI" video={ASSETS.motionFinal} poster={ASSETS.fineMist} label="Video 05: TEMPO 3ml khép lại câu chuyện buổi tối" />
 
-      <section className="waitlist-section" id="waitlist">
+      <section className="waitlist-section" aria-label="Khép lại câu chuyện TEMPO">
         <div className="waitlist-cinema"><img src={ASSETS.fineMist} alt="Chai TEMPO 3ml tạo màn sương mịn trong ánh sáng buổi tối" loading="lazy" /><div className="waitlist-cinema__wash" /><div className="waitlist-cinema__copy"><p className="overline">SAU CẢNH 05 · 1.000 CHAI TEMPO 3ML</p><h2>Lô đầu tiên<br /><em>đã sẵn sàng.</em></h2><p>Đăng ký để nhận thông tin mua, giao hàng và số lượng còn lại của phiên bản 3ml.</p></div></div>
         <div className="waitlist-form-wrap"><div className="waitlist-topline"><span>NHẬN THÔNG TIN MUA / TEMPO 3ML</span><span>{claimed.toLocaleString("vi-VN")} / 1.000 chai đã được giữ</span></div><h2>Giữ quyền mua<br />TEMPO 3ml.</h2><p className="form-intro">Đăng ký để được liên hệ xác nhận mua TEMPO 3ml. Mỗi lượt có thể giữ tối đa 2 chai, tùy số lượng còn lại. Đây chưa phải thanh toán; V2JOY sẽ liên hệ theo thứ tự đăng ký về giao hàng. Giá ra mắt: 349.000đ/chai.</p>
-          <form className="waitlist-form" data-clarity-mask="true" onSubmit={submitWaitlist}>
+          <form className="waitlist-form" data-clarity-mask="true" onFocus={trackFormStart} onSubmit={submitWaitlist}>
             <div className="launch-product-summary"><img src={ASSETS.pack3mlVerified} alt="" loading="lazy" /><div><span>TEMPO 3ml</span><small>349.000đ / chai · lô thử nghiệm đầu tiên</small></div></div>
             <fieldset className="quantity-choice" aria-describedby="quantity-total"><legend>Chọn số lượng</legend><div role="radiogroup" aria-label="Chọn số lượng TEMPO 3ml">{([1, 2] as const).map(option => <button key={option} type="button" role="radio" aria-checked={quantity === option} disabled={remaining < option} onClick={() => setQuantity(option)} className={quantity === option ? "is-active" : ""}><span>{option} chai</span><small>{(option * 349_000).toLocaleString("vi-VN")}đ</small></button>)}</div><p id="quantity-total">Tổng dự kiến: <b>{totalValue.toLocaleString("vi-VN")}đ</b> · số lượng còn lại: {remaining.toLocaleString("vi-VN")} chai.</p></fieldset>
             <label>Họ và tên<input name="fullName" required autoComplete="name" placeholder="Tên của bạn" /></label>

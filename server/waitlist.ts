@@ -2,6 +2,8 @@ import { z } from "zod";
 
 export const WAITLIST_CAPACITY = 1000;
 
+const attributionField = (maxLength: number) => z.string().trim().max(maxLength).optional().or(z.literal(""));
+
 export function normalizeVietnamesePhone(value: unknown) {
   return typeof value === "string" ? value.replace(/[\s().-]/g, "").trim() : value;
 }
@@ -29,6 +31,12 @@ export const waitlistInputSchema = z.object({
   quantity: z.number().int().min(1).max(2),
   note: z.string().trim().max(500, "Lời nhắn tối đa 500 ký tự.").optional().or(z.literal("")),
   marketingConsent: z.boolean().refine(value => value, "Bạn cần đồng ý để V2JOY liên hệ về danh sách chờ."),
+  utmSource: attributionField(120),
+  utmMedium: attributionField(120),
+  utmCampaign: attributionField(180),
+  utmContent: attributionField(180),
+  utmTerm: attributionField(180),
+  fbclid: attributionField(255),
 });
 
 export type WaitlistInput = z.infer<typeof waitlistInputSchema>;

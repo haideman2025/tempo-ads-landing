@@ -28,6 +28,25 @@ describe("TEMPO waitlist validation", () => {
     expect(normalizeVietnamesePhone("0376-676-575")).toBe("0376676575");
   });
 
+  it("accepts bounded non-PII campaign attribution without changing the purchase contract", () => {
+    const result = waitlistInputSchema.safeParse({
+      fullName: "Nguyễn Minh An",
+      phone: "0912345678",
+      preferredSku: "3ml",
+      quantity: 1,
+      marketingConsent: true,
+      utmSource: "facebook",
+      utmMedium: "paid_social",
+      utmCampaign: "tempo_video_01",
+      fbclid: "facebook-click-token",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.utmSource).toBe("facebook");
+      expect(result.data.fbclid).toBe("facebook-click-token");
+    }
+  });
+
   it("accepts one or two 3ml bottles and rejects a quantity outside the launch limit", () => {
     for (const quantity of [1, 2]) {
       expect(waitlistInputSchema.safeParse({
