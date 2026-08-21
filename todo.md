@@ -151,3 +151,9 @@
 - [x] Tích hợp kênh vận hành cho đăng ký mới: đồng bộ Google Sheets hoặc gửi thông báo Telegram sau khi nhận cấu hình/kết nối cần thiết.
 - [x] Kiểm tra quyền truy cập Microsoft Clarity, tạo hoặc chọn project cho `v2joy.life` và lấy mã tracking chính xác.
 - [x] Tích hợp Microsoft Clarity cùng Meta Pixel theo cách không thu nội dung trường form nhạy cảm; kiểm thử script trên production.
+- [ ] Truy xuất số liệu thực tế của quảng cáo Tempo Video 1: reach, impressions, spend, link clicks, landing-page views và Purchase theo khung thời gian đang chạy.
+- [ ] Đối chiếu Meta Ads, Pixel, Clarity và số reservation database để báo cáo chính xác traffic, hành vi và chuyển đổi; không suy diễn khi dữ liệu chưa đủ độ trễ.
+- [ ] Kết nối lại App `Meta Ads Manager` cho phiên phân tích để truy xuất insight API của Tempo Video 1; sau đó đo funnel theo cùng khung thời gian.
+- [ ] Kiểm kê dữ liệu Pixel, Clarity, Meta Ads và reservation theo một khung thời gian; phân loại dữ liệu quan sát được, dữ liệu thiếu và độ trễ báo cáo.
+- [ ] Phân tích nguyên nhân funnel chưa chuyển đổi mà không quy kết sai giữa reach, click, session, form submit và Purchase Pixel.
+- [ ] Đề xuất các ưu tiên tracking, landing và creative ads có thể kiểm chứng trong vòng test tiếp theo.
