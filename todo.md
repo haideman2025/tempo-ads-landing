@@ -160,3 +160,4 @@
 - [x] Chuẩn hóa funnel xác thực: Meta 2.051 Reach, 2.115 Impressions, 237 Link clicks và Clarity 237 sessions/235 unique visitors; không còn dùng Reach làm proxy cho lượt vào web.
 - [x] Chẩn đoán và xử lý rớt chuyển đổi sau Link clicks từ Facebook App: active time 15 giây, scroll depth 34,94%, 1,14 pages per session và LCP 6,1 giây.
 - [x] Kiểm tra và xử lý các lỗi JavaScript Clarity ghi nhận trước khi đánh giá UX; bổ sung event funnel không chứa PII để đo FormStart và ReservationSuccess.
+- [x] Loại bỏ form đăng ký trùng lặp ở cuối trang, giữ một form duy nhất ngay sau hero và biến phần cuối trang thành CTA quay lại form đó.

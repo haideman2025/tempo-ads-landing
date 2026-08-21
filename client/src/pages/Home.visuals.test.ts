@@ -197,8 +197,11 @@ describe("TEMPO sales landing visual system", () => {
     expect(source).not.toContain('{join.error.message}');
   });
 
-  it("places a masked fast-path form before the long story and persists only campaign attribution for new reservations", () => {
+  it("places one masked fast-path form before the long story and persists only campaign attribution for new reservations", () => {
     expect(source.indexOf('className="express-waitlist" id="waitlist"')).toBeLessThan(source.indexOf('className="commerce-intro" id="story"'));
+    expect((source.match(/<form className="waitlist-form"/g) ?? [])).toHaveLength(1);
+    expect(source).toContain('className="waitlist-form-wrap waitlist-form-wrap--closing"');
+    expect(source).toContain('Quay lại form đăng ký');
     expect(source).toContain('window.localStorage.getItem("tempo-attribution")');
     expect(source).toContain('...attributionRef.current');
     expect(styles).toContain('.express-waitlist{display:grid');
