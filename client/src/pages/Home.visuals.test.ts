@@ -83,11 +83,19 @@ describe("TEMPO COD landing", () => {
   });
 
   it("preserves complete text-bearing concept art in square mobile frames", () => {
-    ["product-proof__image--square", "visual-card--asset", "ritual-section--asset", "wait-section--asset", "mobile-safe-square"].forEach(className => expect(source).toContain(className));
+    ["product-proof__image--square", "product-detail-showcase__image", "ritual-section--asset", "wait-section--asset", "mobile-safe-square"].forEach(className => expect(source).toContain(className));
     expect(styles).toContain(".mobile-safe-square{object-fit:contain!important");
-    expect(styles).toContain(".visual-card--asset::after{display:none}");
+    expect(styles).toContain(".product-detail-showcase__figure{aspect-ratio:1/1");
     expect(styles).toContain(".label-gallery figure{aspect-ratio:1/1");
     expect(styles).toContain(".final-cta>.mobile-safe-square{object-fit:contain!important");
+  });
+
+  it("uses one focused desktop product-detail slide instead of three competing visual cards", () => {
+    expect(source).toContain("function ProductDetails()");
+    expect(source).toContain('aria-label="Các góc nhìn chi tiết TEMPO"');
+    expect(source).toContain("product-detail-showcase__tabs");
+    expect(source).not.toContain('className="visual-grid"');
+    expect(styles).toContain(".product-detail-showcase__layout{display:grid");
   });
 
   it("keeps product guidance factual and presents label-backed safety content", () => {

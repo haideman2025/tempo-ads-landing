@@ -173,3 +173,5 @@
 - [x] Kiểm tra claim/copy không vượt quá nhãn, viết regression tests và nghiệm thu trải nghiệm trên mobile lẫn desktop trước phát hành.
 - [x] Khắc phục mọi ảnh chứa chữ bị crop trên mobile: ưu tiên khung hiển thị 1:1 hoặc slide/chạm vuốt để xem đủ thông tin theo đúng tỉ lệ asset.
 - [x] Cập nhật regression test và nghiệm thu mobile/desktop cho cách hiển thị ảnh không cắt chữ.
+- [x] Tái cấu trúc cụm giới thiệu TEMPO và visual chi tiết trên desktop để giảm mật độ thông tin, tạo trọng tâm xem rõ ràng và không ảnh hưởng mobile/COD.
+- [x] Cập nhật regression test, kiểm tra desktop/mobile và production build cho bố cục desktop đã tinh giản.
