@@ -12,7 +12,7 @@ describe("TEMPO COD landing", () => {
       "tempo-brand-hero_6c096b85.png", "tempo-pack-front_9e2c58ea.png", "tempo-pack-sides_99932a67.png",
       "tempo-pack-back_267c13e5.png", "tempo-couple-hands_6b173623.png", "tempo-benefits_e53327fd.png",
       "tempo-use-steps_a7b53030.png", "tempo-wait-ritual_0db05ba8.png", "tempo-carry_5d2617d2.png",
-      "tempo-unbox_7fe4ee69.png", "tempo-design-detail_b6e6ad35.png", "tempo-story_fc38bf3c.png",
+      "tempo-unbox_7fe4ee69.png", "tempo-design-graphite_d1c18acb.png", "tempo-story_fc38bf3c.png",
       "tempo-claim-label_10f35a7d.png",
     ].forEach(asset => expect(source).toContain(asset));
   });
@@ -65,7 +65,7 @@ describe("TEMPO COD landing", () => {
   });
 
   it("uses only user-provided feedback visuals with transparent trust language", () => {
-    ["feedback-01-spray_28cc30b5.png", "feedback-02-wait_8add3a01.png", "feedback-03-clean_7143b919.png", "feedback-04-intention_a9caba0e.png", "feedback-05-care_082b777c.png", "feedback-06-unboxing_d9e5a446.png", "feedback-07-guidance_62df674a.png", "feedback-08-flow_aa0ad378.png", "feedback-09-design_5d665c00.png", "feedback-10-compact_bcf288fa.png"].forEach(asset => expect(source).toContain(asset));
+    ["tempo-feedback-spray-graphite_05a6f498.png", "feedback-02-wait_8add3a01.png", "feedback-03-clean_7143b919.png", "feedback-04-intention_a9caba0e.png", "feedback-05-care_082b777c.png", "feedback-06-unboxing_d9e5a446.png", "feedback-07-guidance_62df674a.png", "feedback-08-flow_aa0ad378.png", "feedback-09-design_5d665c00.png", "feedback-10-compact_bcf288fa.png"].forEach(asset => expect(source).toContain(asset));
     expect(source).toContain("10 visual ghi lại các ý kiến tổng hợp từ nhóm khách hàng trải nghiệm TEMPO do V2JOY cung cấp.");
     expect(source).toContain("Trải nghiệm cá nhân có thể khác nhau.");
     expect(source).toContain("Không hiển thị rating, tên cá nhân hay lời đánh giá tạo sẵn.");
@@ -85,6 +85,23 @@ describe("TEMPO COD landing", () => {
     expect(source).toContain('rootMargin: "700px 0px"');
     expect(styles).toContain(".video-story-scene");
     expect(styles).toContain(".visual-diary__stage");
+  });
+
+  it("uses the user-provided graphite nozzle visuals and removes public scene labels", () => {
+    expect(source).toContain('detail: "/manus-storage/tempo-design-graphite_d1c18acb.png"');
+    expect(source).toContain('image: "/manus-storage/tempo-feedback-spray-graphite_05a6f498.png"');
+    expect(source).not.toContain("CẢNH {step}");
+    expect(source).not.toContain("CẢNH 01");
+    expect(source).not.toContain("ĐANG CHẠY NỀN");
+  });
+
+  it("keeps mobile story copy separate from video and image frames", () => {
+    expect(source).toContain('className="hero-media"');
+    expect(source).toContain('className="video-story-scene__media"');
+    expect(styles).toContain(".tempo-hero{display:grid;grid-template-rows:minmax(352px,52svh) auto");
+    expect(styles).toContain(".video-story-scene{display:grid;grid-template-rows:minmax(330px,50svh) auto");
+    expect(styles).toContain(".visual-diary__copy{position:relative");
+    expect(styles).toContain(".feedback-gallery__stage figcaption{position:static");
   });
 
   it("preserves complete text-bearing concept art in square mobile frames", () => {

@@ -180,3 +180,6 @@
 - [x] Cập nhật regression test và kiểm tra gallery phản hồi ở mobile/desktop trước khi phát hành.
 - [x] Kiểm tra, tối ưu và thay năm video nền TEMPO bằng năm clip mới người dùng cung cấp, giữ đúng thứ tự Cảnh 01–05.
 - [x] Cập nhật regression test và xác minh playback video mới trên mobile/desktop trước khi phát hành.
+- [x] Thay đúng hai visual đang sai bằng hai ảnh người dùng cung cấp, bảo đảm nút nhấn và đầu vòi xịt đều là đen graphite.
+- [x] Loại bỏ các nhãn nội bộ thừa dạng “Cảnh 01–05” khỏi trải nghiệm landing công khai.
+- [x] Tối ưu mobile-first để lớp chữ không che hình hoặc chồng chữ; kiểm thử responsive, regression và không làm thay đổi COD/tracking.
