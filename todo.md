@@ -185,3 +185,13 @@
 - [x] Tối ưu mobile-first để lớp chữ không che hình hoặc chồng chữ; kiểm thử responsive, regression và không làm thay đổi COD/tracking.
 - [x] Loại bỏ nhãn trạng thái nội bộ “VIDEO ĐANG PHÁT” còn sót trên overlay video công khai và kiểm tra lại production.
 - [x] Xác minh và đồng bộ edge production để v2joy.life thực sự phục vụ bản không có nhãn Cảnh hoặc trạng thái video.
+- [x] Sao lưu phiên bản landing production hiện hành và dựng route staging tách biệt, không phát hành production.
+- [x] Kiểm kê brief cùng đúng bảy asset được cung cấp; đối chiếu các ràng buộc chai 3ml, graphite, hộp rút đứng và visual teal–cam.
+- [x] Tái cấu trúc landing staging thành chín section theo brief, ưu tiên thông tin 3ml, mang theo, nghi thức ba bước và CTA COD sớm.
+- [x] Chuyển form COD staging thành hai bước, dùng placeholder rõ ràng cho phí giao/thời gian giao/chính sách khi chưa được xác nhận và không tạo đơn thử.
+- [x] Tinh gọn video/mood lặp ý xuống tối đa hai video full-width; dùng đúng asset pull-push để giải thích hộp rút đứng.
+- [x] Thêm FAQ, policy links placeholder, Product JSON-LD, ảnh responsive/lazy-load, accessibility và tracking funnel không gửi Purchase khi đặt COD.
+- [x] Thực hiện QA staging desktop 1440px và mobile 390px, Lighthouse report, bảng kiểm nghiệm thu và bàn giao để duyệt trước production.
+- [x] Tạo và dùng `srcset` WebP responsive từ đúng bảy asset gốc để giảm tải ảnh cho mobile staging.
+- [x] Chuyển cấu trúc landing TEMPO staging đã được duyệt sang route production `/` trên v2joy.life, đồng thời giữ legal/COD/tracking an toàn.
+- [ ] Kiểm thử regression và xác minh production cache-bypass sau checkpoint phát hành bản staging đã duyệt.

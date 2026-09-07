@@ -1,0 +1,95 @@
+{
+  "requestedUrl": "http://127.0.0.1:4174/staging/tempo-upgrade?lighthouse=acceptance-after-split",
+  "finalUrl": "http://127.0.0.1:4174/staging/tempo-upgrade?lighthouse=acceptance-after-split",
+  "fetchTime": "2026-09-07T10:51:39.815Z",
+  "scores": {
+    "performance": 37,
+    "accessibility": 100,
+    "bestPractices": 81,
+    "seo": 92
+  },
+  "metrics": {
+    "fcp": "7.2 s",
+    "lcp": "10.5 s",
+    "tbt": "950 ms",
+    "cls": "0",
+    "si": "7.2 s",
+    "tti": "17.1 s"
+  },
+  "warnings": [],
+  "lowScoreAudits": [
+    {
+      "id": "largest-contentful-paint",
+      "title": "Largest Contentful Paint",
+      "score": 0,
+      "displayValue": "10.5 s"
+    },
+    {
+      "id": "deprecations",
+      "title": "Uses deprecated APIs",
+      "score": 0,
+      "displayValue": "1 warning found"
+    },
+    {
+      "id": "mainthread-work-breakdown",
+      "title": "Minimize main-thread work",
+      "score": 0,
+      "displayValue": "3.6 s"
+    },
+    {
+      "id": "bootup-time",
+      "title": "Reduce JavaScript execution time",
+      "score": 0,
+      "displayValue": "1.8 s"
+    },
+    {
+      "id": "unused-css-rules",
+      "title": "Reduce unused CSS",
+      "score": 0,
+      "displayValue": "Est savings of 70 KiB"
+    },
+    {
+      "id": "unused-javascript",
+      "title": "Reduce unused JavaScript",
+      "score": 0,
+      "displayValue": "Est savings of 541 KiB"
+    },
+    {
+      "id": "robots-txt",
+      "title": "robots.txt is not valid",
+      "score": 0,
+      "displayValue": "101 errors found"
+    },
+    {
+      "id": "bf-cache",
+      "title": "Page prevented back/forward cache restoration",
+      "score": 0,
+      "displayValue": "1 failure reason"
+    },
+    {
+      "id": "lcp-discovery-insight",
+      "title": "LCP request discovery",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "network-dependency-tree-insight",
+      "title": "Network dependency tree",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "render-blocking-insight",
+      "title": "Render-blocking requests",
+      "score": 0,
+      "displayValue": "Est savings of 600 ms"
+    },
+    {
+      "id": "first-contentful-paint",
+      "title": "First Contentful Paint",
+      "score": 1,
+      "displayValue": "7.2 s"
+    }
+  ],
+  "contrastNodes": []
+}

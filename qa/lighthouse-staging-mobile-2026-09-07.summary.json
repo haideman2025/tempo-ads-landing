@@ -1,0 +1,94 @@
+{
+  "requestedUrl": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/staging/tempo-upgrade?lighthouse=mobile",
+  "finalUrl": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/staging/tempo-upgrade?lighthouse=mobile",
+  "fetchTime": "2026-09-07T10:40:02.798Z",
+  "scores": {
+    "performance": 37,
+    "accessibility": 96,
+    "bestPractices": 82,
+    "seo": 92
+  },
+  "metrics": {
+    "fcp": "12.7 s",
+    "lcp": "24.2 s",
+    "tbt": "760 ms",
+    "cls": "0",
+    "si": "12.7 s",
+    "tti": "26.0 s"
+  },
+  "warnings": [],
+  "lowScoreAudits": [
+    {
+      "id": "first-contentful-paint",
+      "title": "First Contentful Paint",
+      "score": 0,
+      "displayValue": "12.7 s"
+    },
+    {
+      "id": "largest-contentful-paint",
+      "title": "Largest Contentful Paint",
+      "score": 0,
+      "displayValue": "24.2 s"
+    },
+    {
+      "id": "interactive",
+      "title": "Time to Interactive",
+      "score": 0,
+      "displayValue": "26.0 s"
+    },
+    {
+      "id": "deprecations",
+      "title": "Uses deprecated APIs",
+      "score": 0,
+      "displayValue": "1 warning found"
+    },
+    {
+      "id": "mainthread-work-breakdown",
+      "title": "Minimize main-thread work",
+      "score": 0,
+      "displayValue": "4.4 s"
+    },
+    {
+      "id": "bootup-time",
+      "title": "Reduce JavaScript execution time",
+      "score": 0,
+      "displayValue": "2.1 s"
+    },
+    {
+      "id": "third-party-summary",
+      "title": "Reduce the impact of third-party code",
+      "score": 0,
+      "displayValue": "Third-party code blocked the main thread for 720 ms"
+    },
+    {
+      "id": "color-contrast",
+      "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "unminified-javascript",
+      "title": "Minify JavaScript",
+      "score": 0,
+      "displayValue": "Potential savings of 1,345 KiB"
+    },
+    {
+      "id": "unused-javascript",
+      "title": "Reduce unused JavaScript",
+      "score": 0,
+      "displayValue": "Potential savings of 1,290 KiB"
+    },
+    {
+      "id": "uses-text-compression",
+      "title": "Enable text compression",
+      "score": 0,
+      "displayValue": "Potential savings of 3,201 KiB"
+    },
+    {
+      "id": "duplicated-javascript",
+      "title": "Remove duplicate modules in JavaScript bundles",
+      "score": 0,
+      "displayValue": "Potential savings of 15 KiB"
+    }
+  ]
+}

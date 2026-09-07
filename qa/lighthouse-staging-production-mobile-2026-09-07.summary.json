@@ -1,0 +1,94 @@
+{
+  "requestedUrl": "http://127.0.0.1:4174/staging/tempo-upgrade?lighthouse=production-mobile",
+  "finalUrl": "http://127.0.0.1:4174/staging/tempo-upgrade?lighthouse=production-mobile",
+  "fetchTime": "2026-09-07T10:41:34.727Z",
+  "scores": {
+    "performance": 34,
+    "accessibility": 96,
+    "bestPractices": 82,
+    "seo": 92
+  },
+  "metrics": {
+    "fcp": "7.9 s",
+    "lcp": "10.7 s",
+    "tbt": "1,110 ms",
+    "cls": "0",
+    "si": "7.9 s",
+    "tti": "18.0 s"
+  },
+  "warnings": [],
+  "lowScoreAudits": [
+    {
+      "id": "first-contentful-paint",
+      "title": "First Contentful Paint",
+      "score": 0,
+      "displayValue": "7.9 s"
+    },
+    {
+      "id": "largest-contentful-paint",
+      "title": "Largest Contentful Paint",
+      "score": 0,
+      "displayValue": "10.7 s"
+    },
+    {
+      "id": "deprecations",
+      "title": "Uses deprecated APIs",
+      "score": 0,
+      "displayValue": "1 warning found"
+    },
+    {
+      "id": "mainthread-work-breakdown",
+      "title": "Minimize main-thread work",
+      "score": 0,
+      "displayValue": "3.8 s"
+    },
+    {
+      "id": "bootup-time",
+      "title": "Reduce JavaScript execution time",
+      "score": 0,
+      "displayValue": "1.9 s"
+    },
+    {
+      "id": "third-party-summary",
+      "title": "Reduce the impact of third-party code",
+      "score": 0,
+      "displayValue": "Third-party code blocked the main thread for 780 ms"
+    },
+    {
+      "id": "color-contrast",
+      "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "unminified-javascript",
+      "title": "Minify JavaScript",
+      "score": 0,
+      "displayValue": "Potential savings of 14 KiB"
+    },
+    {
+      "id": "unused-css-rules",
+      "title": "Reduce unused CSS",
+      "score": 0,
+      "displayValue": "Potential savings of 72 KiB"
+    },
+    {
+      "id": "unused-javascript",
+      "title": "Reduce unused JavaScript",
+      "score": 0,
+      "displayValue": "Potential savings of 649 KiB"
+    },
+    {
+      "id": "uses-text-compression",
+      "title": "Enable text compression",
+      "score": 0,
+      "displayValue": "Potential savings of 1,231 KiB"
+    },
+    {
+      "id": "robots-txt",
+      "title": "robots.txt is not valid",
+      "score": 0,
+      "displayValue": "101 errors found"
+    }
+  ]
+}

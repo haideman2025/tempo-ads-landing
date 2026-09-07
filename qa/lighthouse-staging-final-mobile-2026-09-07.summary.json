@@ -1,0 +1,108 @@
+{
+  "requestedUrl": "http://127.0.0.1:4174/staging/tempo-upgrade?lighthouse=final-mobile",
+  "finalUrl": "http://127.0.0.1:4174/staging/tempo-upgrade?lighthouse=final-mobile",
+  "fetchTime": "2026-09-07T10:44:12.706Z",
+  "scores": {
+    "performance": 35,
+    "accessibility": 96,
+    "bestPractices": 82,
+    "seo": 92
+  },
+  "metrics": {
+    "fcp": "7.9 s",
+    "lcp": "10.6 s",
+    "tbt": "1,050 ms",
+    "cls": "0",
+    "si": "7.9 s",
+    "tti": "17.9 s"
+  },
+  "warnings": [],
+  "lowScoreAudits": [
+    {
+      "id": "first-contentful-paint",
+      "title": "First Contentful Paint",
+      "score": 0,
+      "displayValue": "7.9 s"
+    },
+    {
+      "id": "largest-contentful-paint",
+      "title": "Largest Contentful Paint",
+      "score": 0,
+      "displayValue": "10.6 s"
+    },
+    {
+      "id": "deprecations",
+      "title": "Uses deprecated APIs",
+      "score": 0,
+      "displayValue": "1 warning found"
+    },
+    {
+      "id": "mainthread-work-breakdown",
+      "title": "Minimize main-thread work",
+      "score": 0,
+      "displayValue": "3.7 s"
+    },
+    {
+      "id": "bootup-time",
+      "title": "Reduce JavaScript execution time",
+      "score": 0,
+      "displayValue": "1.8 s"
+    },
+    {
+      "id": "third-party-summary",
+      "title": "Reduce the impact of third-party code",
+      "score": 0,
+      "displayValue": "Third-party code blocked the main thread for 710 ms"
+    },
+    {
+      "id": "color-contrast",
+      "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "unminified-javascript",
+      "title": "Minify JavaScript",
+      "score": 0,
+      "displayValue": "Potential savings of 14 KiB"
+    },
+    {
+      "id": "unused-css-rules",
+      "title": "Reduce unused CSS",
+      "score": 0,
+      "displayValue": "Potential savings of 72 KiB"
+    },
+    {
+      "id": "unused-javascript",
+      "title": "Reduce unused JavaScript",
+      "score": 0,
+      "displayValue": "Potential savings of 649 KiB"
+    },
+    {
+      "id": "uses-text-compression",
+      "title": "Enable text compression",
+      "score": 0,
+      "displayValue": "Potential savings of 1,231 KiB"
+    },
+    {
+      "id": "robots-txt",
+      "title": "robots.txt is not valid",
+      "score": 0,
+      "displayValue": "101 errors found"
+    }
+  ],
+  "contrastNodes": [
+    {
+      "node": "<div data-loc=\"client/src/pages/TempoUpgradeStaging.tsx:116\" class=\"tempo-stage__preview\" role=\"status\">",
+      "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.35 (foreground color: #ffffff, background color: #d86f3d, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+    },
+    {
+      "node": "<span data-loc=\"client/src/pages/TempoUpgradeStaging.tsx:141\" class=\"\">",
+      "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.76 (foreground color: #85827d, background color: #fffdf9, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+    },
+    {
+      "node": "<button data-loc=\"client/src/pages/TempoUpgradeStaging.tsx:141\" type=\"button\" aria-pressed=\"true\">",
+      "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 3.53 (foreground color: #17191b, background color: #007b8c, font size: 9.8pt (13px), font weight: bold). Expected contrast ratio of 4.5:1"
+    }
+  ]
+}

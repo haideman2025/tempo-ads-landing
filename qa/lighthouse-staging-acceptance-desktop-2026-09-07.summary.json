@@ -1,0 +1,95 @@
+{
+  "requestedUrl": "http://127.0.0.1:4174/staging/tempo-upgrade",
+  "finalUrl": "http://127.0.0.1:4174/staging/tempo-upgrade",
+  "fetchTime": "2026-09-07T11:03:30.119Z",
+  "scores": {
+    "performance": 83,
+    "accessibility": 100,
+    "bestPractices": 81,
+    "seo": 69
+  },
+  "metrics": {
+    "fcp": "1.5 s",
+    "lcp": "2.1 s",
+    "tbt": "70 ms",
+    "cls": "0.001",
+    "si": "1.5 s",
+    "tti": "3.0 s"
+  },
+  "warnings": [],
+  "lowScoreAudits": [
+    {
+      "id": "deprecations",
+      "title": "Uses deprecated APIs",
+      "score": 0,
+      "displayValue": "1 warning found"
+    },
+    {
+      "id": "unminified-javascript",
+      "title": "Minify JavaScript",
+      "score": 0,
+      "displayValue": "Est savings of 14 KiB"
+    },
+    {
+      "id": "unused-css-rules",
+      "title": "Reduce unused CSS",
+      "score": 0,
+      "displayValue": "Est savings of 70 KiB"
+    },
+    {
+      "id": "unused-javascript",
+      "title": "Reduce unused JavaScript",
+      "score": 0,
+      "displayValue": "Est savings of 541 KiB"
+    },
+    {
+      "id": "is-crawlable",
+      "title": "Page is blocked from indexing",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "llms-txt",
+      "title": "llms.txt does not follow recommendations",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "bf-cache",
+      "title": "Page prevented back/forward cache restoration",
+      "score": 0,
+      "displayValue": "1 failure reason"
+    },
+    {
+      "id": "lcp-discovery-insight",
+      "title": "LCP request discovery",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "network-dependency-tree-insight",
+      "title": "Network dependency tree",
+      "score": 0,
+      "displayValue": null
+    },
+    {
+      "id": "render-blocking-insight",
+      "title": "Render-blocking requests",
+      "score": 0,
+      "displayValue": "Est savings of 280 ms"
+    },
+    {
+      "id": "total-byte-weight",
+      "title": "Avoid enormous network payloads",
+      "score": 50,
+      "displayValue": "Total size was 3,076 KiB"
+    },
+    {
+      "id": "cache-insight",
+      "title": "Use efficient cache lifetimes",
+      "score": 50,
+      "displayValue": "Est savings of 215 KiB"
+    }
+  ],
+  "contrastNodes": []
+}
