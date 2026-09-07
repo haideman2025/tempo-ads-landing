@@ -93,6 +93,7 @@ describe("TEMPO COD landing", () => {
     expect(source).not.toContain("CẢNH {step}");
     expect(source).not.toContain("CẢNH 01");
     expect(source).not.toContain("ĐANG CHẠY NỀN");
+    expect(source).not.toContain("VIDEO ĐANG PHÁT");
   });
 
   it("keeps mobile story copy separate from video and image frames", () => {

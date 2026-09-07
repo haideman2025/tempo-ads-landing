@@ -183,3 +183,4 @@
 - [x] Thay đúng hai visual đang sai bằng hai ảnh người dùng cung cấp, bảo đảm nút nhấn và đầu vòi xịt đều là đen graphite.
 - [x] Loại bỏ các nhãn nội bộ thừa dạng “Cảnh 01–05” khỏi trải nghiệm landing công khai.
 - [x] Tối ưu mobile-first để lớp chữ không che hình hoặc chồng chữ; kiểm thử responsive, regression và không làm thay đổi COD/tracking.
+- [x] Loại bỏ nhãn trạng thái nội bộ “VIDEO ĐANG PHÁT” còn sót trên overlay video công khai và kiểm tra lại production.

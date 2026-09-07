@@ -51,7 +51,7 @@ function Backdrop({ video, poster, label, eager = false }: { video: string; post
     const timers = [0, 300, 1100].map(delay => window.setTimeout(play, delay)); media.addEventListener("canplay", play);
     return () => { stopped = true; timers.forEach(window.clearTimeout); media.removeEventListener("canplay", play); };
   }, [load, video]);
-  return <div ref={frame} className="video-frame" data-playback-state={state} aria-label={label}><Image src={poster} alt="" className="video-frame__fallback" eager={eager} />{load && <video ref={player} autoPlay muted loop playsInline preload={eager ? "auto" : "metadata"} poster={poster} onPlaying={() => setState("playing")} onError={() => setState("error")}><source src={video} type="video/mp4" /></video>}{state === "playing" && <span className="video-frame__motion-status" aria-hidden="true">VIDEO ĐANG PHÁT</span>}</div>;
+  return <div ref={frame} className="video-frame" data-playback-state={state} aria-label={label}><Image src={poster} alt="" className="video-frame__fallback" eager={eager} />{load && <video ref={player} autoPlay muted loop playsInline preload={eager ? "auto" : "metadata"} poster={poster} onPlaying={() => setState("playing")} onError={() => setState("error")}><source src={video} type="video/mp4" /></video>}</div>;
 }
 
 function Scene({ step, title, accent, copy, detail, video, poster }: { step: "02" | "03" | "04" | "05"; title: string; accent: string; copy: string; detail: string; video: string; poster: string }) {
