@@ -76,7 +76,9 @@ describe("TEMPO COD landing", () => {
   });
 
   it("restores all five video chapters, visual diary and deferred media loading", () => {
-    ["1-3_488cdaeb.mp4", "2-2_1c24d56b.mp4", "3-2_1be35ced.mp4", "4-2_5b3104ee.mp4", "5-2_104c988a.mp4"].forEach(video => expect(source).toContain(video));
+    const videoSources = ["tempo-background-01_9f851f78.mp4", "tempo-background-02_d44fa0b9.mp4", "tempo-background-03_a5a1c511.mp4", "tempo-background-04_d33bb416.mp4", "tempo-background-05_b3e7f8c0.mp4"];
+    videoSources.forEach(video => expect(source).toContain(video));
+    expect(videoSources.map(video => source.indexOf(video))).toEqual([...videoSources.map(video => source.indexOf(video))].sort((a, b) => a - b));
     expect(source).toContain("function Scene(");
     expect(source).toContain("function Diary()");
     expect(source).toContain('aria-label="Các khoảnh khắc trong visual diary"');

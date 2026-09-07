@@ -178,3 +178,5 @@
 - [x] Soạn bộ prompt Omni Flash 1.1 dựng lại năm video nền TEMPO theo concept chai/hộp 3ml mới, gồm keyframe, continuity và hướng dẫn thay asset video cũ.
 - [x] Tích hợp trọn bộ 10 ảnh phản hồi nhóm khách hàng dùng thử do người dùng cung cấp thành gallery minh bạch, responsive cho mobile và desktop; không tạo thêm rating hoặc nội dung đánh giá.
 - [x] Cập nhật regression test và kiểm tra gallery phản hồi ở mobile/desktop trước khi phát hành.
+- [x] Kiểm tra, tối ưu và thay năm video nền TEMPO bằng năm clip mới người dùng cung cấp, giữ đúng thứ tự Cảnh 01–05.
+- [x] Cập nhật regression test và xác minh playback video mới trên mobile/desktop trước khi phát hành.
