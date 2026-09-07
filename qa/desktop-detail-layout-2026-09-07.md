@@ -20,3 +20,5 @@ Trên mobile, showcase chuyển sang một cột; asset tiếp tục dùng `obje
 ## Theo dõi đồng bộ phát hành
 
 Sau checkpoint `1cb84fb8`, kiểm tra cache-bypass trên `v2joy.life` vẫn thấy bundle `index-CD2XqmHd.js` cùng copy của dải visual cũ; DOM chưa có câu `Chọn một góc nhìn để xem kỹ hơn`. Đây là dấu hiệu edge chưa đồng bộ, không phải lỗi của source/build. Cần phát hành lại và chỉ xác nhận hoàn tất sau khi DOM live có detail showcase mới.
+
+Sau phát hành lại `e764d2c0` và thời gian đồng bộ, cache-bypass trên `v2joy.life` đã hiển thị ba tab `01 CHĂM SÓC KÍN ĐÁO`, `02 THIẾT KẾ TEMPO`, `03 MỞ HỘP RIÊNG TƯ` cùng điều hướng `Xem chi tiết trước/tiếp theo`. Điều này xác nhận detail showcase một trọng tâm đã được phục vụ trên domain chính.
