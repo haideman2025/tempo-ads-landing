@@ -171,3 +171,5 @@
 - [x] Hoàn thiện mobile-first: ưu tiên đọc một tay, CTA sticky, form COD, thứ tự nội dung, kích thước chạm và tối ưu tải ảnh/video trước khi tinh chỉnh desktop.
 - [x] Bổ sung thông tin thành phần, hướng dẫn, bảo quản, cảnh báo, đơn vị chịu trách nhiệm, đơn vị sản xuất, địa chỉ nhà máy, xuất xứ và số công bố chỉ theo ảnh nhãn người dùng cung cấp.
 - [x] Kiểm tra claim/copy không vượt quá nhãn, viết regression tests và nghiệm thu trải nghiệm trên mobile lẫn desktop trước phát hành.
+- [x] Khắc phục mọi ảnh chứa chữ bị crop trên mobile: ưu tiên khung hiển thị 1:1 hoặc slide/chạm vuốt để xem đủ thông tin theo đúng tỉ lệ asset.
+- [x] Cập nhật regression test và nghiệm thu mobile/desktop cho cách hiển thị ảnh không cắt chữ.

@@ -82,6 +82,14 @@ describe("TEMPO COD landing", () => {
     expect(styles).toContain(".visual-diary__stage");
   });
 
+  it("preserves complete text-bearing concept art in square mobile frames", () => {
+    ["product-proof__image--square", "visual-card--asset", "ritual-section--asset", "wait-section--asset", "mobile-safe-square"].forEach(className => expect(source).toContain(className));
+    expect(styles).toContain(".mobile-safe-square{object-fit:contain!important");
+    expect(styles).toContain(".visual-card--asset::after{display:none}");
+    expect(styles).toContain(".label-gallery figure{aspect-ratio:1/1");
+    expect(styles).toContain(".final-cta>.mobile-safe-square{object-fit:contain!important");
+  });
+
   it("keeps product guidance factual and presents label-backed safety content", () => {
     ["Xịt 3–4 nhát", "Chờ 60 phút, sau đó rửa sạch.", "Chỉ dùng ngoài da, không được uống.", "Không xịt lên vùng da có vết thương hở hoặc đang trầy xước.", "dưới 30°C", "Hạn sử dụng: 24 tháng kể từ ngày sản xuất.", "354/20/CBMP-NB"].forEach(copy => expect(source).toContain(copy));
     expect(source).toContain("Chi nhánh Hà Nam – Công ty TNHH Sản xuất DP Công nghệ cao Nanofrance");
