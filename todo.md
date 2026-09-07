@@ -184,3 +184,4 @@
 - [x] Loại bỏ các nhãn nội bộ thừa dạng “Cảnh 01–05” khỏi trải nghiệm landing công khai.
 - [x] Tối ưu mobile-first để lớp chữ không che hình hoặc chồng chữ; kiểm thử responsive, regression và không làm thay đổi COD/tracking.
 - [x] Loại bỏ nhãn trạng thái nội bộ “VIDEO ĐANG PHÁT” còn sót trên overlay video công khai và kiểm tra lại production.
+- [ ] Xác minh và đồng bộ edge production để v2joy.life thực sự phục vụ bản không có nhãn Cảnh hoặc trạng thái video.
