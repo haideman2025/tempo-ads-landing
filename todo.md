@@ -176,3 +176,5 @@
 - [x] Tái cấu trúc cụm giới thiệu TEMPO và visual chi tiết trên desktop để giảm mật độ thông tin, tạo trọng tâm xem rõ ràng và không ảnh hưởng mobile/COD.
 - [x] Cập nhật regression test, kiểm tra desktop/mobile và production build cho bố cục desktop đã tinh giản.
 - [x] Soạn bộ prompt Omni Flash 1.1 dựng lại năm video nền TEMPO theo concept chai/hộp 3ml mới, gồm keyframe, continuity và hướng dẫn thay asset video cũ.
+- [x] Tích hợp trọn bộ 10 ảnh phản hồi nhóm khách hàng dùng thử do người dùng cung cấp thành gallery minh bạch, responsive cho mobile và desktop; không tạo thêm rating hoặc nội dung đánh giá.
+- [x] Cập nhật regression test và kiểm tra gallery phản hồi ở mobile/desktop trước khi phát hành.

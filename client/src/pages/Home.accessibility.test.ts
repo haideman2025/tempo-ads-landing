@@ -13,6 +13,7 @@ describe("TEMPO COD landing accessibility baseline", () => {
     expect(source).toContain('id="san-pham"');
     expect(source).toContain('id="nghi-thuc"');
     expect(source).toContain('id="thong-tin"');
+    expect(source).toContain('id="phan-hoi"');
   });
 
   it("provides meaningful image alternatives and functional in-page navigation", () => {
@@ -39,5 +40,12 @@ describe("TEMPO COD landing accessibility baseline", () => {
     expect(source).toContain('aria-label="Xem khoảnh khắc tiếp theo"');
     expect(source).toContain('role="tablist" aria-label="Các khoảnh khắc trong visual diary"');
     expect(source).toContain('data-swipe="enabled"');
+  });
+
+  it("makes user-provided feedback visuals operable through labelled tabs and controls", () => {
+    expect(source).toContain('aria-label="Xem phản hồi trước"');
+    expect(source).toContain('aria-label="Xem phản hồi tiếp theo"');
+    expect(source).toContain('role="tablist" aria-label="Các phản hồi từ nhóm khách hàng dùng thử"');
+    expect(source).toContain('aria-label={`Xem phản hồi ${feedback.index} trên 10`}');
   });
 });

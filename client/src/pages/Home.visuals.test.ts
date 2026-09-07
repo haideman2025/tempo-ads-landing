@@ -64,12 +64,15 @@ describe("TEMPO COD landing", () => {
     expect(source).toContain("...source");
   });
 
-  it("uses transparent trust language and never fabricates rating or review content", () => {
-    expect(source).toContain("Đánh giá đã xác minh");
-    expect(source).toContain("Đang thu thập sau các đơn giao thành công.");
-    expect(source).toContain("Không dùng review tạo sẵn hoặc rating giả.");
+  it("uses only user-provided feedback visuals with transparent trust language", () => {
+    ["feedback-01-spray_28cc30b5.png", "feedback-02-wait_8add3a01.png", "feedback-03-clean_7143b919.png", "feedback-04-intention_a9caba0e.png", "feedback-05-care_082b777c.png", "feedback-06-unboxing_d9e5a446.png", "feedback-07-guidance_62df674a.png", "feedback-08-flow_aa0ad378.png", "feedback-09-design_5d665c00.png", "feedback-10-compact_bcf288fa.png"].forEach(asset => expect(source).toContain(asset));
+    expect(source).toContain("10 visual ghi lại các ý kiến tổng hợp từ nhóm khách hàng trải nghiệm TEMPO do V2JOY cung cấp.");
+    expect(source).toContain("Trải nghiệm cá nhân có thể khác nhau.");
+    expect(source).toContain("Không hiển thị rating, tên cá nhân hay lời đánh giá tạo sẵn.");
     expect(source).not.toContain("5.0/5");
     expect(source).not.toContain("khách hàng nói");
+    expect(source).toContain('id="phan-hoi"');
+    expect(styles).toContain(".feedback-gallery__stage{position:relative;aspect-ratio:1/1");
   });
 
   it("restores all five video chapters, visual diary and deferred media loading", () => {
