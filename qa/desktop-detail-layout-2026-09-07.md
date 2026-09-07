@@ -16,3 +16,7 @@ Trên mobile, showcase chuyển sang một cột; asset tiếp tục dùng `obje
 `pnpm test`: 35 passed, 1 skipped.  
 `pnpm build`: thành công.  
 Ảnh full-page đã kiểm tra tại 1440×1000 và 375×812. Nhật ký console/mạng mới nhất không cho thấy lỗi JavaScript hoặc phản hồi 4xx/5xx liên quan đến landing; truy vấn `orders.status` trả 200 và số tồn hiển thị là 1.000/1.000.
+
+## Theo dõi đồng bộ phát hành
+
+Sau checkpoint `1cb84fb8`, kiểm tra cache-bypass trên `v2joy.life` vẫn thấy bundle `index-CD2XqmHd.js` cùng copy của dải visual cũ; DOM chưa có câu `Chọn một góc nhìn để xem kỹ hơn`. Đây là dấu hiệu edge chưa đồng bộ, không phải lỗi của source/build. Cần phát hành lại và chỉ xác nhận hoàn tất sau khi DOM live có detail showcase mới.
