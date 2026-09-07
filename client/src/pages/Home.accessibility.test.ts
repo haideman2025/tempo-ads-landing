@@ -4,30 +4,33 @@ import { describe, expect, it } from "vitest";
 
 const source = readFileSync(resolve(process.cwd(), "client/src/pages/Home.tsx"), "utf8");
 
-describe("TEMPO sales landing accessibility baseline", () => {
-  it("keeps clear page landmarks and labelled image-led sections", () => {
-    expect(source).toContain('<header className="night-header">');
-    expect(source).toContain('<main id="top">');
-    expect(source).toContain("<footer>");
-    expect(source).toContain('aria-labelledby="ingredient-atlas-title"');
-    expect(source).toContain('aria-labelledby="transparency-title"');
-    expect(source).toContain('aria-labelledby="protocol-title"');
+describe("TEMPO COD landing accessibility baseline", () => {
+  it("keeps clear page landmarks and labelled product sections", () => {
+    expect(source).toContain('<header className="tempo-header">');
+    expect(source).toContain('<main className="tempo-site">');
+    expect(source).toContain('<footer>');
+    expect(source).toContain('id="dat-hang" aria-labelledby="order-title"');
+    expect(source).toContain('id="san-pham"');
+    expect(source).toContain('id="nghi-thuc"');
+    expect(source).toContain('id="minh-bach"');
   });
 
-  it("provides meaningful alternatives and functional navigation for key visual controls", () => {
-    expect(source).toContain('alt: "Infographic TEMPO về chín chiết xuất thực vật trong danh mục INCI"');
-    expect(source).toContain('alt={`Packshot ${item.name} có nhãn TEMPO rõ ràng`}');
-    expect(source).toContain('href="#inci-full"');
-    expect(source).toContain('href="#story"');
-    expect(source).toContain('aria-label="Timeline video TEMPO"');
-    expect(source).toContain('aria-label={autoAdvance ? "Dừng tự phát" : "Tiếp tục tự phát"}');
+  it("provides meaningful image alternatives and functional in-page navigation", () => {
+    expect(source).toContain('alt="TEMPO by V2JOY: hộp và chai 3ml trên nền ivory"');
+    expect(source).toContain('alt="Ba bước sử dụng TEMPO: làm sạch, xịt thoa đều và rửa sạch sau 60 phút"');
+    expect(source).toContain('aria-label="Điều hướng"');
+    expect(source).toContain('href="#san-pham"');
+    expect(source).toContain('href="#nghi-thuc"');
+    expect(source).toContain('href="#minh-bach"');
   });
 
-  it("makes waitlist selections, FAQ and consent readable to assistive technology", () => {
+  it("makes quantity selection, consents and outcome status readable to assistive technology", () => {
     expect(source).toContain('role="radiogroup" aria-label="Chọn số lượng TEMPO 3ml"');
-    expect(source).toContain('role="radio" aria-checked={quantity === option}');
-    expect(source).toContain('aria-expanded={openFaq === index}');
-    expect(source).toContain("marketingConsent");
-    expect(source).toContain('aria-live="polite"');
+    expect(source).toContain('aria-pressed={quantity===1}');
+    expect(source).toContain('aria-pressed={quantity===2}');
+    expect(source).toContain('name="orderConsent" type="checkbox" required');
+    expect(source).toContain('name="marketingConsent" type="checkbox"');
+    expect(source).toContain('role="status"');
+    expect(source).toContain('disabled={createOrder.isPending || remaining<1}');
   });
 });

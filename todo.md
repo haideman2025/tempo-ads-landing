@@ -161,3 +161,8 @@
 - [x] Chẩn đoán và xử lý rớt chuyển đổi sau Link clicks từ Facebook App: active time 15 giây, scroll depth 34,94%, 1,14 pages per session và LCP 6,1 giây.
 - [x] Kiểm tra và xử lý các lỗi JavaScript Clarity ghi nhận trước khi đánh giá UX; bổ sung event funnel không chứa PII để đo FormStart và ReservationSuccess.
 - [x] Loại bỏ form đăng ký trùng lặp ở cuối trang, giữ một form duy nhất ngay sau hero và biến phần cuối trang thành CTA quay lại form đó.
+- [x] Chuẩn hóa catalog TEMPO theo concept/mẫu demo mới: giá 499.000đ, 3ml, tồn kho 1.000 chai và thông tin hướng dẫn/cảnh báo chỉ theo nhãn đã cung cấp.
+- [x] Tái thiết kế toàn bộ landing theo art direction ivory–graphite–teal của bộ concept mới, ưu tiên packshot, trải nghiệm mở hộp, thao tác sử dụng và ngôn ngữ hình ảnh mobile-first.
+- [x] Thay luồng hàng chờ bằng đơn đặt hàng COD có kiểm soát tồn kho, lưu thông tin giao nhận cần thiết và giữ thông báo Telegram cho từng đơn mới.
+- [x] Tạo lớp trust minh bạch: thông tin sản phẩm, hướng dẫn sử dụng, cảnh báo, chính sách mua hàng và khu vực mời khách để lại đánh giá đã xác minh sau giao hàng; không tạo rating/review giả.
+- [x] Tích hợp bộ ảnh concept mới qua hệ thống phân phối asset, viết regression tests, kiểm tra đơn COD và xác minh trải nghiệm desktop/mobile trước phát hành.

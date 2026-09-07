@@ -56,3 +56,44 @@ export const tempoWaitlistEntries = mysqlTable("tempo_waitlist_entries", {
 
 export type TempoWaitlistEntry = typeof tempoWaitlistEntries.$inferSelect;
 export type InsertTempoWaitlistEntry = typeof tempoWaitlistEntries.$inferInsert;
+
+/** One durable row controls TEMPO stock with an atomic reserved <= onHand guard. */
+export const tempoInventory = mysqlTable("tempo_inventory", {
+  sku: varchar("sku", { length: 64 }).primaryKey(),
+  onHand: int("on_hand").notNull(),
+  reserved: int("reserved").notNull().default(0),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+}, table => [
+  check("tempo_inventory_nonnegative", sql`${table.onHand} >= 0 and ${table.reserved} >= 0 and ${table.reserved} <= ${table.onHand}`),
+]);
+
+/** COD orders are deliberately separate from the prior waitlist, which remains historical evidence. */
+export const tempoCodOrders = mysqlTable("tempo_cod_orders", {
+  id: int("id").autoincrement().primaryKey(),
+  orderNumber: varchar("order_number", { length: 32 }).notNull(),
+  sku: varchar("sku", { length: 64 }).notNull().default("tempo-3ml"),
+  fullName: varchar("full_name", { length: 120 }).notNull(),
+  phone: varchar("phone", { length: 24 }).notNull(),
+  address: varchar("address", { length: 500 }).notNull(),
+  quantity: int("quantity").notNull(),
+  unitPrice: int("unit_price").notNull().default(499000),
+  totalValue: int("total_value").notNull(),
+  note: text("note"),
+  orderConsent: boolean("order_consent").notNull(),
+  marketingConsent: boolean("marketing_consent").notNull().default(false),
+  status: mysqlEnum("status", ["pending_confirmation", "confirmed", "shipped", "delivered", "cancelled"]).notNull().default("pending_confirmation"),
+  utmSource: varchar("utm_source", { length: 120 }),
+  utmMedium: varchar("utm_medium", { length: 120 }),
+  utmCampaign: varchar("utm_campaign", { length: 180 }),
+  utmContent: varchar("utm_content", { length: 180 }),
+  utmTerm: varchar("utm_term", { length: 180 }),
+  fbclid: varchar("fbclid", { length: 255 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+}, table => [
+  uniqueIndex("tempo_cod_order_number_unique").on(table.orderNumber),
+  check("tempo_cod_order_quantity_range", sql`${table.quantity} between 1 and 2`),
+  check("tempo_cod_order_value_positive", sql`${table.unitPrice} > 0 and ${table.totalValue} = ${table.unitPrice} * ${table.quantity}`),
+]);
+
+export type TempoCodOrder = typeof tempoCodOrders.$inferSelect;

@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+const runExternalTelegramCheck = process.env.VERIFY_EXTERNAL_TELEGRAM === "1";
+const externalIt = runExternalTelegramCheck ? it : it.skip;
+
 describe("Telegram credentials", () => {
-  it("xác thực bot bằng endpoint getMe mà không ghi lộ token", async () => {
+  externalIt("xác thực bot bằng endpoint getMe mà không ghi lộ token", async () => {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     expect(token).toMatch(/^\d+:[A-Za-z0-9_-]{20,}$/);
 

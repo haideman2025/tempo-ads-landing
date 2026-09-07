@@ -62,3 +62,52 @@ export async function notifyTempoReservation(
     clearTimeout(timeout);
   }
 }
+
+type TempoCodOrderNotification = {
+  orderNumber: string;
+  fullName: string;
+  phone: string;
+  address: string;
+  quantity: number;
+  totalValue: number;
+  note?: string | null;
+};
+
+export function formatTempoCodOrderNotification(notification: TempoCodOrderNotification) {
+  const lines = [
+    "TEMPO 3ML · ĐƠN COD MỚI",
+    `Mã đơn: ${notification.orderNumber}`,
+    `Số lượng: ${notification.quantity} chai · ${notification.totalValue.toLocaleString("vi-VN")}đ`,
+    `Khách: ${notification.fullName}`,
+    `Điện thoại: ${notification.phone}`,
+    `Địa chỉ: ${notification.address}`,
+    "Trạng thái: chờ xác nhận COD.",
+  ];
+  if (notification.note) lines.push(`Lời nhắn: ${notification.note}`);
+  return lines.join("\n");
+}
+
+export async function notifyTempoCodOrder(
+  notification: TempoCodOrderNotification,
+  options: { token?: string; chatId?: string; fetchImpl?: TelegramFetch } = {},
+) {
+  const token = options.token ?? process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = options.chatId ?? process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return { delivered: false, skipped: true } as const;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5_000);
+  try {
+    const response = await (options.fetchImpl ?? fetch)(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, text: formatTempoCodOrderNotification(notification), disable_web_page_preview: true }),
+      signal: controller.signal,
+    });
+    if (!response.ok) return { delivered: false, skipped: false } as const;
+    return { delivered: true, skipped: false } as const;
+  } catch {
+    return { delivered: false, skipped: false } as const;
+  } finally {
+    clearTimeout(timeout);
+  }
+}

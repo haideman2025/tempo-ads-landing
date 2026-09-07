@@ -2,8 +2,9 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
-import { getTempoWaitlistStatus, reserveTempoWaitlistSlot } from "./db";
-import { notifyTempoReservation } from "./telegram";
+import { createTempoCodOrder, getTempoCodOrderStatus, getTempoWaitlistStatus, reserveTempoWaitlistSlot } from "./db";
+import { tempoCodOrderInputSchema } from "./orders";
+import { notifyTempoCodOrder, notifyTempoReservation } from "./telegram";
 import { waitlistInputSchema } from "./waitlist";
 
 export const appRouter = router({
@@ -32,6 +33,24 @@ export const appRouter = router({
           totalValue: result.totalValue,
           slotNumber: result.entry.slotNumber,
           note: result.entry.note,
+        });
+      }
+      return result;
+    }),
+  }),
+  orders: router({
+    status: publicProcedure.query(() => getTempoCodOrderStatus()),
+    create: publicProcedure.input(tempoCodOrderInputSchema).mutation(async ({ input }) => {
+      const result = await createTempoCodOrder(input);
+      if (result.kind === "created") {
+        await notifyTempoCodOrder({
+          orderNumber: result.order.orderNumber,
+          fullName: result.order.fullName,
+          phone: result.order.phone,
+          address: result.order.address,
+          quantity: result.order.quantity,
+          totalValue: result.order.totalValue,
+          note: result.order.note,
         });
       }
       return result;

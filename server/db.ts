@@ -1,7 +1,8 @@
 import { eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, tempoWaitlistEntries, users } from "../drizzle/schema";
+import { InsertUser, tempoCodOrders, tempoInventory, tempoWaitlistEntries, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
+import { TEMPO_INITIAL_STOCK, TEMPO_SKU, TEMPO_UNIT_PRICE, type TempoCodOrderInput } from "./orders";
 import { getRemainingSlots, hasRemainingCapacity, WAITLIST_CAPACITY, type WaitlistInput } from "./waitlist";
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -156,4 +157,72 @@ export async function reserveTempoWaitlistSlot(input: WaitlistInput) {
   }
 
   throw new Error("Could not reserve a waitlist slot");
+}
+
+export async function getTempoCodOrderStatus() {
+  const db = await getDb();
+  if (!db) throw new Error("Database is unavailable");
+  const rows = await db.select().from(tempoInventory).where(eq(tempoInventory.sku, TEMPO_SKU)).limit(1);
+  const inventory = rows[0];
+  const capacity = inventory?.onHand ?? TEMPO_INITIAL_STOCK;
+  const claimed = inventory?.reserved ?? 0;
+  return { capacity, claimed, remaining: Math.max(0, capacity - claimed), unitPrice: TEMPO_UNIT_PRICE };
+}
+
+export async function getTempoCodOrderByPhone(phone: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is unavailable");
+  const rows = await db.select().from(tempoCodOrders).where(eq(tempoCodOrders.phone, phone)).limit(1);
+  return rows[0];
+}
+
+function makeTempoOrderNumber() {
+  return `TMP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+}
+
+export async function createTempoCodOrder(input: TempoCodOrderInput) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is unavailable");
+
+  const existing = await getTempoCodOrderByPhone(input.phone);
+  if (existing) return { kind: "existing" as const, order: existing };
+
+  const orderNumber = makeTempoOrderNumber();
+  const result = await db.transaction(async tx => {
+    await tx.insert(tempoInventory).values({ sku: TEMPO_SKU, onHand: TEMPO_INITIAL_STOCK, reserved: 0 })
+      .onDuplicateKeyUpdate({ set: { sku: sql`${tempoInventory.sku}` } });
+
+    const updateResult = await tx.update(tempoInventory)
+      .set({ reserved: sql`${tempoInventory.reserved} + ${input.quantity}` })
+      .where(sql`${tempoInventory.sku} = ${TEMPO_SKU} and ${tempoInventory.reserved} + ${input.quantity} <= ${tempoInventory.onHand}`);
+
+    if (updateResult[0].affectedRows !== 1) return { kind: "full" as const };
+
+    await tx.insert(tempoCodOrders).values({
+      orderNumber,
+      sku: TEMPO_SKU,
+      fullName: input.fullName,
+      phone: input.phone,
+      address: input.address,
+      quantity: input.quantity,
+      unitPrice: TEMPO_UNIT_PRICE,
+      totalValue: input.quantity * TEMPO_UNIT_PRICE,
+      note: input.note || null,
+      orderConsent: input.orderConsent,
+      marketingConsent: input.marketingConsent,
+      utmSource: input.utmSource || null,
+      utmMedium: input.utmMedium || null,
+      utmCampaign: input.utmCampaign || null,
+      utmContent: input.utmContent || null,
+      utmTerm: input.utmTerm || null,
+      fbclid: input.fbclid || null,
+    });
+    return { kind: "created" as const };
+  });
+
+  if (result.kind === "full") return result;
+  const orderRows = await db.select().from(tempoCodOrders).where(eq(tempoCodOrders.orderNumber, orderNumber)).limit(1);
+  const order = orderRows[0];
+  if (!order) throw new Error("COD order could not be confirmed");
+  return { kind: "created" as const, order };
 }
