@@ -9,3 +9,7 @@ Hệ thống triển khai sau đó xác nhận deployment đã thành công cho 
 Kiểm tra console của phiên trang trắng không ghi nhận lỗi JavaScript. Điều này chưa loại trừ vấn đề tải HTML/bundle từ edge và cần đối chiếu trực tiếp nội dung HTML cùng HTTP response trước khi nghiệm thu.
 
 Đối chiếu marker bundle: source/build local có `499.000` và `Đặt hàng COD`, trong khi HTML live ở cả `v2joy.life` và hostname Manus tham chiếu bundle cũ `index-BeU8QbyD.js` (~35 KB), khác bundle local `index-CcjFlTMd.js` (~66 KB). Cache-bypass trên hostname Manus cũng trả trang trắng. Sự cố nằm ở bản deployment đang phục vụ, không phải một mình DNS custom domain.
+
+## Kết quả sau checkpoint đồng bộ 88d9e1a5
+
+Tên miền chính `https://v2joy.life/?release=88d9e1a5` đã render thành công landing COD mới. DOM hiển thị hero, CTA “Đặt hàng COD”, giá 499.000đ, tồn kho 1.000 chai, form giao nhận COD, các visual concept mới và phần minh bạch về đánh giá xác minh. Vấn đề edge phân phối bundle cũ/trang trắng đã được khắc phục sau phát hành lại.

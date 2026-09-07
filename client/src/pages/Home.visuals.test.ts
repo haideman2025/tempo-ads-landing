@@ -25,13 +25,13 @@ describe("TEMPO COD landing", () => {
     expect(source).toContain('const remaining = stock?.remaining ?? 1000');
   });
 
-  it("has one conversion form immediately after the hero", () => {
+  it("has one COD conversion form reachable from the hero and all page CTAs", () => {
     const formPosition = source.indexOf('className="order-section" id="dat-hang"');
-    const storyPosition = source.indexOf('className="split-story" id="san-pham"');
     expect(formPosition).toBeGreaterThan(source.indexOf('className="tempo-hero"'));
-    expect(formPosition).toBeLessThan(storyPosition);
     expect((source.match(/<form className="cod-form"/g) ?? [])).toHaveLength(1);
     expect(source).toContain('data-clarity-mask="true"');
+    expect(source).toContain('className="mobile-sticky"');
+    expect(source.match(/onClick={scrollToOrder}/g)?.length).toBeGreaterThanOrEqual(4);
   });
 
   it("collects only the information required to fulfil a COD order", () => {
@@ -41,10 +41,10 @@ describe("TEMPO COD landing", () => {
   });
 
   it("supports a 1–2 bottle order and calculates the COD subtotal", () => {
-    expect(source).toContain('const [quantity, setQuantity] = useState(1)');
+    expect(source).toContain('const [quantity, setQuantity] = useState<1 | 2>(1)');
     expect(source).toContain('aria-label="Chọn số lượng TEMPO 3ml"');
     expect(source).toContain("value: quantity * 499000");
-    expect(source).toContain("vnd(quantity*499000)");
+    expect(source).toContain("vnd(quantity * 499000)");
   });
 
   it("fires funnel events without sending PII to Meta", () => {
@@ -61,7 +61,7 @@ describe("TEMPO COD landing", () => {
     expect(source).toContain('localStorage.getItem("tempo-attribution")');
     expect(source).toContain('utmSource: "utm_source"');
     expect(source).toContain('fbclid: "fbclid"');
-    expect(source).toContain("...attribution");
+    expect(source).toContain("...source");
   });
 
   it("uses transparent trust language and never fabricates rating or review content", () => {
@@ -72,9 +72,21 @@ describe("TEMPO COD landing", () => {
     expect(source).not.toContain("khách hàng nói");
   });
 
-  it("keeps product guidance factual and presents safety content", () => {
-    ["Chỉ dùng ngoài da.", "Ngưng sử dụng nếu có kích ứng.", "Không dùng trên vùng da tổn thương.", "Bảo quản dưới 30°C."].forEach(copy => expect(source).toContain(copy));
-    expect(source).toContain("Chờ 60 phút rồi rửa sạch.");
+  it("restores all five video chapters, visual diary and deferred media loading", () => {
+    ["1-3_488cdaeb.mp4", "2-2_1c24d56b.mp4", "3-2_1be35ced.mp4", "4-2_5b3104ee.mp4", "5-2_104c988a.mp4"].forEach(video => expect(source).toContain(video));
+    expect(source).toContain("function Scene(");
+    expect(source).toContain("function Diary()");
+    expect(source).toContain('aria-label="Các khoảnh khắc trong visual diary"');
+    expect(source).toContain('rootMargin: "700px 0px"');
+    expect(styles).toContain(".video-story-scene");
+    expect(styles).toContain(".visual-diary__stage");
+  });
+
+  it("keeps product guidance factual and presents label-backed safety content", () => {
+    ["Xịt 3–4 nhát", "Chờ 60 phút, sau đó rửa sạch.", "Chỉ dùng ngoài da, không được uống.", "Không xịt lên vùng da có vết thương hở hoặc đang trầy xước.", "dưới 30°C", "Hạn sử dụng: 24 tháng kể từ ngày sản xuất.", "354/20/CBMP-NB"].forEach(copy => expect(source).toContain(copy));
+    expect(source).toContain("Chi nhánh Hà Nam – Công ty TNHH Sản xuất DP Công nghệ cao Nanofrance");
+    expect(source).toContain("Xuất xứ: Việt Nam.");
+    expect(source).toContain("Danh mục thành phần (INCI)");
   });
 
   it("keeps responsive, Vietnamese and tracking foundations", () => {

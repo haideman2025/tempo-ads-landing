@@ -166,3 +166,8 @@
 - [x] Thay luồng hàng chờ bằng đơn đặt hàng COD có kiểm soát tồn kho, lưu thông tin giao nhận cần thiết và giữ thông báo Telegram cho từng đơn mới.
 - [x] Tạo lớp trust minh bạch: thông tin sản phẩm, hướng dẫn sử dụng, cảnh báo, chính sách mua hàng và khu vực mời khách để lại đánh giá đã xác minh sau giao hàng; không tạo rating/review giả.
 - [x] Tích hợp bộ ảnh concept mới qua hệ thống phân phối asset, viết regression tests, kiểm tra đơn COD và xác minh trải nghiệm desktop/mobile trước phát hành.
+- [x] Khôi phục trải nghiệm landing TEMPO cũ gồm tuyến storytelling, 5 video nền, carousel/visual diary và nhịp cuộn; giữ luồng đặt hàng COD hiện hành.
+- [x] Tái bố trí bộ ảnh mẫu mới vào các block đúng ngữ cảnh: sản phẩm, chi tiết thiết kế, lợi ích mỹ phẩm, nghi thức, khoảng chờ, kích thước mang theo, mở hộp và thông tin bao bì.
+- [x] Hoàn thiện mobile-first: ưu tiên đọc một tay, CTA sticky, form COD, thứ tự nội dung, kích thước chạm và tối ưu tải ảnh/video trước khi tinh chỉnh desktop.
+- [x] Bổ sung thông tin thành phần, hướng dẫn, bảo quản, cảnh báo, đơn vị chịu trách nhiệm, đơn vị sản xuất, địa chỉ nhà máy, xuất xứ và số công bố chỉ theo ảnh nhãn người dùng cung cấp.
+- [x] Kiểm tra claim/copy không vượt quá nhãn, viết regression tests và nghiệm thu trải nghiệm trên mobile lẫn desktop trước phát hành.
