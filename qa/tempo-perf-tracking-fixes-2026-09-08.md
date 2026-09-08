@@ -76,7 +76,21 @@ Owner cấp token ngày 2026-09-08. Kiểm tra không gửi sự kiện thật n
 | `POST /events` với `data: [{}]` | `$['data'][0]['event_name'] is required` — Meta đang validate field, tức token **có quyền ghi** (thiếu quyền thì bị chặn ở tầng permission trước) |
 | `POST /events` với payload thật từ `buildPurchaseEvent`, `event_time` cố tình để 30 ngày trước | Lỗi **duy nhất** là subcode 2804003 "nhãn thời gian quá cũ" — toàn bộ `event_name`, `event_id`, `action_source`, `ph`/`fn`/`ln` đã băm, `fbp`, `fbc`, IP, User-Agent và khối `custom_data` VND đều qua validate. Sự kiện bị từ chối nên không ghi vào dataset. |
 
-Chưa kiểm chứng được một lần ingest thành công — việc đó cần `TEST_EVENT_CODE` từ tab Test Events của Events Manager. Chạy `npx tsx scripts/verify-capi.ts <TEST_EVENT_CODE>` để gửi một Purchase mẫu qua đúng `buildPurchaseEvent`/`sendMetaCapiEvent` mà server dùng; sự kiện kèm mã test chỉ hiện ở tab Test Events, không vào dữ liệu dataset và không ảnh hưởng quy đổi quảng cáo. Script từ chối chạy nếu không có mã, để không ai lỡ tay bơm Purchase giả vào dataset.
+**Đã kiểm chứng một lần ingest thành công** với `TEST_EVENT_CODE = TEST17529` (2026-09-08):
+
+```
+HTTP 200
+{ "events_received": 1, "messages": [], "fbtrace_id": "AY6z0qzzhSV7Ui4kc6YHVHd" }
+user_data: ph, fn, ln, fbp, fbc, client_ip_address, client_user_agent
+custom_data: {"currency":"VND","value":998000,"content_type":"product",
+              "content_ids":["tempo-3ml"],
+              "contents":[{"id":"tempo-3ml","quantity":2,"item_price":499000}],
+              "order_id":"VERIFY-MTSIKCK3"}
+```
+
+`messages: []` nghĩa là Meta không cảnh báo trường nào — đủ cả bảy định danh và khối doanh thu VND đều được chấp nhận nguyên vẹn. Sự kiện kèm mã test chỉ hiện ở tab Test Events, không vào dữ liệu dataset.
+
+Chạy lại bất cứ lúc nào: `npx tsx scripts/verify-capi.ts <TEST_EVENT_CODE>` để gửi một Purchase mẫu qua đúng `buildPurchaseEvent`/`sendMetaCapiEvent` mà server dùng; sự kiện kèm mã test chỉ hiện ở tab Test Events, không vào dữ liệu dataset và không ảnh hưởng quy đổi quảng cáo. Script từ chối chạy nếu không có mã, để không ai lỡ tay bơm Purchase giả vào dataset.
 
 ### Ba sửa lỗi nhỏ
 
