@@ -156,7 +156,7 @@ curl -sS "https://v2joy.life/?cb=$(date +%s)" | grep -c 'manus-runtime'
 # 3. Pixel vẫn được nhúng: kỳ vọng in ra fbq('init', '1955804598438163')
 curl -sS "https://v2joy.life/?cb=$(date +%s)" | grep -o "fbq('init', '[0-9]*')"
 
-# 4. Ảnh đã tối ưu phục vụ được: kỳ vọng 200 và ~62 KB
+# 4. Ảnh đã tối ưu phục vụ được: kỳ vọng 200 và 80594 byte (đúng bằng file trong repo)
 curl -sS -o /dev/null -w '%{http_code} %{size_download}\n' https://v2joy.life/media/tempo-use-steps-960.webp
 
 # 5. Backend còn sống: kỳ vọng JSON có remaining
