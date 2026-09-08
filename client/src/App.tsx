@@ -12,6 +12,8 @@ const TempoUpgradeStaging = lazy(() => import("./pages/TempoUpgradeStaging"));
 const TempoRestoreV2Staging = lazy(() => import("./pages/TempoRestoreV2Staging"));
 const TempoUpgradeProduction = () => <TempoUpgradeStaging mode="production" />;
 const TempoUpgradePreview = () => <TempoUpgradeStaging mode="staging" />;
+const TempoRestoreV2Production = () => <TempoRestoreV2Staging mode="production" />;
+const TempoRestoreV2Preview = () => <TempoRestoreV2Staging mode="staging" />;
 
 function LoadingFallback() {
   return (
@@ -28,9 +30,9 @@ function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path="/staging/tempo-restore-v2" component={TempoRestoreV2Staging} />
+      <Route path="/staging/tempo-restore-v2" component={TempoRestoreV2Preview} />
       <Route path="/staging/tempo-upgrade" component={TempoUpgradePreview} />
-      <Route path="/" component={TempoUpgradeProduction} />
+      <Route path="/" component={TempoRestoreV2Production} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

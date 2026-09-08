@@ -160,6 +160,9 @@ type CheckoutForm = {
 };
 
 type TrackingEvent = "ViewContent" | "ViewInfographic" | "ViewRitual" | "ViewFeedback" | "InitiateCheckout" | "Lead";
+type LandingMode = "staging" | "production";
+type Attribution = Record<"utmSource" | "utmMedium" | "utmCampaign" | "utmContent" | "utmTerm" | "fbclid", string>;
+const emptyAttribution: Attribution = { utmSource: "", utmMedium: "", utmCampaign: "", utmContent: "", utmTerm: "", fbclid: "" };
 
 function createEventId() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -180,7 +183,41 @@ function stagingTrack(event: TrackingEvent, payload: Record<string, unknown> = {
   window.dispatchEvent(new CustomEvent("tempo:staging-event", { detail }));
 }
 
-function useVisibilityEvent(id: string, event: TrackingEvent) {
+function getAttribution(): Attribution {
+  try {
+    const query = new URLSearchParams(window.location.search);
+    const previous = JSON.parse(localStorage.getItem("tempo-attribution") || "{}") as Partial<Attribution>;
+    const attribution: Attribution = {
+      utmSource: query.get("utm_source") || previous.utmSource || "",
+      utmMedium: query.get("utm_medium") || previous.utmMedium || "",
+      utmCampaign: query.get("utm_campaign") || previous.utmCampaign || "",
+      utmContent: query.get("utm_content") || previous.utmContent || "",
+      utmTerm: query.get("utm_term") || previous.utmTerm || "",
+      fbclid: query.get("fbclid") || previous.fbclid || "",
+    };
+    localStorage.setItem("tempo-attribution", JSON.stringify(attribution));
+    return attribution;
+  } catch {
+    return emptyAttribution;
+  }
+}
+
+function trackFunnel(mode: LandingMode, event: TrackingEvent, payload: Record<string, unknown> = {}) {
+  const detail = {
+    event_id: createEventId(),
+    content_ids: [PRODUCT_CONFIG.sku],
+    content_type: "product",
+    currency: PRODUCT_CONFIG.currency,
+    ...payload,
+  };
+  if (mode === "staging") {
+    stagingTrack(event, detail);
+    return;
+  }
+  window.fbq?.("track", event, detail, { eventID: detail.event_id });
+}
+
+function useVisibilityEvent(id: string, event: TrackingEvent, mode: LandingMode) {
   const ref = useRef<HTMLElement>(null);
   const sent = useRef(false);
   useEffect(() => {
@@ -190,7 +227,7 @@ function useVisibilityEvent(id: string, event: TrackingEvent) {
       entries => {
         if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.5) && !sent.current) {
           sent.current = true;
-          stagingTrack(event, { section_id: id });
+          trackFunnel(mode, event, { section_id: id });
           observer.disconnect();
         }
       },
@@ -198,7 +235,7 @@ function useVisibilityEvent(id: string, event: TrackingEvent) {
     );
     observer.observe(element);
     return () => observer.disconnect();
-  }, [event, id]);
+  }, [event, id, mode]);
   return ref;
 }
 
@@ -392,9 +429,9 @@ function ImageLightbox({
   );
 }
 
-function InfographicGallery() {
+function InfographicGallery({ mode }: { mode: LandingMode }) {
   const [active, setActive] = useState<number | null>(null);
-  const sectionRef = useVisibilityEvent("infographic-gallery", "ViewInfographic");
+  const sectionRef = useVisibilityEvent("infographic-gallery", "ViewInfographic", mode);
   const item = active === null ? null : INFOGRAPHICS[active];
   const choose = (index: number) => setActive((index + INFOGRAPHICS.length) % INFOGRAPHICS.length);
   return (
@@ -431,9 +468,9 @@ function VisualDiary() {
   );
 }
 
-function FeedbackGallery() {
+function FeedbackGallery({ mode }: { mode: LandingMode }) {
   const [active, setActive] = useState<number | null>(null);
-  const sectionRef = useVisibilityEvent("feedback-gallery", "ViewFeedback");
+  const sectionRef = useVisibilityEvent("feedback-gallery", "ViewFeedback", mode);
   const item = active === null ? null : FEEDBACK[active];
   const choose = (index: number) => setActive((index + FEEDBACK.length) % FEEDBACK.length);
   return (
@@ -447,55 +484,95 @@ function FeedbackGallery() {
   );
 }
 
-function useStagingSeo() {
+function useRestoreSeo(mode: LandingMode) {
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = "STAGING · TEMPO — XỊT LÀM CHỦ NHỊP YÊU 3ML";
-    const robots = document.createElement("meta");
-    robots.name = "robots";
-    robots.content = "noindex, nofollow";
-    robots.dataset.tempoRestoreV2 = "true";
-    document.head.appendChild(robots);
-    return () => { document.title = previousTitle; robots.remove(); };
-  }, []);
+    document.title = mode === "staging" ? "STAGING · TEMPO — XỊT LÀM CHỦ NHỊP YÊU 3ML" : "TEMPO — XỊT LÀM CHỦ NHỊP YÊU 3ML | V2JOY";
+    const canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    canonical.href = "https://v2joy.life/";
+    canonical.dataset.tempoRestoreV2 = mode;
+    document.head.appendChild(canonical);
+    const robots = mode === "staging" ? document.createElement("meta") : null;
+    if (robots) {
+      robots.name = "robots";
+      robots.content = "noindex, nofollow";
+      robots.dataset.tempoRestoreV2 = "true";
+      document.head.appendChild(robots);
+    }
+    return () => { document.title = previousTitle; canonical.remove(); robots?.remove(); };
+  }, [mode]);
 }
 
-export default function TempoRestoreV2Staging() {
-  useStagingSeo();
+export default function TempoRestoreV2Staging({ mode = "staging" }: { mode?: LandingMode }) {
+  const isStaging = mode === "staging";
+  useRestoreSeo(mode);
   const formRef = useRef<HTMLFormElement>(null);
+  const utils = trpc.useUtils();
   const [step, setStep] = useState<1 | 2>(1);
   const [startedCheckout, setStartedCheckout] = useState(false);
   const [notice, setNotice] = useState("");
   const [form, setForm] = useState<CheckoutForm>({ fullName: "", phone: "", address: "", note: "", quantity: 1, orderConsent: false, marketingConsent: false });
   const { data: stock } = trpc.orders.status.useQuery(undefined, { refetchInterval: 30_000 });
+  const order = trpc.orders.create.useMutation({ onSuccess: () => utils.orders.status.invalidate() });
   const remaining = stock?.remaining ?? PRODUCT_CONFIG.inventoryCapacity;
-  const ritualRef = useVisibilityEvent("ritual", "ViewRitual");
+  const ritualRef = useVisibilityEvent("ritual", "ViewRitual", mode);
+  const attribution = useRef<Attribution>(emptyAttribution);
   const total = useMemo(() => form.quantity * PRODUCT_CONFIG.price, [form.quantity]);
 
-  useEffect(() => { stagingTrack("ViewContent", { value: PRODUCT_CONFIG.price, staging: true }); }, []);
+  useEffect(() => {
+    attribution.current = getAttribution();
+    trackFunnel(mode, "ViewContent", { value: PRODUCT_CONFIG.price, landing_mode: mode });
+  }, [mode]);
 
   const updateForm = <K extends keyof CheckoutForm>(key: K, value: CheckoutForm[K]) => setForm(current => ({ ...current, [key]: value }));
   const scrollToOrder = () => {
     if (!startedCheckout) {
       setStartedCheckout(true);
-      stagingTrack("InitiateCheckout", { value: total, num_items: form.quantity, staging: true });
+      trackFunnel(mode, "InitiateCheckout", { value: total, num_items: form.quantity, order_intent: "cod" });
     }
     document.getElementById("dat-cod")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   const nextStep = () => {
     if (!startedCheckout) {
       setStartedCheckout(true);
-      stagingTrack("InitiateCheckout", { value: total, num_items: form.quantity, staging: true });
+      trackFunnel(mode, "InitiateCheckout", { value: total, num_items: form.quantity, order_intent: "cod" });
     }
     if (!form.fullName.trim() || !form.phone.trim()) { formRef.current?.reportValidity(); return; }
     setNotice("");
     setStep(2);
   };
-  const submitStaging = (event: FormEvent<HTMLFormElement>) => {
+  const submitOrder = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!form.address.trim() || !form.orderConsent || !form.marketingConsent) { formRef.current?.reportValidity(); return; }
-    stagingTrack("Lead", { value: total, num_items: form.quantity, order_intent: "cod", staging: true, simulated: true });
-    setNotice("Đã kiểm tra đủ luồng COD hai bước trên staging. Không có đơn, thông tin liên hệ, trừ tồn kho, Pixel Purchase hoặc CAPI Purchase nào được tạo.");
+    if (isStaging) {
+      trackFunnel("staging", "Lead", { value: total, num_items: form.quantity, order_intent: "cod", simulated: true });
+      setNotice("Đã kiểm tra đủ luồng COD hai bước trên staging. Không có đơn, thông tin liên hệ, trừ tồn kho, Pixel Purchase hoặc CAPI Purchase nào được tạo.");
+      return;
+    }
+    setNotice("");
+    order.mutate({
+      fullName: form.fullName,
+      phone: form.phone,
+      address: form.address,
+      note: form.note,
+      quantity: form.quantity,
+      orderConsent: form.orderConsent,
+      marketingConsent: form.marketingConsent,
+      ...attribution.current,
+    }, {
+      onSuccess: result => {
+        if (result.kind === "created") {
+          trackFunnel("production", "Lead", { value: result.order.totalValue, num_items: result.order.quantity, order_intent: "cod" });
+          setNotice(`Đơn ${result.order.orderNumber} đã được ghi nhận. V2JOY sẽ liên hệ xác nhận trước khi gửi COD.`);
+          setStep(1);
+          setForm({ fullName: "", phone: "", address: "", note: "", quantity: 1, orderConsent: false, marketingConsent: false });
+        } else {
+          setNotice(result.kind === "existing" ? "Số điện thoại này đã có đơn TEMPO đang được xử lý. V2JOY sẽ liên hệ xác nhận." : "TEMPO hiện đã hết hàng. Cảm ơn bạn đã quan tâm.");
+        }
+      },
+      onError: error => setNotice(error.message || "Không thể tạo đơn lúc này. Vui lòng thử lại."),
+    });
   };
   const productJsonLd = JSON.stringify({
     "@context": "https://schema.org",
@@ -505,13 +582,13 @@ export default function TempoRestoreV2Staging() {
     brand: { "@type": "Brand", name: "V2JOY" },
     image: [MEDIA.heroGrooming.webp, MEDIA.scale.webp, MEDIA.actuator.webp],
     description: "TEMPO 3ml by V2JOY là sản phẩm chăm sóc da cá nhân nhỏ gọn, sử dụng theo hướng dẫn trên nhãn.",
-    offers: { "@type": "Offer", price: String(PRODUCT_CONFIG.price), priceCurrency: PRODUCT_CONFIG.currency, availability: "https://schema.org/InStock", url: "https://v2joy.life/staging/tempo-restore-v2" },
+    offers: { "@type": "Offer", price: String(PRODUCT_CONFIG.price), priceCurrency: PRODUCT_CONFIG.currency, availability: "https://schema.org/InStock", url: isStaging ? "https://v2joy.life/staging/tempo-restore-v2" : "https://v2joy.life/" },
   });
 
   return (
-    <main className="tempo-r2" id="top">
+    <main className={`tempo-r2 ${isStaging ? "" : "tempo-r2--production"}`} id="top">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: productJsonLd }} />
-      <div className="tempo-r2__stage-ribbon" role="status">STAGING REVIEW · Không ghi đơn, không lưu PII, không trừ tồn, không gửi Pixel/CAPI production</div>
+      {isStaging && <div className="tempo-r2__stage-ribbon" role="status">STAGING REVIEW · Không ghi đơn, không lưu PII, không trừ tồn, không gửi Pixel/CAPI production</div>}
       <header className="tempo-r2__header">
         <a href="#top" className="tempo-r2__brand" aria-label="V2JOY TEMPO 3ml"><img src={MEDIA.logo} alt="V2JOY" width="44" height="44" /><span>TEMPO</span></a>
         <p>TEMPO — XỊT LÀM CHỦ NHỊP YÊU 3ML</p>
@@ -533,7 +610,7 @@ export default function TempoRestoreV2Staging() {
 
       <section className="tempo-r2__product tempo-r2__section" id="san-pham" aria-labelledby="product-title"><div className="tempo-r2__product-image"><LegacyImage src={MEDIA.packFront} alt="Chai và hộp TEMPO 3ml" /><span>3ML / NHỎ GỌN</span></div><div className="tempo-r2__product-copy"><p className="tempo-r2__eyebrow">TEMPO 3ML / ĐẶT SỚM</p><h2 id="product-title">Nhỏ để mang theo.<br /><em>Dễ bắt đầu.</em></h2><p>Một chai TEMPO 3ml cho nhịp chăm sóc kín đáo. Thanh toán COD; V2JOY gọi xác nhận trước khi gửi.</p><dl><div><dt>Giá bán</dt><dd>{formatVnd(PRODUCT_CONFIG.price)} / chai</dd></div><div><dt>Đơn tối đa</dt><dd>{PRODUCT_CONFIG.maxQuantity.toString().padStart(2, "0")} chai</dd></div><div><dt>Tồn hiển thị</dt><dd>{remaining.toLocaleString("vi-VN")} / {PRODUCT_CONFIG.inventoryCapacity.toLocaleString("vi-VN")}</dd></div></dl><button type="button" className="tempo-r2__button" onClick={scrollToOrder}>XEM TÓM TẮT ĐƠN <ShoppingBag size={17} /></button></div><ResponsiveImage asset={MEDIA.scale} alt="Chai TEMPO 3 ml nằm gọn trong bàn tay" className="tempo-r2__product-scale" /></section>
 
-      <InfographicGallery />
+      <InfographicGallery mode={mode} />
 
       <section className="tempo-r2__packaging tempo-r2__section" aria-labelledby="packaging-title"><div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">THIẾT KẾ BAO BÌ</p><h2 id="packaging-title">Kéo trên. Đẩy dưới.<br /><em>Một nhịp mở liền mạch.</em></h2><p>Hộp đứng dạng khay rút: thao tác kéo từ phần teal phía trên và đẩy tại điểm chạm phía dưới. Cửa sổ vừa phải để nhìn thấy chai, vẫn giữ cảm giác kín đáo.</p></div><div className="tempo-r2__pack-grid"><figure><LegacyImage src={MEDIA.packFront} alt="Mặt trước hộp TEMPO dạng khay rút đứng" /><figcaption>Mặt trước</figcaption></figure><figure><LegacyImage src={MEDIA.packSides} alt="Mặt hông hộp TEMPO" /><figcaption>Mặt hông</figcaption></figure><figure><LegacyImage src={MEDIA.packBack} alt="Mặt sau hộp TEMPO" /><figcaption>Mặt sau</figcaption></figure></div><div className="tempo-r2__pull-push"><ResponsiveImage asset={MEDIA.pullPush} alt="Hộp TEMPO mở theo thao tác kéo trên và đẩy dưới" /><div><span>KÉO</span><SignalRail /><span>ĐẨY</span></div><p>Visual teal–cam chạy liên tục giữa hộp và chai; không phải thiết kế nắp mở hay hộp kiểu quyển sách.</p></div></section>
 
@@ -547,11 +624,11 @@ export default function TempoRestoreV2Staging() {
 
       <CinematicChapter id="chapter-four" video={MEDIA.video5} poster={MEDIA.story} eyebrow="GIỮ MỘT NHỊP RIÊNG" title="Nhẹ nhàng kết thúc." accent="Hiểu rõ điều mình dùng." copy="Từ một chai nhỏ đến một buổi tối bạn đã chọn — mọi thứ đều bắt đầu bằng việc hiểu rõ điều mình dùng." detail="TEMPO 3ML · KÍN ĐÁO · RÕ RÀNG" />
 
-      <FeedbackGallery />
+      <FeedbackGallery mode={mode} />
 
       <section className="tempo-r2__information tempo-r2__section" id="thong-tin" aria-labelledby="information-title"><div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">THÔNG TIN SẢN PHẨM</p><h2 id="information-title">Rõ ràng từ thành phần<br /><em>đến nhãn thành phẩm.</em></h2><p>Thông tin dưới đây được giữ nguyên để bạn kiểm tra trước khi đặt COD. Nhãn in trên sản phẩm của từng lô luôn là nguồn ưu tiên.</p></div><div className="tempo-r2__label-grid"><figure><LegacyImage src={MEDIA.packSides} alt="Mặt hông hộp TEMPO có hướng dẫn nghi thức" /><figcaption>Hướng dẫn trên mặt hông</figcaption></figure><figure><LegacyImage src={MEDIA.packBack} alt="Mặt sau hộp TEMPO có thông tin bảo quản" /><figcaption>Hướng dẫn và bảo quản</figcaption></figure><figure><LegacyImage src={MEDIA.label} alt="Chi tiết nhãn chai TEMPO 3ml" /><figcaption>Chi tiết chai 3ml</figcaption></figure></div><div className="tempo-r2__safety-grid"><article><TimerReset size={21} /><h3>Hướng dẫn</h3><p>Lắc đều. Xịt 3–4 nhát cách da khoảng 3–5 cm, chờ 60 phút rồi rửa sạch.</p></article><article><ShieldCheck size={21} /><h3>Cảnh báo</h3><p>Chỉ dùng ngoài da. Không dùng trên vùng da trầy xước; ngưng dùng nếu có kích ứng.</p></article><article><ClipboardCheck size={21} /><h3>Bảo quản</h3><p>Nơi khô ráo, thoáng mát, dưới 30°C; tránh nắng trực tiếp và đóng kín nắp sau khi dùng.</p></article></div><div className="tempo-r2__details"><details><summary>Danh mục thành phần (INCI)<ChevronDown size={18} /></summary><p>{INCI}</p></details><details><summary>Cảnh báo và hạn sử dụng<ChevronDown size={18} /></summary><p>Chỉ dùng ngoài da, không được uống. Không dùng với người mẫn cảm với bất kỳ thành phần nào. Không xịt lên vùng da có vết thương hở hoặc đang trầy xước. Ngưng sử dụng và tham khảo ý kiến chuyên gia khi có dấu hiệu kích ứng, mẩn đỏ. Hạn sử dụng: 24 tháng kể từ ngày sản xuất.</p></details><details><summary>Nhà sản xuất và số công bố<ChevronDown size={18} /></summary><p>Chi nhánh Hà Nam – Công ty TNHH Sản xuất DP Công nghệ cao Nanofrance. Khu công nghiệp Đồng Văn IV, Phường Lê Hồ, Tỉnh Ninh Bình, Việt Nam. Xuất xứ: Việt Nam. Website trên nhãn: www.nanofrance.com.vn. Số công bố hiển thị: 354/20/CBMP-NB. Vui lòng đối chiếu thông tin lô hàng thực nhận với nhãn thành phẩm.</p></details></div></section>
 
-      <section className="tempo-r2__order tempo-r2__section" id="dat-cod" aria-labelledby="order-title"><div className="tempo-r2__order-intro"><ResponsiveImage asset={MEDIA.delivery} alt="TEMPO trong kiện giao hàng kín đáo" /><div><p className="tempo-r2__eyebrow">TÓM TẮT ĐƠN / COD</p><h2 id="order-title">Đặt một chai.<br /><em>Giữ một nhịp.</em></h2><p>V2JOY gọi xác nhận trước khi gửi; bạn chỉ thanh toán khi nhận hàng.</p><dl><div><dt>TEMPO 3ML</dt><dd>{formatVnd(PRODUCT_CONFIG.price)} / chai</dd></div><div><dt>Số lượng tối đa</dt><dd>{PRODUCT_CONFIG.maxQuantity} chai</dd></div><div><dt>Phí giao hàng</dt><dd><mark>CẦN V2JOY XÁC NHẬN</mark></dd></div><div><dt>Thời gian giao</dt><dd><mark>CẦN V2JOY XÁC NHẬN</mark></dd></div></dl></div></div><form ref={formRef} className="tempo-r2__form" data-clarity-mask="true" onSubmit={submitStaging} aria-label="Form COD hai bước staging"><div className="tempo-r2__form-progress"><span className={step === 1 ? "is-active" : "is-complete"}>1. THÔNG TIN</span><span className={step === 2 ? "is-active" : ""}>2. GIAO HÀNG</span></div>{step === 1 ? <fieldset><legend>Thông tin nhận hàng</legend><label>Họ và tên<input value={form.fullName} onChange={event => updateForm("fullName", event.target.value)} autoComplete="name" required placeholder="Tên người nhận" /></label><label>Số điện thoại<input value={form.phone} onChange={event => updateForm("phone", event.target.value)} autoComplete="tel" inputMode="tel" required placeholder="Ví dụ: 090 123 4567" /></label><div className="tempo-r2__quantity"><span>Số lượng</span><div role="radiogroup" aria-label="Chọn số lượng TEMPO"><button type="button" aria-pressed={form.quantity === 1} onClick={() => updateForm("quantity", 1)}>01 chai</button><button type="button" aria-pressed={form.quantity === 2} onClick={() => updateForm("quantity", 2)}>02 chai</button></div></div><button type="button" className="tempo-r2__button" onClick={nextStep}>TIẾP TỤC ĐỊA CHỈ <ArrowRight size={17} /></button></fieldset> : <fieldset><legend>Địa chỉ và xác nhận</legend><label>Địa chỉ nhận hàng<textarea value={form.address} onChange={event => updateForm("address", event.target.value)} autoComplete="street-address" required placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" /></label><label>Lời nhắn <small>(không bắt buộc)</small><input value={form.note} onChange={event => updateForm("note", event.target.value)} placeholder="Thời điểm thuận tiện để nhận cuộc gọi..." /></label><div className="tempo-r2__form-total"><span>Tạm tính <small>Phí giao chờ V2JOY xác nhận</small></span><strong>{formatVnd(total)}</strong></div><label className="tempo-r2__consent"><input type="checkbox" checked={form.orderConsent} onChange={event => updateForm("orderConsent", event.target.checked)} required /><span>Tôi đồng ý để V2JOY dùng thông tin này để xác nhận và giao đơn COD.</span></label><label className="tempo-r2__consent"><input type="checkbox" checked={form.marketingConsent} onChange={event => updateForm("marketingConsent", event.target.checked)} required /><span>Tôi đồng ý nhận thông tin cập nhật sản phẩm và ưu đãi từ V2JOY.</span></label><div className="tempo-r2__form-actions"><button type="button" onClick={() => setStep(1)}>QUAY LẠI</button><button type="submit" className="tempo-r2__button" disabled={remaining < 1}>{remaining < 1 ? "TEMPO ĐÃ HẾT HÀNG" : <>XÁC NHẬN ĐẶT COD <ShoppingBag size={17} /></>}</button></div></fieldset>}{notice && <p className="tempo-r2__form-notice" role="status"><Check size={17} /> {notice}</p>}<p className="tempo-r2__privacy"><LockKeyhole size={14} /> Bản staging không gửi form tới server; QualifiedLead chỉ theo CRM sau xác nhận và Purchase chỉ theo CAPI sau khi giao thành công.</p></form></section>
+      <section className="tempo-r2__order tempo-r2__section" id="dat-cod" aria-labelledby="order-title"><div className="tempo-r2__order-intro"><ResponsiveImage asset={MEDIA.delivery} alt="TEMPO trong kiện giao hàng kín đáo" /><div><p className="tempo-r2__eyebrow">TÓM TẮT ĐƠN / COD</p><h2 id="order-title">Đặt một chai.<br /><em>Giữ một nhịp.</em></h2><p>V2JOY gọi xác nhận trước khi gửi; bạn chỉ thanh toán khi nhận hàng.</p><dl><div><dt>TEMPO 3ML</dt><dd>{formatVnd(PRODUCT_CONFIG.price)} / chai</dd></div><div><dt>Số lượng tối đa</dt><dd>{PRODUCT_CONFIG.maxQuantity} chai</dd></div><div><dt>Phí giao hàng</dt><dd><mark>CẦN V2JOY XÁC NHẬN</mark></dd></div><div><dt>Thời gian giao</dt><dd><mark>CẦN V2JOY XÁC NHẬN</mark></dd></div></dl></div></div><form ref={formRef} className="tempo-r2__form" data-clarity-mask="true" onSubmit={submitOrder} aria-label={isStaging ? "Form COD hai bước staging" : "Form COD hai bước"}><div className="tempo-r2__form-progress"><span className={step === 1 ? "is-active" : "is-complete"}>1. THÔNG TIN</span><span className={step === 2 ? "is-active" : ""}>2. GIAO HÀNG</span></div>{step === 1 ? <fieldset><legend>Thông tin nhận hàng</legend><label>Họ và tên<input value={form.fullName} onChange={event => updateForm("fullName", event.target.value)} autoComplete="name" required placeholder="Tên người nhận" /></label><label>Số điện thoại<input value={form.phone} onChange={event => updateForm("phone", event.target.value)} autoComplete="tel" inputMode="tel" required placeholder="Ví dụ: 090 123 4567" /></label><div className="tempo-r2__quantity"><span>Số lượng</span><div role="radiogroup" aria-label="Chọn số lượng TEMPO"><button type="button" aria-pressed={form.quantity === 1} onClick={() => updateForm("quantity", 1)}>01 chai</button><button type="button" aria-pressed={form.quantity === 2} onClick={() => updateForm("quantity", 2)}>02 chai</button></div></div><button type="button" className="tempo-r2__button" onClick={nextStep}>TIẾP TỤC ĐỊA CHỈ <ArrowRight size={17} /></button></fieldset> : <fieldset><legend>Địa chỉ và xác nhận</legend><label>Địa chỉ nhận hàng<textarea value={form.address} onChange={event => updateForm("address", event.target.value)} autoComplete="street-address" required placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" /></label><label>Lời nhắn <small>(không bắt buộc)</small><input value={form.note} onChange={event => updateForm("note", event.target.value)} placeholder="Thời điểm thuận tiện để nhận cuộc gọi..." /></label><div className="tempo-r2__form-total"><span>Tạm tính <small>Phí giao chờ V2JOY xác nhận</small></span><strong>{formatVnd(total)}</strong></div><label className="tempo-r2__consent"><input type="checkbox" checked={form.orderConsent} onChange={event => updateForm("orderConsent", event.target.checked)} required /><span>Tôi đồng ý để V2JOY dùng thông tin này để xác nhận và giao đơn COD.</span></label><label className="tempo-r2__consent"><input type="checkbox" checked={form.marketingConsent} onChange={event => updateForm("marketingConsent", event.target.checked)} required /><span>Tôi đồng ý nhận thông tin cập nhật sản phẩm và ưu đãi từ V2JOY.</span></label><div className="tempo-r2__form-actions"><button type="button" onClick={() => setStep(1)}>QUAY LẠI</button><button type="submit" className="tempo-r2__button" disabled={remaining < 1 || order.isPending}>{remaining < 1 ? "TEMPO ĐÃ HẾT HÀNG" : order.isPending ? "ĐANG GỬI ĐƠN..." : <>XÁC NHẬN ĐẶT COD <ShoppingBag size={17} /></>}</button></div></fieldset>}{notice && <p className="tempo-r2__form-notice" role="status"><Check size={17} /> {notice}</p>}<p className="tempo-r2__privacy"><LockKeyhole size={14} /> {isStaging ? "Bản staging không gửi form tới server;" : "V2JOY chỉ dùng thông tin để xác nhận và giao đơn COD;"} QualifiedLead chỉ theo CRM sau xác nhận và Purchase chỉ theo CAPI sau khi giao thành công.</p></form></section>
 
       <section className="tempo-r2__faq tempo-r2__section" aria-labelledby="faq-title"><div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">CÂU HỎI THƯỜNG GẶP</p><h2 id="faq-title">Cần biết trước<br /><em>khi đặt COD.</em></h2></div><div>{[{ q: "TEMPO là sản phẩm gì?", a: "TEMPO là sản phẩm chăm sóc da cá nhân. Mục đích sử dụng ghi nhận: giúp chăm sóc dưỡng ẩm da." }, { q: "Chai có dung tích bao nhiêu?", a: "Mỗi chai có dung tích 3 ml, được thiết kế nhỏ gọn để mang theo." }, { q: "Sử dụng và rửa sạch như thế nào?", a: "Vệ sinh sạch và lắc đều; xịt 3–4 nhát từ khoảng cách 3–5 cm; chờ 60 phút rồi rửa sạch." }, { q: "Đơn hàng được đóng gói ra sao?", a: "Kiện ngoài được định hướng đóng gói kín đáo, không lộ tên sản phẩm. Quy cách cuối cùng cần V2JOY xác nhận trước khi production." }, { q: "Phí và thời gian giao hàng?", a: "PLACEHOLDER CẦN XÁC NHẬN: phí giao và thời gian giao chưa được V2JOY cung cấp, nên chưa hiển thị số liệu cụ thể trên staging." }].map(item => <details key={item.q}><summary>{item.q}<ChevronDown size={18} /></summary><p>{item.a}</p></details>)}</div><div className="tempo-r2__policy"><span>Chính sách bảo mật <b>PLACEHOLDER CẦN V2JOY XÁC NHẬN</b></span><span>Chính sách giao hàng <b>PLACEHOLDER CẦN V2JOY XÁC NHẬN</b></span><span>Chính sách đổi trả <b>PLACEHOLDER CẦN V2JOY XÁC NHẬN</b></span><span>Hỗ trợ khách hàng <b>PLACEHOLDER CẦN V2JOY XÁC NHẬN</b></span></div></section>
 

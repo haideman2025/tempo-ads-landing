@@ -25,9 +25,11 @@ describe("TEMPO Restore V2 staging regression", () => {
     expect(pageSource).not.toContain("349.000");
   });
 
-  it("keeps Restore V2 on an independent noindex staging route", () => {
+  it("keeps a noindex staging route while mounting Restore V2 in production at the public root", () => {
     expect(appSource).toContain('path="/staging/tempo-restore-v2"');
-    expect(appSource).toContain('path="/" component={TempoUpgradeProduction}');
+    expect(appSource).toContain('const TempoRestoreV2Production = () => <TempoRestoreV2Staging mode="production" />');
+    expect(appSource).toContain('path="/" component={TempoRestoreV2Production}');
+    expect(appSource).toContain('const TempoRestoreV2Preview = () => <TempoRestoreV2Staging mode="staging" />');
     expect(pageSource).toContain("noindex, nofollow");
   });
 
@@ -64,7 +66,10 @@ describe("TEMPO Restore V2 staging regression", () => {
 
   it("keeps staging non-mutating and excludes Purchase tracking at COD intent", () => {
     expect(pageSource).toContain("Không có đơn, thông tin liên hệ, trừ tồn kho, Pixel Purchase hoặc CAPI Purchase nào được tạo");
-    expect(pageSource).not.toContain("orders.create");
+    expect(pageSource).toContain('const isStaging = mode === "staging"');
+    expect(pageSource).toContain("if (isStaging)");
+    expect(pageSource).toContain('trackFunnel("staging", "Lead"');
+    expect(pageSource).toContain("order.mutate({");
     expect(pageSource).not.toContain("fbq(");
     expect(pageSource).not.toMatch(/track\([^\n]*Purchase/);
     expect(pageSource).toContain("QualifiedLead chỉ theo CRM sau xác nhận và Purchase chỉ theo CAPI sau khi giao thành công");

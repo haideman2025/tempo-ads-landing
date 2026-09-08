@@ -207,3 +207,4 @@
 - [x] Tái hiện lỗi autoplay owner vẫn gặp trên link demo Restore V2, điều chỉnh điều kiện phát/độ nhận biết video và kiểm thử lại desktop-mobile trước khi xin duyệt production.
 - [x] Bỏ hoàn toàn nút phát tay Restore V2; bảo đảm từng video tự phát khi section vào viewport và tự pause ngay khi section rời viewport.
 - [ ] Phát hành Restore V2 đã được owner duyệt lên `v2joy.life` và xác minh cache-bypass production có đủ 5 video autoplay theo viewport.
+- [x] Sửa mapping route gốc `/` từ ứng viên rút gọn cũ sang Restore V2 trước checkpoint redeploy production.
