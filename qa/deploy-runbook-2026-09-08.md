@@ -102,6 +102,32 @@ Token là loại SYSTEM_USER, không hết hạn, đã kiểm chứng ghi đư�
 Thiếu biến này thì `markDelivered` vẫn cập nhật đơn bình thường, chỉ lặng lẽ bỏ qua bước báo Meta —
 `sendMetaCapiEvent` trả `{ delivered: false, skipped: true }` chứ không ném lỗi.
 
+### Bẫy: đừng xác thực token CAPI bằng truy vấn đọc
+
+Token CAPI sinh từ Events Manager **chỉ có quyền ghi sự kiện, không có quyền đọc metadata pixel**.
+Kiểm chứng trên Graph API v21.0 với dataset `1955804598438163` ngày 2026-09-08:
+
+| Thao tác | Kết quả |
+|---|---|
+| `GET /v21.0/1955804598438163?fields=name` | `(#100) Missing Permission` |
+| `POST /v21.0/1955804598438163/events` với `{"data":[{}]}` | subcode 2804019 `event_name is required` — đã qua tầng permission |
+| Gửi Purchase thật kèm `test_event_code` | HTTP 200, `events_received: 1`, `messages: []` |
+
+Bất kỳ công cụ nào "kiểm tra chỉ đọc" dataset rồi báo token hỏng đều đang **kết luận sai** — nó thử
+đúng cái mà token này theo thiết kế không được phép làm. Dev-agent của Manus đã vấp đúng lỗi này và
+từ chối tiếp tục cho tới khi được đưa bằng chứng.
+
+`debug_token` cũng gây hiểu nhầm tương tự: chỉ liệt kê scope `read_ads_dataset_quality`, nhưng quyền
+ghi đến từ việc System User được gán vào dataset chứ không hiện trong danh sách scope.
+
+Muốn kiểm tra mà không tạo event, dùng đúng lệnh này — payload rỗng nên không ghi gì:
+
+```bash
+curl -X POST "https://graph.facebook.com/v21.0/1955804598438163/events"   -H 'content-type: application/json'   -d '{"data":[{}],"access_token":"<TOKEN>"}'
+```
+
+Trả về `2804019 event_name is required` nghĩa là token hợp lệ.
+
 Kiểm tra các biến cũ vẫn còn nguyên: `DATABASE_URL`, `JWT_SECRET`, `TELEGRAM_BOT_TOKEN`,
 `TELEGRAM_CHAT_ID`, `VITE_META_PIXEL_ID`.
 
