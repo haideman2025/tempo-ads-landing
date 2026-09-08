@@ -124,3 +124,29 @@ describe("sendMetaCapiEvent", () => {
     expect(result).toEqual({ delivered: false, skipped: false });
   });
 });
+
+describe("cấu hình Meta CAPI triển khai", () => {
+  const pixelId = process.env.VITE_META_PIXEL_ID;
+  const accessToken = process.env.META_CAPI_ACCESS_TOKEN;
+
+  it.runIf(Boolean(pixelId && accessToken))("xác thực token đi qua lớp quyền ghi mà không tạo event", async () => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 7_000);
+    try {
+      // Token Events Manager không có quyền GET metadata Pixel. Gửi payload thiếu event_name
+      // xác nhận token đã qua permission rồi dừng ở lớp validation, không có event nào được tạo.
+      const response = await fetch(`https://graph.facebook.com/v21.0/${pixelId}/events`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ data: [{}], access_token: accessToken }),
+        signal: controller.signal,
+      });
+      expect(response.status).toBe(400);
+      const payload = await response.json() as { error?: { code?: number; error_subcode?: number } };
+      expect(payload.error?.code).toBe(100);
+      expect(payload.error?.error_subcode).toBe(2_804_019);
+    } finally {
+      clearTimeout(timeout);
+    }
+  });
+});

@@ -208,3 +208,12 @@
 - [x] Bỏ hoàn toàn nút phát tay Restore V2; bảo đảm từng video tự phát khi section vào viewport và tự pause ngay khi section rời viewport.
 - [x] Phát hành Restore V2 đã được owner duyệt lên `v2joy.life` và xác minh cache-bypass production có đủ 5 video autoplay theo viewport.
 - [x] Sửa mapping route gốc `/` từ ứng viên rút gọn cũ sang Restore V2 trước checkpoint redeploy production.
+- [x] Kiểm tra và squash-merge pull request #1, sau đó xoá branch nguồn theo lệnh owner.
+- [x] Fetch `origin/main`, merge vào workspace hiện tại, rồi chạy `pnpm install`, `pnpm check`, `pnpm test` và `pnpm build`.
+- [x] Rà soát runbook, áp dụng thủ công năm ALTER TABLE còn thiếu và xác minh đủ năm cột mới trong schema production.
+- [x] Lưu `META_CAPI_ACCESS_TOKEN` do owner cung cấp qua cấu hình bí mật của dự án và xác minh regression không làm lộ token.
+- [x] Kiểm tra `VITE_META_PIXEL_ID` vẫn có giá trị đúng và Pixel được nhúng trong HTML build production.
+- [x] Khôi phục token CAPI owner đã xác nhận; bỏ kiểm tra đọc metadata Pixel vì token Events Manager chỉ có quyền ghi event.
+- [x] Kiểm kê đủ 75 WebP và bốn thành phần PR #1, sau đó chạy check, test và build sạch trước phát hành.
+- [ ] Tạo checkpoint để phát hành PR #1 sau khi schema production đã có đủ năm cột CAPI.
+- [ ] Nghiệm thu cache-bypass: kích thước HTML, runtime debug, Pixel init, asset WebP và endpoint tồn kho; không tạo đơn COD thử.
