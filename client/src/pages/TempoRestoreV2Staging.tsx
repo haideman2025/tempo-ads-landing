@@ -18,17 +18,14 @@ import {
 } from "lucide-react";
 import { FormEvent, TouchEvent, useEffect, useMemo, useRef, useState } from "react";
 import { PRODUCT_CONFIG, formatVnd } from "@/config/tempoProduct";
+import { TEMPO_MEDIA, type ResponsiveAsset } from "@/config/tempoMedia";
 import { trpc } from "@/lib/trpc";
 import "./tempo-restore-v2-staging.css";
 
-type ResponsiveAsset = {
-  webp480: string;
-  webp960: string;
-  webp: string;
-  png: string;
-  width: number;
-  height: number;
-};
+/** Ảnh còn nằm trên Manus storage: một URL duy nhất, không có biến thể theo bề rộng. */
+function singleAsset(url: string, width: number, height: number): ResponsiveAsset {
+  return { webp480: url, webp960: url, webp: url, fallback: url, width, height };
+}
 
 const MEDIA = {
   logo: "/manus-storage/v2joylogo-official_9302769f.webp",
@@ -36,7 +33,7 @@ const MEDIA = {
     webp480: "/manus-storage/01-hero-grooming-480_c164fe4e.webp",
     webp960: "/manus-storage/01-hero-grooming-960_1a254cd1.webp",
     webp: "/manus-storage/01-hero-grooming_3964bc1c.webp",
-    png: "/manus-storage/01-hero-grooming_4a73bdb5.png",
+    fallback: "/manus-storage/01-hero-grooming_3964bc1c.webp",
     width: 1672,
     height: 941,
   },
@@ -44,7 +41,7 @@ const MEDIA = {
     webp480: "/manus-storage/02-scale-hand-3ml-480_cf67e79f.webp",
     webp960: "/manus-storage/02-scale-hand-3ml-960_ccd1274e.webp",
     webp: "/manus-storage/02-scale-hand-3ml_2be8617f.webp",
-    png: "/manus-storage/02-scale-hand-3ml_02f14fc9.png",
+    fallback: "/manus-storage/02-scale-hand-3ml_2be8617f.webp",
     width: 1536,
     height: 1024,
   },
@@ -52,7 +49,7 @@ const MEDIA = {
     webp480: "/manus-storage/03-ritual-black-actuator-480_0ed14d63.webp",
     webp960: "/manus-storage/03-ritual-black-actuator-960_38eb15af.webp",
     webp: "/manus-storage/03-ritual-black-actuator_216f29f2.webp",
-    png: "/manus-storage/03-ritual-black-actuator_2f8a79c7.png",
+    fallback: "/manus-storage/03-ritual-black-actuator_216f29f2.webp",
     width: 1536,
     height: 1024,
   },
@@ -60,7 +57,7 @@ const MEDIA = {
     webp480: "/manus-storage/04-portable-grooming-pouch-480_8c63cda0.webp",
     webp960: "/manus-storage/04-portable-grooming-pouch-960_7d77d385.webp",
     webp: "/manus-storage/04-portable-grooming-pouch_c4693388.webp",
-    png: "/manus-storage/04-portable-grooming-pouch_619b3f4a.png",
+    fallback: "/manus-storage/04-portable-grooming-pouch_c4693388.webp",
     width: 1536,
     height: 1024,
   },
@@ -68,7 +65,7 @@ const MEDIA = {
     webp480: "/manus-storage/05-couple-evening-context-480_f63ae016.webp",
     webp960: "/manus-storage/05-couple-evening-context-960_851ce329.webp",
     webp: "/manus-storage/05-couple-evening-context_def084a1.webp",
-    png: "/manus-storage/05-couple-evening-context_f864353c.png",
+    fallback: "/manus-storage/05-couple-evening-context_def084a1.webp",
     width: 1672,
     height: 941,
   },
@@ -76,7 +73,7 @@ const MEDIA = {
     webp480: "/manus-storage/06-pull-push-unboxing-480_b345fe28.webp",
     webp960: "/manus-storage/06-pull-push-unboxing-960_65b99cb2.webp",
     webp: "/manus-storage/06-pull-push-unboxing_a1821968.webp",
-    png: "/manus-storage/06-pull-push-unboxing_b3ae3d2d.png",
+    fallback: "/manus-storage/06-pull-push-unboxing_a1821968.webp",
     width: 1536,
     height: 1024,
   },
@@ -84,28 +81,28 @@ const MEDIA = {
     webp480: "/manus-storage/07-discreet-delivery-480_1a69c6b9.webp",
     webp960: "/manus-storage/07-discreet-delivery-960_f5a808c8.webp",
     webp: "/manus-storage/07-discreet-delivery_fadce894.webp",
-    png: "/manus-storage/07-discreet-delivery_f676417b.png",
+    fallback: "/manus-storage/07-discreet-delivery_fadce894.webp",
     width: 1536,
     height: 1024,
   },
-  legacyHero: "/manus-storage/tempo-brand-hero_6c096b85.png",
-  packFront: "/manus-storage/tempo-pack-front_9e2c58ea.png",
-  packSides: "/manus-storage/tempo-pack-sides_99932a67.png",
-  packBack: "/manus-storage/tempo-pack-back_267c13e5.png",
-  coupleHands: "/manus-storage/tempo-couple-hands_6b173623.png",
-  benefits: "/manus-storage/tempo-benefits_e53327fd.png",
-  steps: "/manus-storage/tempo-use-steps_a7b53030.png",
-  wait: "/manus-storage/tempo-wait-ritual_0db05ba8.png",
-  carry: "/manus-storage/tempo-carry_5d2617d2.png",
-  unbox: "/manus-storage/tempo-unbox_7fe4ee69.png",
-  detail: "/manus-storage/tempo-design-graphite_d1c18acb.png",
-  story: "/manus-storage/tempo-story_fc38bf3c.png",
-  label: "/manus-storage/tempo-claim-label_10f35a7d.png",
-  diaryExit: "/manus-storage/tempo-lifestyle-01-exit-evening_334132f2.webp",
-  diaryWalk: "/manus-storage/tempo-couple-04-walk-home-woman-man_8da9bbe8.png",
-  diaryRitual: "/manus-storage/tempo-ritual-01-quiet-preparation_c68f7133.webp",
-  diaryKitchen: "/manus-storage/tempo-couple-03-kitchen-evening-woman-man_9c71be8e.png",
-  diaryMorning: "/manus-storage/tempo-lifestyle-04-morning-return_a7805e20.webp",
+  legacyHero: TEMPO_MEDIA["tempo-brand-hero"],
+  packFront: TEMPO_MEDIA["tempo-pack-front"],
+  packSides: TEMPO_MEDIA["tempo-pack-sides"],
+  packBack: TEMPO_MEDIA["tempo-pack-back"],
+  coupleHands: TEMPO_MEDIA["tempo-couple-hands"],
+  benefits: TEMPO_MEDIA["tempo-benefits"],
+  steps: TEMPO_MEDIA["tempo-use-steps"],
+  wait: TEMPO_MEDIA["tempo-wait-ritual"],
+  carry: TEMPO_MEDIA["tempo-carry"],
+  unbox: TEMPO_MEDIA["tempo-unbox"],
+  detail: TEMPO_MEDIA["tempo-design-graphite"],
+  story: TEMPO_MEDIA["tempo-story"],
+  label: TEMPO_MEDIA["tempo-claim-label"],
+  diaryExit: singleAsset("/manus-storage/tempo-lifestyle-01-exit-evening_334132f2.webp", 1600, 900),
+  diaryWalk: TEMPO_MEDIA["tempo-couple-04-walk-home-woman-man"],
+  diaryRitual: singleAsset("/manus-storage/tempo-ritual-01-quiet-preparation_c68f7133.webp", 1280, 1600),
+  diaryKitchen: TEMPO_MEDIA["tempo-couple-03-kitchen-evening-woman-man"],
+  diaryMorning: singleAsset("/manus-storage/tempo-lifestyle-04-morning-return_a7805e20.webp", 1600, 900),
   video1: "/manus-storage/tempo-background-01_9f851f78.mp4",
   video2: "/manus-storage/tempo-background-02_d44fa0b9.mp4",
   video3: "/manus-storage/tempo-background-03_a5a1c511.mp4",
@@ -127,16 +124,16 @@ const INFOGRAPHICS = [
 ] as const;
 
 const FEEDBACK = [
-  { id: "01", image: "/manus-storage/tempo-feedback-spray-graphite_05a6f498.png" },
-  { id: "02", image: "/manus-storage/feedback-02-wait_8add3a01.png" },
-  { id: "03", image: "/manus-storage/feedback-03-clean_7143b919.png" },
-  { id: "04", image: "/manus-storage/feedback-04-intention_a9caba0e.png" },
-  { id: "05", image: "/manus-storage/feedback-05-care_082b777c.png" },
-  { id: "06", image: "/manus-storage/feedback-06-unboxing_d9e5a446.png" },
-  { id: "07", image: "/manus-storage/feedback-07-guidance_62df674a.png" },
-  { id: "08", image: "/manus-storage/feedback-08-flow_aa0ad378.png" },
-  { id: "09", image: "/manus-storage/feedback-09-design_5d665c00.png" },
-  { id: "10", image: "/manus-storage/feedback-10-compact_bcf288fa.png" },
+  { id: "01", image: TEMPO_MEDIA["tempo-feedback-spray-graphite"] },
+  { id: "02", image: TEMPO_MEDIA["feedback-02-wait"] },
+  { id: "03", image: TEMPO_MEDIA["feedback-03-clean"] },
+  { id: "04", image: TEMPO_MEDIA["feedback-04-intention"] },
+  { id: "05", image: TEMPO_MEDIA["feedback-05-care"] },
+  { id: "06", image: TEMPO_MEDIA["feedback-06-unboxing"] },
+  { id: "07", image: TEMPO_MEDIA["feedback-07-guidance"] },
+  { id: "08", image: TEMPO_MEDIA["feedback-08-flow"] },
+  { id: "09", image: TEMPO_MEDIA["feedback-09-design"] },
+  { id: "10", image: TEMPO_MEDIA["feedback-10-compact"] },
 ] as const;
 
 const DIARY = [
@@ -160,9 +157,35 @@ type CheckoutForm = {
 };
 
 type TrackingEvent = "ViewContent" | "ViewInfographic" | "ViewRitual" | "ViewFeedback" | "InitiateCheckout" | "Lead";
+/** Tên nằm trong danh sách chuẩn của Meta; mọi tên khác phải gửi qua trackCustom. */
+const STANDARD_PIXEL_EVENTS: ReadonlySet<TrackingEvent> = new Set<TrackingEvent>(["ViewContent", "InitiateCheckout", "Lead"]);
 type LandingMode = "staging" | "production";
 type Attribution = Record<"utmSource" | "utmMedium" | "utmCampaign" | "utmContent" | "utmTerm" | "fbclid", string>;
 const emptyAttribution: Attribution = { utmSource: "", utmMedium: "", utmCampaign: "", utmContent: "", utmTerm: "", fbclid: "" };
+
+function readCookie(name: string) {
+  try {
+    const match = document.cookie.split(";").map(part => part.trim()).find(part => part.startsWith(`${name}=`));
+    return match ? decodeURIComponent(match.slice(name.length + 1)) : "";
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Đọc _fbp/_fbc ngay lúc gửi đơn, không đọc lúc mount: Pixel nạp bất đồng bộ nên khi trang
+ * vừa mount cookie thường chưa tồn tại.
+ *
+ * Khi _fbc chưa được đặt mà URL có fbclid thì tự dựng theo đúng định dạng của Meta —
+ * đây là định danh mạnh nhất để quy đơn về lượt click, và Purchase chỉ được gửi sau khi
+ * giao hàng nên không còn cơ hội thu lại từ trình duyệt.
+ */
+function readPixelIdentifiers(attribution: Attribution) {
+  const fbc = readCookie("_fbc");
+  if (fbc || !attribution.fbclid) return { fbp: readCookie("_fbp"), fbc };
+  const seenAt = Number(localStorage.getItem("tempo-fbclid-at")) || Date.now();
+  return { fbp: readCookie("_fbp"), fbc: `fb.1.${seenAt}.${attribution.fbclid}` };
+}
 
 function createEventId() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -196,6 +219,10 @@ function getAttribution(): Attribution {
       fbclid: query.get("fbclid") || previous.fbclid || "",
     };
     localStorage.setItem("tempo-attribution", JSON.stringify(attribution));
+    // Thời điểm nhìn thấy fbclid lần đầu, dùng để dựng _fbc khi Pixel chưa kịp đặt cookie.
+    if (query.get("fbclid") && !localStorage.getItem("tempo-fbclid-at")) {
+      localStorage.setItem("tempo-fbclid-at", String(Date.now()));
+    }
     return attribution;
   } catch {
     return emptyAttribution;
@@ -214,7 +241,7 @@ function trackFunnel(mode: LandingMode, event: TrackingEvent, payload: Record<st
     stagingTrack(event, detail);
     return;
   }
-  window.fbq?.("track", event, detail, { eventID: detail.event_id });
+  window.fbq?.(STANDARD_PIXEL_EVENTS.has(event) ? "track" : "trackCustom", event, detail, { eventID: detail.event_id });
 }
 
 function useVisibilityEvent(id: string, event: TrackingEvent, mode: LandingMode) {
@@ -255,20 +282,16 @@ function ResponsiveImage({
   return (
     <picture className={className}>
       <source srcSet={`${asset.webp480} 480w, ${asset.webp960} 960w, ${asset.webp} ${asset.width}w`} sizes={sizes} type="image/webp" />
-      <img src={asset.png} alt={alt} width={asset.width} height={asset.height} loading={priority ? "eager" : "lazy"} decoding="async" />
+      <img src={asset.fallback} alt={alt} width={asset.width} height={asset.height} loading={priority ? "eager" : "lazy"} decoding="async" />
     </picture>
   );
-}
-
-function LegacyImage({ src, alt, className = "", eager = false }: { src: string; alt: string; className?: string; eager?: boolean }) {
-  return <img className={className} src={src} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" />;
 }
 
 function SignalRail() {
   return <svg className="tempo-r2__signal" viewBox="0 0 560 80" fill="none" aria-hidden="true"><path d="M0 43H58c30 0 29-23 56-23 29 0 25 43 56 43 33 0 25-35 56-35 35 0 23 30 58 30 29 0 27-20 57-20 27 0 30 13 56 13h56" /></svg>;
 }
 
-function CinematicVideo({ src, poster, label, eager = false }: { src: string; poster: string; label: string; eager?: boolean }) {
+function CinematicVideo({ src, poster, label, eager = false }: { src: string; poster: ResponsiveAsset; label: string; eager?: boolean }) {
   const frame = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const [load, setLoad] = useState(eager);
@@ -343,7 +366,7 @@ function CinematicVideo({ src, poster, label, eager = false }: { src: string; po
   };
   return (
     <div ref={frame} className="tempo-r2__cinema" data-video-state={state} data-video-src={src} aria-label={label}>
-      <LegacyImage src={poster} alt="" className="tempo-r2__cinema-poster" eager={eager} />
+      <ResponsiveImage asset={poster} alt="" className="tempo-r2__cinema-poster" priority={eager} sizes="100vw" />
       {mediaEnabled && (
         <video
           ref={video}
@@ -352,7 +375,7 @@ function CinematicVideo({ src, poster, label, eager = false }: { src: string; po
           loop
           playsInline
           preload={eager ? "auto" : "metadata"}
-          poster={poster}
+          poster={poster.webp960}
           onLoadStart={() => setState("loading")}
           onPlaying={() => { retryCount.current = 0; setState("playing"); }}
           onPause={() => setState("paused")}
@@ -379,7 +402,7 @@ function CinematicChapter({
 }: {
   id: string;
   video: string;
-  poster: string;
+  poster: ResponsiveAsset;
   eyebrow: string;
   title: string;
   accent: string;
@@ -408,7 +431,7 @@ function ImageLightbox({
   onNext,
   title,
 }: {
-  item: { id: string; image: string; label?: string; alt?: string };
+  item: { id: string; image: ResponsiveAsset; label?: string; alt?: string };
   onClose: () => void;
   onPrevious: () => void;
   onNext: () => void;
@@ -423,7 +446,7 @@ function ImageLightbox({
     <div className="tempo-r2__lightbox" role="dialog" aria-modal="true" aria-label={title}>
       <button type="button" className="tempo-r2__lightbox-close" onClick={onClose} aria-label="Đóng ảnh phóng to"><X size={22} /></button>
       <button type="button" className="tempo-r2__lightbox-nav tempo-r2__lightbox-nav--previous" onClick={onPrevious} aria-label="Ảnh trước"><ChevronLeft size={26} /></button>
-      <figure><LegacyImage src={item.image} alt={item.alt || `${title} ${item.id}`} eager /><figcaption>{item.id} / {item.label || title}</figcaption></figure>
+      <figure><ResponsiveImage asset={item.image} alt={item.alt || `${title} ${item.id}`} priority sizes="100vw" /><figcaption>{item.id} / {item.label || title}</figcaption></figure>
       <button type="button" className="tempo-r2__lightbox-nav tempo-r2__lightbox-nav--next" onClick={onNext} aria-label="Ảnh tiếp theo"><ChevronRight size={26} /></button>
     </div>
   );
@@ -438,7 +461,7 @@ function InfographicGallery({ mode }: { mode: LandingMode }) {
     <section className="tempo-r2__section tempo-r2__infographics" ref={sectionRef} id="infographic" aria-labelledby="infographic-title">
       <div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">THƯ VIỆN THÔNG TIN</p><h2 id="infographic-title">Mười khung hình.<br /><em>Để xem kỹ trước khi chọn.</em></h2><p>Toàn bộ visual có sẵn được giữ trong cùng một thư viện; chạm ảnh để xem trọn khung, không cắt chữ trên mobile.</p></div>
       <div className="tempo-r2__gallery-grid" aria-label="10 infographic TEMPO">
-        {INFOGRAPHICS.map((info, index) => <button key={info.id} type="button" className="tempo-r2__gallery-card" onClick={() => choose(index)} aria-label={`Phóng to infographic ${info.id}: ${info.label}`}><LegacyImage src={info.image} alt={info.alt} /><span>{info.id} · {info.label}</span><Eye size={16} /></button>)}
+        {INFOGRAPHICS.map((info, index) => <button key={info.id} type="button" className="tempo-r2__gallery-card" onClick={() => choose(index)} aria-label={`Phóng to infographic ${info.id}: ${info.label}`}><ResponsiveImage asset={info.image} alt={info.alt} sizes="(max-width: 640px) 68vw, 25vw" /><span>{info.id} · {info.label}</span><Eye size={16} /></button>)}
       </div>
       {item && <ImageLightbox item={item} onClose={() => setActive(null)} onPrevious={() => choose(active! - 1)} onNext={() => choose(active! + 1)} title="Infographic TEMPO" />}
     </section>
@@ -459,7 +482,7 @@ function VisualDiary() {
     <section className="tempo-r2__diary" aria-labelledby="diary-title">
       <div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">VISUAL DIARY / TEMPO</p><h2 id="diary-title">Một buổi tối.<br /><em>Những khoảng vừa đủ.</em></h2><p>Năm khoảnh khắc được giữ trọn vẹn như một tuyến hình ảnh, không thay thế giao tiếp và sự đồng thuận giữa hai người.</p></div>
       <div className="tempo-r2__diary-stage" data-swipe="enabled" onTouchStart={event => { start.current = event.changedTouches[0]?.clientX ?? null; }} onTouchEnd={handleTouchEnd}>
-        <LegacyImage src={item.image} alt={`${item.title}: ${item.copy}`} />
+        <ResponsiveImage asset={item.image} alt={`${item.title}: ${item.copy}`} sizes="(max-width: 640px) 100vw, 60vw" />
         <div className="tempo-r2__diary-copy"><span>{item.id} / 05 · {item.kicker}</span><h3>{item.title}</h3><p>{item.copy}</p></div>
         <div className="tempo-r2__gallery-controls"><button type="button" onClick={() => choose(active - 1)} aria-label="Khoảnh khắc trước"><ChevronLeft size={20} /></button><button type="button" onClick={() => choose(active + 1)} aria-label="Khoảnh khắc tiếp theo"><ChevronRight size={20} /></button></div>
       </div>
@@ -476,7 +499,7 @@ function FeedbackGallery({ mode }: { mode: LandingMode }) {
   return (
     <section className="tempo-r2__feedback" ref={sectionRef} id="phan-hoi" aria-labelledby="feedback-title">
       <div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow tempo-r2__eyebrow--light">GÓC NHÌN NHÓM TRẢI NGHIỆM</p><h2 id="feedback-title">Những ghi nhận.<br /><em>Để bạn xem kỹ.</em></h2><p>Ba khung xem nhanh bên dưới dẫn tới toàn bộ 10 visual do V2JOY cung cấp. Không thêm rating, tên cá nhân hoặc lời trích dẫn tạo sẵn.</p></div>
-      <div className="tempo-r2__feedback-preview">{FEEDBACK.slice(0, 3).map((feedback, index) => <button key={feedback.id} type="button" onClick={() => choose(index)} aria-label={`Xem phản hồi ${feedback.id} trên 10`}><LegacyImage src={feedback.image} alt={`Visual phản hồi tổng hợp ${feedback.id} trên 10`} /><span>PHẢN HỒI {feedback.id}</span></button>)}</div>
+      <div className="tempo-r2__feedback-preview">{FEEDBACK.slice(0, 3).map((feedback, index) => <button key={feedback.id} type="button" onClick={() => choose(index)} aria-label={`Xem phản hồi ${feedback.id} trên 10`}><ResponsiveImage asset={feedback.image} alt={`Visual phản hồi tổng hợp ${feedback.id} trên 10`} sizes="(max-width: 640px) 78vw, 33vw" /><span>PHẢN HỒI {feedback.id}</span></button>)}</div>
       <div className="tempo-r2__feedback-all" role="tablist" aria-label="Đầy đủ 10 visual phản hồi">{FEEDBACK.map((feedback, index) => <button key={feedback.id} type="button" role="tab" aria-label={`Mở visual phản hồi ${feedback.id} trên 10`} onClick={() => choose(index)}>{feedback.id}</button>)}</div>
       <p className="tempo-r2__feedback-disclaimer"><ClipboardCheck size={17} /> Visual giữ nguyên theo tài liệu V2JOY cung cấp. Nội dung phản ánh góc nhìn tổng hợp của nhóm trải nghiệm, không phải rating, không phải cam kết kết quả; trải nghiệm cá nhân có thể khác nhau và không thay thế thông tin trên nhãn thành phẩm.</p>
       {item && <ImageLightbox item={item} onClose={() => setActive(null)} onPrevious={() => choose(active! - 1)} onNext={() => choose(active! + 1)} title="Phản hồi nhóm trải nghiệm" />}
@@ -544,7 +567,7 @@ export default function TempoRestoreV2Staging({ mode = "staging" }: { mode?: Lan
   };
   const submitOrder = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!form.address.trim() || !form.orderConsent || !form.marketingConsent) { formRef.current?.reportValidity(); return; }
+    if (!form.address.trim() || !form.orderConsent) { formRef.current?.reportValidity(); return; }
     if (isStaging) {
       trackFunnel("staging", "Lead", { value: total, num_items: form.quantity, order_intent: "cod", simulated: true });
       setNotice("Đã kiểm tra đủ luồng COD hai bước trên staging. Không có đơn, thông tin liên hệ, trừ tồn kho, Pixel Purchase hoặc CAPI Purchase nào được tạo.");
@@ -560,6 +583,7 @@ export default function TempoRestoreV2Staging({ mode = "staging" }: { mode?: Lan
       orderConsent: form.orderConsent,
       marketingConsent: form.marketingConsent,
       ...attribution.current,
+      ...readPixelIdentifiers(attribution.current),
     }, {
       onSuccess: result => {
         if (result.kind === "created") {
@@ -580,7 +604,7 @@ export default function TempoRestoreV2Staging({ mode = "staging" }: { mode?: Lan
     name: PRODUCT_CONFIG.name,
     sku: PRODUCT_CONFIG.sku,
     brand: { "@type": "Brand", name: "V2JOY" },
-    image: [MEDIA.heroGrooming.webp, MEDIA.scale.webp, MEDIA.actuator.webp],
+    image: [MEDIA.heroGrooming.webp, MEDIA.scale.webp, MEDIA.actuator.webp].map(path => `https://v2joy.life${path}`),
     description: "TEMPO 3ml by V2JOY là sản phẩm chăm sóc da cá nhân nhỏ gọn, sử dụng theo hướng dẫn trên nhãn.",
     offers: { "@type": "Offer", price: String(PRODUCT_CONFIG.price), priceCurrency: PRODUCT_CONFIG.currency, availability: "https://schema.org/InStock", url: isStaging ? "https://v2joy.life/staging/tempo-restore-v2" : "https://v2joy.life/" },
   });
@@ -597,7 +621,7 @@ export default function TempoRestoreV2Staging({ mode = "staging" }: { mode?: Lan
       </header>
 
       <section className="tempo-r2__hero" aria-labelledby="hero-title">
-        <CinematicVideo src={MEDIA.video1} poster={MEDIA.heroGrooming.webp} label="Hình ảnh mở đầu TEMPO" eager />
+        <CinematicVideo src={MEDIA.video1} poster={MEDIA.heroGrooming} label="Hình ảnh mở đầu TEMPO" eager />
         <div className="tempo-r2__hero-copy"><p className="tempo-r2__eyebrow tempo-r2__eyebrow--light">V2JOY / TEMPO 3ML</p><h1 id="hero-title">CHẬM MỘT NHỊP.<br /><em>GẦN NHAU HƠN.</em></h1><p>Một bước chăm sóc cá nhân kín đáo trước những khoảnh khắc riêng tư — để sự chuẩn bị có thêm chủ động, nhẹ nhàng và đúng nhịp.</p><div><button type="button" className="tempo-r2__button" onClick={scrollToOrder}>ĐẶT TEMPO 3ML · {formatVnd(PRODUCT_CONFIG.price)} <ArrowRight size={18} /></button><a href="#nghi-thuc">XEM NGHI THỨC <ArrowDown size={16} /></a></div></div>
         <div className="tempo-r2__hero-stock"><b>{remaining.toLocaleString("vi-VN")}</b><span>/ {PRODUCT_CONFIG.inventoryCapacity.toLocaleString("vi-VN")} chai · COD · Gọi xác nhận trước khi giao</span><SignalRail /></div>
       </section>
@@ -608,15 +632,15 @@ export default function TempoRestoreV2Staging({ mode = "staging" }: { mode?: Lan
 
       <CinematicChapter id="chapter-one" video={MEDIA.video2} poster={MEDIA.carry} eyebrow="MỘT KHOẢNG CHO RIÊNG MÌNH" title="Khép lại ngày dài." accent="Mang theo điều vừa đủ." copy="Bỏ chai vào túi. Rời khỏi lịch làm việc. Giữ một khoảng chuẩn bị riêng cho buổi tối bạn đã chọn." detail="MỘT CHAI NHỎ · MỘT NHỊP CHỦ ĐỘNG"><ResponsiveImage asset={MEDIA.pouch} alt="TEMPO 3 ml được cất trong túi grooming kín đáo" className="tempo-r2__chapter-inset" /></CinematicChapter>
 
-      <section className="tempo-r2__product tempo-r2__section" id="san-pham" aria-labelledby="product-title"><div className="tempo-r2__product-image"><LegacyImage src={MEDIA.packFront} alt="Chai và hộp TEMPO 3ml" /><span>3ML / NHỎ GỌN</span></div><div className="tempo-r2__product-copy"><p className="tempo-r2__eyebrow">TEMPO 3ML / ĐẶT SỚM</p><h2 id="product-title">Nhỏ để mang theo.<br /><em>Dễ bắt đầu.</em></h2><p>Một chai TEMPO 3ml cho nhịp chăm sóc kín đáo. Thanh toán COD; V2JOY gọi xác nhận trước khi gửi.</p><dl><div><dt>Giá bán</dt><dd>{formatVnd(PRODUCT_CONFIG.price)} / chai</dd></div><div><dt>Đơn tối đa</dt><dd>{PRODUCT_CONFIG.maxQuantity.toString().padStart(2, "0")} chai</dd></div><div><dt>Tồn hiển thị</dt><dd>{remaining.toLocaleString("vi-VN")} / {PRODUCT_CONFIG.inventoryCapacity.toLocaleString("vi-VN")}</dd></div></dl><button type="button" className="tempo-r2__button" onClick={scrollToOrder}>XEM TÓM TẮT ĐƠN <ShoppingBag size={17} /></button></div><ResponsiveImage asset={MEDIA.scale} alt="Chai TEMPO 3 ml nằm gọn trong bàn tay" className="tempo-r2__product-scale" /></section>
+      <section className="tempo-r2__product tempo-r2__section" id="san-pham" aria-labelledby="product-title"><div className="tempo-r2__product-image"><ResponsiveImage asset={MEDIA.packFront} alt="Chai và hộp TEMPO 3ml" /><span>3ML / NHỎ GỌN</span></div><div className="tempo-r2__product-copy"><p className="tempo-r2__eyebrow">TEMPO 3ML / ĐẶT SỚM</p><h2 id="product-title">Nhỏ để mang theo.<br /><em>Dễ bắt đầu.</em></h2><p>Một chai TEMPO 3ml cho nhịp chăm sóc kín đáo. Thanh toán COD; V2JOY gọi xác nhận trước khi gửi.</p><dl><div><dt>Giá bán</dt><dd>{formatVnd(PRODUCT_CONFIG.price)} / chai</dd></div><div><dt>Đơn tối đa</dt><dd>{PRODUCT_CONFIG.maxQuantity.toString().padStart(2, "0")} chai</dd></div><div><dt>Tồn hiển thị</dt><dd>{remaining.toLocaleString("vi-VN")} / {PRODUCT_CONFIG.inventoryCapacity.toLocaleString("vi-VN")}</dd></div></dl><button type="button" className="tempo-r2__button" onClick={scrollToOrder}>XEM TÓM TẮT ĐƠN <ShoppingBag size={17} /></button></div><ResponsiveImage asset={MEDIA.scale} alt="Chai TEMPO 3 ml nằm gọn trong bàn tay" className="tempo-r2__product-scale" /></section>
 
       <InfographicGallery mode={mode} />
 
-      <section className="tempo-r2__packaging tempo-r2__section" aria-labelledby="packaging-title"><div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">THIẾT KẾ BAO BÌ</p><h2 id="packaging-title">Kéo trên. Đẩy dưới.<br /><em>Một nhịp mở liền mạch.</em></h2><p>Hộp đứng dạng khay rút: thao tác kéo từ phần teal phía trên và đẩy tại điểm chạm phía dưới. Cửa sổ vừa phải để nhìn thấy chai, vẫn giữ cảm giác kín đáo.</p></div><div className="tempo-r2__pack-grid"><figure><LegacyImage src={MEDIA.packFront} alt="Mặt trước hộp TEMPO dạng khay rút đứng" /><figcaption>Mặt trước</figcaption></figure><figure><LegacyImage src={MEDIA.packSides} alt="Mặt hông hộp TEMPO" /><figcaption>Mặt hông</figcaption></figure><figure><LegacyImage src={MEDIA.packBack} alt="Mặt sau hộp TEMPO" /><figcaption>Mặt sau</figcaption></figure></div><div className="tempo-r2__pull-push"><ResponsiveImage asset={MEDIA.pullPush} alt="Hộp TEMPO mở theo thao tác kéo trên và đẩy dưới" /><div><span>KÉO</span><SignalRail /><span>ĐẨY</span></div><p>Visual teal–cam chạy liên tục giữa hộp và chai; không phải thiết kế nắp mở hay hộp kiểu quyển sách.</p></div></section>
+      <section className="tempo-r2__packaging tempo-r2__section" aria-labelledby="packaging-title"><div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">THIẾT KẾ BAO BÌ</p><h2 id="packaging-title">Kéo trên. Đẩy dưới.<br /><em>Một nhịp mở liền mạch.</em></h2><p>Hộp đứng dạng khay rút: thao tác kéo từ phần teal phía trên và đẩy tại điểm chạm phía dưới. Cửa sổ vừa phải để nhìn thấy chai, vẫn giữ cảm giác kín đáo.</p></div><div className="tempo-r2__pack-grid"><figure><ResponsiveImage asset={MEDIA.packFront} alt="Mặt trước hộp TEMPO dạng khay rút đứng" /><figcaption>Mặt trước</figcaption></figure><figure><ResponsiveImage asset={MEDIA.packSides} alt="Mặt hông hộp TEMPO" /><figcaption>Mặt hông</figcaption></figure><figure><ResponsiveImage asset={MEDIA.packBack} alt="Mặt sau hộp TEMPO" /><figcaption>Mặt sau</figcaption></figure></div><div className="tempo-r2__pull-push"><ResponsiveImage asset={MEDIA.pullPush} alt="Hộp TEMPO mở theo thao tác kéo trên và đẩy dưới" /><div><span>KÉO</span><SignalRail /><span>ĐẨY</span></div><p>Visual teal–cam chạy liên tục giữa hộp và chai; không phải thiết kế nắp mở hay hộp kiểu quyển sách.</p></div></section>
 
       <CinematicChapter id="chapter-two" video={MEDIA.video3} poster={MEDIA.label} eyebrow="BIẾT TRƯỚC KHI CHỌN" title="Dừng lại để đọc." accent="Tự đối chiếu trước khi dùng." copy="Sản phẩm chăm sóc da không cần được hứa quá. Bạn có thể xem thành phần, đối chiếu nhãn và chọn theo điều mình hiểu rõ." detail="ĐỌC INCI · ĐỐI CHIẾU NHÃN · TỰ QUYẾT ĐỊNH" />
 
-      <section className="tempo-r2__ritual tempo-r2__section" ref={ritualRef} id="nghi-thuc" aria-labelledby="ritual-title"><div className="tempo-r2__ritual-copy"><p className="tempo-r2__eyebrow">NGHI THỨC TEMPO</p><h2 id="ritual-title">Ba bước.<br /><em>Đúng nhịp.</em></h2><ol><li><b>01</b><span><strong>VỆ SINH & LẮC ĐỀU</strong>Vệ sinh sạch vùng da cơ thể và lắc đều sản phẩm.</span></li><li><b>02</b><span><strong>XỊT THEO HƯỚNG DẪN</strong>Để chai cách vùng da cần chăm sóc khoảng 3–5 cm.</span></li><li><b>03</b><span><strong>CHỜ & RỬA SẠCH</strong>xịt 3–4 nhát, chờ 60 phút rồi rửa sạch.</span></li></ol><p className="tempo-r2__legal-callout"><CircleAlert size={18} /> Chỉ dùng ngoài da. Không dùng trên vùng da trầy xước; ngưng dùng nếu có kích ứng.</p></div><div className="tempo-r2__ritual-media"><LegacyImage src={MEDIA.steps} alt="Ba bước sử dụng TEMPO 3ml" /><ResponsiveImage asset={MEDIA.actuator} alt="Cụm nút nhấn và vòi graphite đen, vòng cổ bạc của TEMPO" /><LegacyImage src={MEDIA.wait} alt="Khoảng chờ 60 phút của nghi thức TEMPO" /></div></section>
+      <section className="tempo-r2__ritual tempo-r2__section" ref={ritualRef} id="nghi-thuc" aria-labelledby="ritual-title"><div className="tempo-r2__ritual-copy"><p className="tempo-r2__eyebrow">NGHI THỨC TEMPO</p><h2 id="ritual-title">Ba bước.<br /><em>Đúng nhịp.</em></h2><ol><li><b>01</b><span><strong>VỆ SINH & LẮC ĐỀU</strong>Vệ sinh sạch vùng da cơ thể và lắc đều sản phẩm.</span></li><li><b>02</b><span><strong>XỊT THEO HƯỚNG DẪN</strong>Để chai cách vùng da cần chăm sóc khoảng 3–5 cm.</span></li><li><b>03</b><span><strong>CHỜ & RỬA SẠCH</strong>xịt 3–4 nhát, chờ 60 phút rồi rửa sạch.</span></li></ol><p className="tempo-r2__legal-callout"><CircleAlert size={18} /> Chỉ dùng ngoài da. Không dùng trên vùng da trầy xước; ngưng dùng nếu có kích ứng.</p></div><div className="tempo-r2__ritual-media"><ResponsiveImage asset={MEDIA.steps} alt="Ba bước sử dụng TEMPO 3ml" /><ResponsiveImage asset={MEDIA.actuator} alt="Cụm nút nhấn và vòi graphite đen, vòng cổ bạc của TEMPO" /><ResponsiveImage asset={MEDIA.wait} alt="Khoảng chờ 60 phút của nghi thức TEMPO" /></div></section>
 
       <CinematicChapter id="chapter-three" video={MEDIA.video4} poster={MEDIA.coupleHands} eyebrow="KHOẢNH KHẮC CỦA HAI NGƯỜI" title="Đến cuộc hẹn." accent="Có mặt cho nhau." copy="Một khung cảnh bình tĩnh, đặt sự có mặt lên trước mọi vội vàng. TEMPO chỉ là một bước chăm sóc trong nhịp riêng của bạn." detail="BÌNH TĨNH · TÔN TRỌNG · ĐỒNG THUẬN"><ResponsiveImage asset={MEDIA.couple} alt="Cặp đôi nam nữ trưởng thành trong một buổi tối riêng tư" className="tempo-r2__chapter-inset" /></CinematicChapter>
 
@@ -626,9 +650,9 @@ export default function TempoRestoreV2Staging({ mode = "staging" }: { mode?: Lan
 
       <FeedbackGallery mode={mode} />
 
-      <section className="tempo-r2__information tempo-r2__section" id="thong-tin" aria-labelledby="information-title"><div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">THÔNG TIN SẢN PHẨM</p><h2 id="information-title">Rõ ràng từ thành phần<br /><em>đến nhãn thành phẩm.</em></h2><p>Thông tin dưới đây được giữ nguyên để bạn kiểm tra trước khi đặt COD. Nhãn in trên sản phẩm của từng lô luôn là nguồn ưu tiên.</p></div><div className="tempo-r2__label-grid"><figure><LegacyImage src={MEDIA.packSides} alt="Mặt hông hộp TEMPO có hướng dẫn nghi thức" /><figcaption>Hướng dẫn trên mặt hông</figcaption></figure><figure><LegacyImage src={MEDIA.packBack} alt="Mặt sau hộp TEMPO có thông tin bảo quản" /><figcaption>Hướng dẫn và bảo quản</figcaption></figure><figure><LegacyImage src={MEDIA.label} alt="Chi tiết nhãn chai TEMPO 3ml" /><figcaption>Chi tiết chai 3ml</figcaption></figure></div><div className="tempo-r2__safety-grid"><article><TimerReset size={21} /><h3>Hướng dẫn</h3><p>Lắc đều. Xịt 3–4 nhát cách da khoảng 3–5 cm, chờ 60 phút rồi rửa sạch.</p></article><article><ShieldCheck size={21} /><h3>Cảnh báo</h3><p>Chỉ dùng ngoài da. Không dùng trên vùng da trầy xước; ngưng dùng nếu có kích ứng.</p></article><article><ClipboardCheck size={21} /><h3>Bảo quản</h3><p>Nơi khô ráo, thoáng mát, dưới 30°C; tránh nắng trực tiếp và đóng kín nắp sau khi dùng.</p></article></div><div className="tempo-r2__details"><details><summary>Danh mục thành phần (INCI)<ChevronDown size={18} /></summary><p>{INCI}</p></details><details><summary>Cảnh báo và hạn sử dụng<ChevronDown size={18} /></summary><p>Chỉ dùng ngoài da, không được uống. Không dùng với người mẫn cảm với bất kỳ thành phần nào. Không xịt lên vùng da có vết thương hở hoặc đang trầy xước. Ngưng sử dụng và tham khảo ý kiến chuyên gia khi có dấu hiệu kích ứng, mẩn đỏ. Hạn sử dụng: 24 tháng kể từ ngày sản xuất.</p></details><details><summary>Nhà sản xuất và số công bố<ChevronDown size={18} /></summary><p>Chi nhánh Hà Nam – Công ty TNHH Sản xuất DP Công nghệ cao Nanofrance. Khu công nghiệp Đồng Văn IV, Phường Lê Hồ, Tỉnh Ninh Bình, Việt Nam. Xuất xứ: Việt Nam. Website trên nhãn: www.nanofrance.com.vn. Số công bố hiển thị: 354/20/CBMP-NB. Vui lòng đối chiếu thông tin lô hàng thực nhận với nhãn thành phẩm.</p></details></div></section>
+      <section className="tempo-r2__information tempo-r2__section" id="thong-tin" aria-labelledby="information-title"><div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">THÔNG TIN SẢN PHẨM</p><h2 id="information-title">Rõ ràng từ thành phần<br /><em>đến nhãn thành phẩm.</em></h2><p>Thông tin dưới đây được giữ nguyên để bạn kiểm tra trước khi đặt COD. Nhãn in trên sản phẩm của từng lô luôn là nguồn ưu tiên.</p></div><div className="tempo-r2__label-grid"><figure><ResponsiveImage asset={MEDIA.packSides} alt="Mặt hông hộp TEMPO có hướng dẫn nghi thức" /><figcaption>Hướng dẫn trên mặt hông</figcaption></figure><figure><ResponsiveImage asset={MEDIA.packBack} alt="Mặt sau hộp TEMPO có thông tin bảo quản" /><figcaption>Hướng dẫn và bảo quản</figcaption></figure><figure><ResponsiveImage asset={MEDIA.label} alt="Chi tiết nhãn chai TEMPO 3ml" /><figcaption>Chi tiết chai 3ml</figcaption></figure></div><div className="tempo-r2__safety-grid"><article><TimerReset size={21} /><h3>Hướng dẫn</h3><p>Lắc đều. Xịt 3–4 nhát cách da khoảng 3–5 cm, chờ 60 phút rồi rửa sạch.</p></article><article><ShieldCheck size={21} /><h3>Cảnh báo</h3><p>Chỉ dùng ngoài da. Không dùng trên vùng da trầy xước; ngưng dùng nếu có kích ứng.</p></article><article><ClipboardCheck size={21} /><h3>Bảo quản</h3><p>Nơi khô ráo, thoáng mát, dưới 30°C; tránh nắng trực tiếp và đóng kín nắp sau khi dùng.</p></article></div><div className="tempo-r2__details"><details><summary>Danh mục thành phần (INCI)<ChevronDown size={18} /></summary><p>{INCI}</p></details><details><summary>Cảnh báo và hạn sử dụng<ChevronDown size={18} /></summary><p>Chỉ dùng ngoài da, không được uống. Không dùng với người mẫn cảm với bất kỳ thành phần nào. Không xịt lên vùng da có vết thương hở hoặc đang trầy xước. Ngưng sử dụng và tham khảo ý kiến chuyên gia khi có dấu hiệu kích ứng, mẩn đỏ. Hạn sử dụng: 24 tháng kể từ ngày sản xuất.</p></details><details><summary>Nhà sản xuất và số công bố<ChevronDown size={18} /></summary><p>Chi nhánh Hà Nam – Công ty TNHH Sản xuất DP Công nghệ cao Nanofrance. Khu công nghiệp Đồng Văn IV, Phường Lê Hồ, Tỉnh Ninh Bình, Việt Nam. Xuất xứ: Việt Nam. Website trên nhãn: www.nanofrance.com.vn. Số công bố hiển thị: 354/20/CBMP-NB. Vui lòng đối chiếu thông tin lô hàng thực nhận với nhãn thành phẩm.</p></details></div></section>
 
-      <section className="tempo-r2__order tempo-r2__section" id="dat-cod" aria-labelledby="order-title"><div className="tempo-r2__order-intro"><ResponsiveImage asset={MEDIA.delivery} alt="TEMPO trong kiện giao hàng kín đáo" /><div><p className="tempo-r2__eyebrow">TÓM TẮT ĐƠN / COD</p><h2 id="order-title">Đặt một chai.<br /><em>Giữ một nhịp.</em></h2><p>V2JOY gọi xác nhận trước khi gửi; bạn chỉ thanh toán khi nhận hàng.</p><dl><div><dt>TEMPO 3ML</dt><dd>{formatVnd(PRODUCT_CONFIG.price)} / chai</dd></div><div><dt>Số lượng tối đa</dt><dd>{PRODUCT_CONFIG.maxQuantity} chai</dd></div><div><dt>Phí giao hàng</dt><dd><mark>CẦN V2JOY XÁC NHẬN</mark></dd></div><div><dt>Thời gian giao</dt><dd><mark>CẦN V2JOY XÁC NHẬN</mark></dd></div></dl></div></div><form ref={formRef} className="tempo-r2__form" data-clarity-mask="true" onSubmit={submitOrder} aria-label={isStaging ? "Form COD hai bước staging" : "Form COD hai bước"}><div className="tempo-r2__form-progress"><span className={step === 1 ? "is-active" : "is-complete"}>1. THÔNG TIN</span><span className={step === 2 ? "is-active" : ""}>2. GIAO HÀNG</span></div>{step === 1 ? <fieldset><legend>Thông tin nhận hàng</legend><label>Họ và tên<input value={form.fullName} onChange={event => updateForm("fullName", event.target.value)} autoComplete="name" required placeholder="Tên người nhận" /></label><label>Số điện thoại<input value={form.phone} onChange={event => updateForm("phone", event.target.value)} autoComplete="tel" inputMode="tel" required placeholder="Ví dụ: 090 123 4567" /></label><div className="tempo-r2__quantity"><span>Số lượng</span><div role="radiogroup" aria-label="Chọn số lượng TEMPO"><button type="button" aria-pressed={form.quantity === 1} onClick={() => updateForm("quantity", 1)}>01 chai</button><button type="button" aria-pressed={form.quantity === 2} onClick={() => updateForm("quantity", 2)}>02 chai</button></div></div><button type="button" className="tempo-r2__button" onClick={nextStep}>TIẾP TỤC ĐỊA CHỈ <ArrowRight size={17} /></button></fieldset> : <fieldset><legend>Địa chỉ và xác nhận</legend><label>Địa chỉ nhận hàng<textarea value={form.address} onChange={event => updateForm("address", event.target.value)} autoComplete="street-address" required placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" /></label><label>Lời nhắn <small>(không bắt buộc)</small><input value={form.note} onChange={event => updateForm("note", event.target.value)} placeholder="Thời điểm thuận tiện để nhận cuộc gọi..." /></label><div className="tempo-r2__form-total"><span>Tạm tính <small>Phí giao chờ V2JOY xác nhận</small></span><strong>{formatVnd(total)}</strong></div><label className="tempo-r2__consent"><input type="checkbox" checked={form.orderConsent} onChange={event => updateForm("orderConsent", event.target.checked)} required /><span>Tôi đồng ý để V2JOY dùng thông tin này để xác nhận và giao đơn COD.</span></label><label className="tempo-r2__consent"><input type="checkbox" checked={form.marketingConsent} onChange={event => updateForm("marketingConsent", event.target.checked)} required /><span>Tôi đồng ý nhận thông tin cập nhật sản phẩm và ưu đãi từ V2JOY.</span></label><div className="tempo-r2__form-actions"><button type="button" onClick={() => setStep(1)}>QUAY LẠI</button><button type="submit" className="tempo-r2__button" disabled={remaining < 1 || order.isPending}>{remaining < 1 ? "TEMPO ĐÃ HẾT HÀNG" : order.isPending ? "ĐANG GỬI ĐƠN..." : <>XÁC NHẬN ĐẶT COD <ShoppingBag size={17} /></>}</button></div></fieldset>}{notice && <p className="tempo-r2__form-notice" role="status"><Check size={17} /> {notice}</p>}<p className="tempo-r2__privacy"><LockKeyhole size={14} /> {isStaging ? "Bản staging không gửi form tới server;" : "V2JOY chỉ dùng thông tin để xác nhận và giao đơn COD;"} QualifiedLead chỉ theo CRM sau xác nhận và Purchase chỉ theo CAPI sau khi giao thành công.</p></form></section>
+      <section className="tempo-r2__order tempo-r2__section" id="dat-cod" aria-labelledby="order-title"><div className="tempo-r2__order-intro"><ResponsiveImage asset={MEDIA.delivery} alt="TEMPO trong kiện giao hàng kín đáo" /><div><p className="tempo-r2__eyebrow">TÓM TẮT ĐƠN / COD</p><h2 id="order-title">Đặt một chai.<br /><em>Giữ một nhịp.</em></h2><p>V2JOY gọi xác nhận trước khi gửi; bạn chỉ thanh toán khi nhận hàng.</p><dl><div><dt>TEMPO 3ML</dt><dd>{formatVnd(PRODUCT_CONFIG.price)} / chai</dd></div><div><dt>Số lượng tối đa</dt><dd>{PRODUCT_CONFIG.maxQuantity} chai</dd></div><div><dt>Phí giao hàng</dt><dd><mark>CẦN V2JOY XÁC NHẬN</mark></dd></div><div><dt>Thời gian giao</dt><dd><mark>CẦN V2JOY XÁC NHẬN</mark></dd></div></dl></div></div><form ref={formRef} className="tempo-r2__form" data-clarity-mask="true" onSubmit={submitOrder} aria-label={isStaging ? "Form COD hai bước staging" : "Form COD hai bước"}><div className="tempo-r2__form-progress"><span className={step === 1 ? "is-active" : "is-complete"}>1. THÔNG TIN</span><span className={step === 2 ? "is-active" : ""}>2. GIAO HÀNG</span></div>{step === 1 ? <fieldset><legend>Thông tin nhận hàng</legend><label>Họ và tên<input value={form.fullName} onChange={event => updateForm("fullName", event.target.value)} autoComplete="name" required placeholder="Tên người nhận" /></label><label>Số điện thoại<input value={form.phone} onChange={event => updateForm("phone", event.target.value)} autoComplete="tel" inputMode="tel" required placeholder="Ví dụ: 090 123 4567" /></label><div className="tempo-r2__quantity"><span>Số lượng</span><div role="radiogroup" aria-label="Chọn số lượng TEMPO"><button type="button" aria-pressed={form.quantity === 1} onClick={() => updateForm("quantity", 1)}>01 chai</button><button type="button" aria-pressed={form.quantity === 2} onClick={() => updateForm("quantity", 2)}>02 chai</button></div></div><button type="button" className="tempo-r2__button" onClick={nextStep}>TIẾP TỤC ĐỊA CHỈ <ArrowRight size={17} /></button></fieldset> : <fieldset><legend>Địa chỉ và xác nhận</legend><label>Địa chỉ nhận hàng<textarea value={form.address} onChange={event => updateForm("address", event.target.value)} autoComplete="street-address" required placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" /></label><label>Lời nhắn <small>(không bắt buộc)</small><input value={form.note} onChange={event => updateForm("note", event.target.value)} placeholder="Thời điểm thuận tiện để nhận cuộc gọi..." /></label><div className="tempo-r2__form-total"><span>Tạm tính <small>Phí giao chờ V2JOY xác nhận</small></span><strong>{formatVnd(total)}</strong></div><label className="tempo-r2__consent"><input type="checkbox" checked={form.orderConsent} onChange={event => updateForm("orderConsent", event.target.checked)} required /><span>Tôi đồng ý để V2JOY dùng thông tin này để xác nhận và giao đơn COD.</span></label><label className="tempo-r2__consent"><input type="checkbox" checked={form.marketingConsent} onChange={event => updateForm("marketingConsent", event.target.checked)} /><span>Tôi đồng ý nhận thông tin cập nhật sản phẩm và ưu đãi từ V2JOY. <small>(không bắt buộc)</small></span></label><div className="tempo-r2__form-actions"><button type="button" onClick={() => setStep(1)}>QUAY LẠI</button><button type="submit" className="tempo-r2__button" disabled={remaining < 1 || order.isPending}>{remaining < 1 ? "TEMPO ĐÃ HẾT HÀNG" : order.isPending ? "ĐANG GỬI ĐƠN..." : <>XÁC NHẬN ĐẶT COD <ShoppingBag size={17} /></>}</button></div></fieldset>}{notice && <p className="tempo-r2__form-notice" role="status"><Check size={17} /> {notice}</p>}<p className="tempo-r2__privacy"><LockKeyhole size={14} /> {isStaging ? "Bản staging không gửi form tới server;" : "V2JOY chỉ dùng thông tin để xác nhận và giao đơn COD;"} QualifiedLead chỉ theo CRM sau xác nhận và Purchase chỉ theo CAPI sau khi giao thành công.</p></form></section>
 
       <section className="tempo-r2__faq tempo-r2__section" aria-labelledby="faq-title"><div className="tempo-r2__section-heading"><p className="tempo-r2__eyebrow">CÂU HỎI THƯỜNG GẶP</p><h2 id="faq-title">Cần biết trước<br /><em>khi đặt COD.</em></h2></div><div>{[{ q: "TEMPO là sản phẩm gì?", a: "TEMPO là sản phẩm chăm sóc da cá nhân. Mục đích sử dụng ghi nhận: giúp chăm sóc dưỡng ẩm da." }, { q: "Chai có dung tích bao nhiêu?", a: "Mỗi chai có dung tích 3 ml, được thiết kế nhỏ gọn để mang theo." }, { q: "Sử dụng và rửa sạch như thế nào?", a: "Vệ sinh sạch và lắc đều; xịt 3–4 nhát từ khoảng cách 3–5 cm; chờ 60 phút rồi rửa sạch." }, { q: "Đơn hàng được đóng gói ra sao?", a: "Kiện ngoài được định hướng đóng gói kín đáo, không lộ tên sản phẩm. Quy cách cuối cùng cần V2JOY xác nhận trước khi production." }, { q: "Phí và thời gian giao hàng?", a: "PLACEHOLDER CẦN XÁC NHẬN: phí giao và thời gian giao chưa được V2JOY cung cấp, nên chưa hiển thị số liệu cụ thể trên staging." }].map(item => <details key={item.q}><summary>{item.q}<ChevronDown size={18} /></summary><p>{item.a}</p></details>)}</div><div className="tempo-r2__policy"><span>Chính sách bảo mật <b>PLACEHOLDER CẦN V2JOY XÁC NHẬN</b></span><span>Chính sách giao hàng <b>PLACEHOLDER CẦN V2JOY XÁC NHẬN</b></span><span>Chính sách đổi trả <b>PLACEHOLDER CẦN V2JOY XÁC NHẬN</b></span><span>Hỗ trợ khách hàng <b>PLACEHOLDER CẦN V2JOY XÁC NHẬN</b></span></div></section>
 

@@ -150,10 +150,14 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusDebugCollector()];
 
-export default defineConfig({
-  plugins,
+// vitePluginManusRuntime nhúng thẳng ~367KB JS vào index.html, không có tuỳ chọn tắt.
+// Runtime đó chỉ phục vụ việc soạn và preview bên trong Manus; với khách vào từ quảng cáo
+// nó là 367KB parse trên main thread trước khi trang kịp hiện, mỗi lượt truy cập (HTML
+// được trả kèm no-store nên không bao giờ cache). Vì vậy chỉ nạp khi chạy dev.
+export default defineConfig(({ command }) => ({
+  plugins: command === "build" ? plugins : [...plugins, vitePluginManusRuntime()],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -196,4 +200,4 @@ export default defineConfig({
       deny: ["**/.*"],
     },
   },
-});
+}));

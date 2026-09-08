@@ -180,7 +180,9 @@ function makeTempoOrderNumber() {
   return `TMP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }
 
-export async function createTempoCodOrder(input: TempoCodOrderInput) {
+export type TempoCodOrderSignals = { clientIpAddress: string | null; clientUserAgent: string | null };
+
+export async function createTempoCodOrder(input: TempoCodOrderInput, signals: TempoCodOrderSignals = { clientIpAddress: null, clientUserAgent: null }) {
   const db = await getDb();
   if (!db) throw new Error("Database is unavailable");
 
@@ -216,6 +218,10 @@ export async function createTempoCodOrder(input: TempoCodOrderInput) {
       utmContent: input.utmContent || null,
       utmTerm: input.utmTerm || null,
       fbclid: input.fbclid || null,
+      fbp: input.fbp || null,
+      fbc: input.fbc || null,
+      clientIpAddress: signals.clientIpAddress,
+      clientUserAgent: signals.clientUserAgent,
     });
     return { kind: "created" as const };
   });
@@ -225,4 +231,28 @@ export async function createTempoCodOrder(input: TempoCodOrderInput) {
   const order = orderRows[0];
   if (!order) throw new Error("COD order could not be confirmed");
   return { kind: "created" as const, order };
+}
+
+/**
+ * Đánh dấu đơn đã giao và trả về đúng bản ghi cần báo Purchase.
+ *
+ * purchase_reported_at chỉ được đặt khi nó còn trống, và câu UPDATE đó là chốt chặn duy nhất
+ * quyết định ai được gửi Purchase: hai lần bấm đồng thời thì chỉ một câu chạm được dòng.
+ */
+export async function markTempoCodOrderDelivered(orderNumber: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is unavailable");
+
+  const rows = await db.select().from(tempoCodOrders).where(eq(tempoCodOrders.orderNumber, orderNumber)).limit(1);
+  const order = rows[0];
+  if (!order) return { kind: "not_found" as const };
+
+  const deliveredAt = new Date();
+  const claim = await db
+    .update(tempoCodOrders)
+    .set({ status: "delivered", purchaseReportedAt: deliveredAt })
+    .where(sql`${tempoCodOrders.orderNumber} = ${orderNumber} and ${tempoCodOrders.purchaseReportedAt} is null`);
+
+  if (claim[0].affectedRows !== 1) return { kind: "already_reported" as const, order };
+  return { kind: "delivered" as const, order, deliveredAt };
 }

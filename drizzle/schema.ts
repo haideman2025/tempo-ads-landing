@@ -88,6 +88,14 @@ export const tempoCodOrders = mysqlTable("tempo_cod_orders", {
   utmContent: varchar("utm_content", { length: 180 }),
   utmTerm: varchar("utm_term", { length: 180 }),
   fbclid: varchar("fbclid", { length: 255 }),
+  // Cookie _fbp/_fbc lúc đặt đơn: Purchase chỉ được gửi sau khi giao, nên phải giữ lại
+  // định danh của phiên đã click quảng cáo thì Meta mới quy đổi được về đúng chiến dịch.
+  fbp: varchar("fbp", { length: 255 }),
+  fbc: varchar("fbc", { length: 255 }),
+  clientUserAgent: varchar("client_user_agent", { length: 500 }),
+  clientIpAddress: varchar("client_ip_address", { length: 64 }),
+  // Chốt chặn để một đơn chỉ sinh đúng một Purchase dù thao tác đánh dấu giao bị lặp.
+  purchaseReportedAt: timestamp("purchase_reported_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
 }, table => [
