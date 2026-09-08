@@ -65,6 +65,19 @@ Giữ nguyên ranh giới đã công bố trên trang — COD chưa thu tiền l
 
 **Cần owner cấp:** `META_CAPI_ACCESS_TOKEN` trong biến môi trường Manus. Thiếu token thì `markDelivered` vẫn cập nhật đơn bình thường, chỉ bỏ qua bước báo Meta.
 
+### Đã kiểm chứng token trên dataset thật
+
+Owner cấp token ngày 2026-09-08. Kiểm tra không gửi sự kiện thật nào vào dataset:
+
+| Kiểm tra | Kết quả |
+|---|---|
+| `debug_token` | `SYSTEM_USER`, `is_valid: true`, `expires_at: 0` (không hết hạn), granular scope trỏ đúng dataset `1955804598438163` |
+| `POST /events` với `data: []` | `(#100) param data must be non-empty` — qua được tầng xác thực |
+| `POST /events` với `data: [{}]` | `$['data'][0]['event_name'] is required` — Meta đang validate field, tức token **có quyền ghi** (thiếu quyền thì bị chặn ở tầng permission trước) |
+| `POST /events` với payload thật từ `buildPurchaseEvent`, `event_time` cố tình để 30 ngày trước | Lỗi **duy nhất** là subcode 2804003 "nhãn thời gian quá cũ" — toàn bộ `event_name`, `event_id`, `action_source`, `ph`/`fn`/`ln` đã băm, `fbp`, `fbc`, IP, User-Agent và khối `custom_data` VND đều qua validate. Sự kiện bị từ chối nên không ghi vào dataset. |
+
+Chưa kiểm chứng được một lần ingest thành công — việc đó cần `TEST_EVENT_CODE` từ tab Test Events của Events Manager. Chạy `npx tsx scripts/verify-capi.ts <TEST_EVENT_CODE>` để gửi một Purchase mẫu qua đúng `buildPurchaseEvent`/`sendMetaCapiEvent` mà server dùng; sự kiện kèm mã test chỉ hiện ở tab Test Events, không vào dữ liệu dataset và không ảnh hưởng quy đổi quảng cáo. Script từ chối chạy nếu không có mã, để không ai lỡ tay bơm Purchase giả vào dataset.
+
 ### Ba sửa lỗi nhỏ
 
 - Bỏ `required` khỏi checkbox đồng ý nhận marketing. Server vốn khai `marketingConsent` là optional; ép tick vừa chặn phễu ở bước cuối, vừa khiến đồng ý marketing không còn là đồng ý tự nguyện theo Nghị định 13/2023. Checkbox đồng ý xử lý đơn vẫn bắt buộc.
