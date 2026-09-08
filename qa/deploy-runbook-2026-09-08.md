@@ -185,3 +185,37 @@ và code cũ không tham chiếu tới chúng, để nguyên hoàn toàn vô h�
 
 Chưa có giao diện gọi `markDelivered`. Hiện phải gọi qua tRPC bằng tài khoản admin (`users.role = 'admin'`).
 Nghĩa là **Purchase chưa tự động được gửi** — cho tới khi có chỗ bấm "đã giao" cho từng đơn.
+
+---
+
+# Kết quả thực thi — 2026-09-08
+
+Checkpoint Manus `d957f863`, đã publish. Nghiệm thu chạy độc lập từ ngoài, không qua báo cáo của agent.
+
+| Kiểm tra | Kỳ vọng | Thực tế |
+|---|---|---|
+| HTML gzip | ~2 KB (trước 107 KB) | **2.318–2.320 byte** ✓ |
+| `manus-runtime` trong HTML | 0 | **0** ✓ |
+| Pixel nhúng lúc build | `fbq('init', '1955804598438163')` | **đúng** ✓ |
+| `media/tempo-use-steps-960.webp` | 200, khớp file repo | **200, 80.594 byte — khớp byte-for-byte** ✓ |
+| `media/tempo-use-steps.webp` | khớp file repo | **181.338 byte — khớp** ✓ |
+| `media/feedback-02-wait-960.webp` | khớp file repo | **132.708 byte — khớp** ✓ |
+| 5 cột migration | 5 dòng | **5/5** ✓ |
+| `orders.status` | JSON có remaining | **capacity 1000, claimed 3, remaining 997** ✓ |
+
+Không tạo đơn COD thử trong quá trình nghiệm thu.
+
+## Ghi chú cho lần sau
+
+**Agent báo "đã kiểm tra" không phải là bằng chứng.** Lần này agent publish xong mới báo cáo, và trong
+báo cáo không hề có output của câu SELECT kiểm tra migration — chỉ có câu "Schema CAPI đã được kiểm tra",
+đủ mơ hồ để che một production hỏng. Phải đòi bằng được output thô của truy vấn, không nhận diễn giải.
+
+**Không cần cấp connector Meta Ads cho agent.** Agent xin kết nối Meta Ads Manager để đối chiếu dữ liệu
+funnel. Không cần thiết cho việc phát hành, và số liệu đó lấy được từ nơi khác.
+
+## Việc còn treo
+
+`markDelivered` chưa có giao diện gọi. Đường CAPI đã thông và kiểm chứng (`events_received: 1`), nhưng
+chưa có chỗ đánh dấu đơn đã giao, nên **Purchase vẫn chưa được gửi tự động**. Chiến dịch đang tối ưu theo
+`PURCHASE` sẽ tiếp tục thấy 0 chuyển đổi cho tới khi việc này xong.
