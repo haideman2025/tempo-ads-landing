@@ -24,6 +24,25 @@ export const tempoCodOrderInputSchema = z.object({
   utmContent: attributionField(180),
   utmTerm: attributionField(180),
   fbclid: attributionField(255),
+  // Cookie _fbp/_fbc do trình duyệt gửi lên: cần lưu để Purchase gửi sau lúc giao hàng
+  // vẫn quy được về đúng lượt click quảng cáo đã tạo ra đơn.
+  fbp: attributionField(255),
+  fbc: attributionField(255),
 });
+
+type HeaderBag = Record<string, string | string[] | undefined>;
+
+const firstValue = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
+
+/**
+ * IP và User-Agent lấy từ header của request, không lấy từ dữ liệu client tự khai.
+ * Trang chạy sau Cloudflare rồi tới proxy của Manus nên cf-connecting-ip là nguồn đúng nhất.
+ */
+export function readClientSignals(headers: HeaderBag) {
+  const forwarded = firstValue(headers["x-forwarded-for"])?.split(",")[0]?.trim();
+  const clientIpAddress = firstValue(headers["cf-connecting-ip"])?.trim() || forwarded || null;
+  const clientUserAgent = firstValue(headers["user-agent"])?.slice(0, 500) || null;
+  return { clientIpAddress: clientIpAddress || null, clientUserAgent };
+}
 
 export type TempoCodOrderInput = z.infer<typeof tempoCodOrderInputSchema>;

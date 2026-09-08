@@ -85,4 +85,28 @@ describe("TEMPO Restore V2 staging regression", () => {
     expect(boundarySource).toContain("Thông tin COD chưa được ghi nhận");
     expect(boundarySource).not.toContain("error?.stack");
   });
+
+  it("chỉ bắt buộc đồng ý xử lý đơn, không ép đồng ý nhận marketing", () => {
+    // Server khai marketingConsent là optional; ép tick ở UI vừa chặn phễu ở bước cuối,
+    // vừa khiến đồng ý marketing không còn là đồng ý tự nguyện.
+    expect(pageSource).toContain("if (!form.address.trim() || !form.orderConsent) {");
+    expect(pageSource).not.toContain("|| !form.marketingConsent) {");
+    const marketingCheckbox = pageSource.match(/<input type="checkbox" checked=\{form\.marketingConsent\}[^/]*\/>/)?.[0] ?? "";
+    expect(marketingCheckbox).not.toContain("required");
+    const orderCheckbox = pageSource.match(/<input type="checkbox" checked=\{form\.orderConsent\}[^/]*\/>/)?.[0] ?? "";
+    expect(orderCheckbox).toContain("required");
+  });
+
+  it("gửi sự kiện tự đặt tên qua trackCustom để Meta không lặng lẽ bỏ", () => {
+    // fbq('track') chỉ nhận tên chuẩn của Meta. ViewInfographic/ViewRitual/ViewFeedback
+    // từng gửi qua 'track' và không hề xuất hiện trong dataset của pixel.
+    expect(pageSource).toContain('STANDARD_PIXEL_EVENTS.has(event) ? "track" : "trackCustom"');
+    const standardList = pageSource.match(/const STANDARD_PIXEL_EVENTS[^;]+;/)?.[0] ?? "";
+    for (const standard of ["ViewContent", "InitiateCheckout", "Lead"]) {
+      expect(standardList, standard).toContain(`"${standard}"`);
+    }
+    for (const custom of ["ViewInfographic", "ViewRitual", "ViewFeedback"]) {
+      expect(standardList, custom).not.toContain(`"${custom}"`);
+    }
+  });
 });

@@ -25,7 +25,7 @@ describe("TEMPO Restore V2 production", () => {
 
   it("uses ViewContent, InitiateCheckout and Lead without recording a COD submit as Purchase", () => {
     ["ViewContent", "InitiateCheckout", "Lead", "QualifiedLead", "Purchase"].forEach(event => expect(source).toContain(event));
-    expect(source).toContain('window.fbq?.("track", event, detail, { eventID: detail.event_id })');
+    expect(source).toContain('window.fbq?.(STANDARD_PIXEL_EVENTS.has(event) ? "track" : "trackCustom", event, detail, { eventID: detail.event_id })');
     expect(source).not.toContain('trackFunnel("production", "Purchase"');
     expect(source).not.toContain('window.fbq?.("track", "Purchase"');
   });

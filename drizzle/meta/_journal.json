@@ -43,6 +43,13 @@
       "when": 1788759919076,
       "tag": "0005_lying_whirlwind",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1788861777297,
+      "tag": "0006_moaning_marvel_zombies",
+      "breakpoints": true
     }
   ]
 }
