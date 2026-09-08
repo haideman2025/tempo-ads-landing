@@ -1,0 +1,238 @@
+{
+  "requestedUrl": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/staging/tempo-restore-v2?qa=lighthouse",
+  "finalUrl": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/staging/tempo-restore-v2?qa=lighthouse",
+  "categories": {
+    "performance": 36,
+    "accessibility": 94,
+    "best-practices": 81,
+    "seo": 66
+  },
+  "audits": {
+    "first-contentful-paint": {
+      "score": 0.16,
+      "displayValue": "4.4 s"
+    },
+    "largest-contentful-paint": {
+      "score": 0,
+      "displayValue": "23.0 s"
+    },
+    "total-blocking-time": {
+      "score": 0.17,
+      "displayValue": "1,350 ms"
+    },
+    "cumulative-layout-shift": {
+      "score": 0.99,
+      "displayValue": "0.044"
+    },
+    "speed-index": {
+      "score": 0.44,
+      "displayValue": "6.2 s"
+    }
+  },
+  "opportunities": {
+    "render-blocking-resources": {
+      "score": null,
+      "displayValue": null,
+      "details": []
+    },
+    "uses-optimized-images": {
+      "score": null,
+      "displayValue": null,
+      "details": []
+    },
+    "uses-responsive-images": {
+      "score": null,
+      "displayValue": null,
+      "details": []
+    },
+    "offscreen-images": {
+      "score": null,
+      "displayValue": null,
+      "details": []
+    },
+    "unminified-css": {
+      "score": 1,
+      "displayValue": "",
+      "details": []
+    },
+    "unminified-javascript": {
+      "score": 0,
+      "displayValue": "Est savings of 1,281 KiB",
+      "details": [
+        {
+          "url": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/@fs/home/ubuntu/tempo-ads-landing/node_modules/.vite/deps/react-dom_client.js?v=93ac65c4",
+          "totalBytes": 1006049,
+          "wastedBytes": 306779,
+          "wastedPercent": 30.493449173939837
+        },
+        {
+          "url": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/@fs/home/ubuntu/tempo-ads-landing/node_modules/.vite/deps/lucide-react.js?v=93ac65c4",
+          "totalBytes": 948593,
+          "wastedBytes": 292576,
+          "wastedPercent": 30.84315401863602
+        },
+        {
+          "url": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/@vite/client",
+          "totalBytes": 177026,
+          "wastedBytes": 149753,
+          "wastedPercent": 84.59378848304769
+        },
+        {
+          "url": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/src/pages/TempoRestoreV2Staging.tsx?t=1788850599679",
+          "totalBytes": 263848,
+          "wastedBytes": 148820,
+          "wastedPercent": 56.403612843966464
+        }
+      ]
+    },
+    "unused-css-rules": {
+      "score": 0.5,
+      "displayValue": "Est savings of 21 KiB",
+      "details": [
+        {
+          "url": "/*! tailwindcss v4.1.14 | MIT License | https://tailwindcss.com */\n@layer properties;\n@layer theme,…",
+          "wastedBytes": 21156,
+          "wastedPercent": 62.657489293393596,
+          "totalBytes": 33764
+        }
+      ]
+    },
+    "unused-javascript": {
+      "score": 0,
+      "displayValue": "Est savings of 1,091 KiB",
+      "details": [
+        {
+          "url": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/@fs/home/ubuntu/tempo-ads-landing/node_modules/.vite/deps/react-dom_client.js?v=93ac65c4",
+          "totalBytes": 1005980,
+          "wastedBytes": 356200,
+          "wastedPercent": 35.40825861349132,
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "source": "…react-dom@19.2.1_react@19.2.1/node_modules/react-dom/cjs/react-dom-client.development.js",
+                "sourceBytes": 992532,
+                "sourceWastedBytes": 353559
+              },
+              {
+                "source": "…scheduler@0.27.0/node_modules/scheduler/cjs/scheduler.development.js",
+                "sourceBytes": 11422,
+                "sourceWastedBytes": 2641
+              }
+            ]
+          }
+        },
+        {
+          "url": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/staging/tempo-restore-v2?qa=lighthouse",
+          "totalBytes": 367093,
+          "wastedBytes": 221742,
+          "wastedPercent": 60.40485653499249
+        },
+        {
+          "url": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/@fs/home/ubuntu/tempo-ads-landing/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=93ac65c4",
+          "totalBytes": 119439,
+          "wastedBytes": 103324,
+          "wastedPercent": 86.50775709776539,
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "source": "…floating-ui+core@1.7.3/node_modules/@floating-ui/core/dist/floating-ui.core.mjs",
+                "sourceBytes": 23379,
+                "sourceWastedBytes": 23189
+              },
+              {
+                "source": "…floating-ui+dom@1.7.4/node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs",
+                "sourceBytes": 20476,
+                "sourceWastedBytes": 19904
+              },
+              {
+                "source": "…radix-ui+react-tooltip@1.2.8_@types+react-dom@19.2.1_@types+react@19.2.1__@types+react_cf38e8bef4fd3f50a3a3839d1868f5b4/node_modules/@radix-ui/react-tooltip/src/tooltip.tsx",
+                "sourceBytes": 17160,
+                "sourceWastedBytes": 14684
+              },
+              {
+                "source": "…radix-ui+react-popper@1.2.8_@types+react-dom@19.2.1_@types+react@19.2.1__@types+react@_5e23a2e04f687b9473cf38c895236d04/node_modules/@radix-ui/react-popper/src/popper.tsx",
+                "sourceBytes": 8546,
+                "sourceWastedBytes": 7565
+              },
+              {
+                "source": "…radix-ui+react-dismissable-layer@1.1.11_@types+react-dom@19.2.1_@types+react@19.2.1__@_6938744f5e4e35f3d76d7cb8422ccfb4/node_modules/@radix-ui/react-dismissable-layer/src/dismissable-layer.tsx",
+                "sourceBytes": 8059,
+                "sourceWastedBytes": 7265
+              }
+            ]
+          }
+        },
+        {
+          "url": "https://3000-ik5v3uxl36e0tpmlizsc9-12ff98c2.sg2.manus.computer/@fs/home/ubuntu/tempo-ads-landing/node_modules/.vite/deps/chunk-ICZ5RBPZ.js?v=93ac65c4",
+          "totalBytes": 152393,
+          "wastedBytes": 101408,
+          "wastedPercent": 66.54373888564436,
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "source": "…client@11.18.0_@trpc+server@11.18.0_typescript@5.9.3__typescript@5.9.3/node_modules/@trpc/client/src/links/wsLink/wsClient/wsClient.ts",
+                "sourceBytes": 8187,
+                "sourceWastedBytes": 8150
+              },
+              {
+                "source": "…server@11.18.0_typescript@5.9.3/node_modules/@trpc/server/src/unstable-core-do-not-import/stream/jsonl.ts",
+                "sourceBytes": 6886,
+                "sourceWastedBytes": 6551
+              },
+              {
+                "source": "…server@11.18.0_typescript@5.9.3/node_modules/@trpc/server/src/unstable-core-do-not-import/router.ts",
+                "sourceBytes": 6801,
+                "sourceWastedBytes": 6532
+              },
+              {
+                "source": "…client@11.18.0_@trpc+server@11.18.0_typescript@5.9.3__typescript@5.9.3/node_modules/@trpc/client/src/links/localLink.ts",
+                "sourceBytes": 4908,
+                "sourceWastedBytes": 4858
+              },
+              {
+                "source": "…server@11.18.0_typescript@5.9.3/node_modules/@trpc/server/src/unstable-core-do-not-import/procedureBuilder.ts",
+                "sourceBytes": 4637,
+                "sourceWastedBytes": 4574
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "total-byte-weight": {
+      "score": 0.5,
+      "displayValue": "Total size was 16,654 KiB",
+      "details": [
+        {
+          "url": "https://d36hbw14aib5lz.cloudfront.net/310519663384433292/ELnJ8nbnY9sDcFmzEeiCHg/tempo-background-02_d44fa0b9.mp4?Expires=1788854372&Signature=HPYsDxAm5fntSp~wO3igBypZsZrSSh2njAcji2JHmaAhiA5XRKGYvlcQz8cQZL-io7rbhYHcM50dkAgLVgVfUp4Nnp0Wm0gQGnvb-LiAbkFafyMj79ZEJmyoHkpVcOHtLBWwAx0pQul3UsBHK5gbC3gvPH9UbfxLD3-jArfdm2WetzWMp8JzvfMmFNV8wXbpciGe2uhI8PSDuUVYFucEoGkp5~TVtxlycRUStH4MXidct4gLcWnXtPP0wHtn7XH2ncgRJ~IOll4hZR3q5tzFY8I9n4oEoffEmwA08iKKqPL9RwctW2QMzKBPwLXHcZQHOv8UKzIa6xb1bYBLWJA0HA__&Key-Pair-Id=K1MP89RTKNH4J",
+          "totalBytes": 2515555
+        },
+        {
+          "url": "https://d36hbw14aib5lz.cloudfront.net/310519663384433292/ELnJ8nbnY9sDcFmzEeiCHg/tempo-carry_5d2617d2.png?Expires=1788854372&Signature=tW~pst3IYs~pE~eFAMOTFXph3iTMr6L8JMmvAIxkkFg-XgJ7D8tvrwfr6sPRQcz6fB~bYJTI9JN2vp6m9YZ1ShEsQ~~rI4EvoEwhmTQdUts5c63Czy9JFd7-6mDpAuIrWfch9oia6x51MPDdSqAhhBlmQSTEPRxCBfIrMJP8NJXhIj6ul59bGJ0xZjEFAT1V993LRJCDvQV8Id9jVxuiSB2xqfWcxdk5JhwZUe~j9wGPPQZMn9MxoEaU6a0N7OKzoqGbjOgTEX-BeBE~ayIpjdTlrku644iYinOzj-prXZCjCksWyydimgt~1bSUdI20U3bBFlGbhj~U2f4clBtmOg__&Key-Pair-Id=K1MP89RTKNH4J",
+          "totalBytes": 2317121
+        },
+        {
+          "url": "https://d36hbw14aib5lz.cloudfront.net/310519663384433292/ELnJ8nbnY9sDcFmzEeiCHg/tempo-brand-hero_6c096b85.png?Expires=1788854372&Signature=fYKq8ubaQ7EAMDrJb3xg679ivGqIthZO1BWqyjX-20M6116q0YG5fXB7RQFiGsj6gLiNIpX71-4vrkp9IzTNf3tKplewfqwPu2-ltl-a~mXwLtC4-zunb5jHRWISClIKNp7pC-ysrSJfMMbTxHUNft0G23tUki2zQh8~ajmU5lqIPnIFSts07H4bAbEdUoYJaSlM8uNfS667Neb8eZKK2oQ4fVmLmQm1yrTryQHmAugytBuWmE0Z7sXjiSGuFJPbwRYlAFPCaP7fUrHHmh8i33i-5YJd2uexZYbwQr3ukWshspYV63y-UL~~C2W0h5cpb0yL2-rvemBelhJo2m0GTQ__&Key-Pair-Id=K1MP89RTKNH4J",
+          "totalBytes": 2051058
+        },
+        {
+          "url": "https://d36hbw14aib5lz.cloudfront.net/310519663384433292/ELnJ8nbnY9sDcFmzEeiCHg/tempo-benefits_e53327fd.png?Expires=1788854372&Signature=ccA-Cc8vyoeAOW9B-Qm8ugb87NTVa6uQeV0Wegjct3JIF2RGYUoE2qJ4r~Jee6dRyhNhQEHnqhCCvQ6FTfvX~oQELlQ3LgPBIpVl2keKneH0ghVMC9N26o4YVk2P8xptF-l2Hk1rnBaUoqs5nTv2GA87~xEp4kr0DjipZLWPZsX~H7BNbQ0Gl9D-pDSu5bScWb0GPJWUurwd1ghtlkA-e5sGF-vhaLfS-cTfx~dvQawgS-kNyxMvZisLIr48jsUppxtT4Ut0EMKu8Ygu9kmFQveSEFQ0rcEAs4nedQAg1xoJ-tLqnv3XYFsZ7y7YC7vVntKpDWHHRm7vkVWlXe3SCw__&Key-Pair-Id=K1MP89RTKNH4J",
+          "totalBytes": 2049460
+        }
+      ]
+    },
+    "third-party-summary": {
+      "score": null,
+      "displayValue": null,
+      "details": []
+    },
+    "largest-contentful-paint-element": {
+      "score": null,
+      "displayValue": null,
+      "details": []
+    }
+  }
+}

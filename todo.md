@@ -194,4 +194,16 @@
 - [x] Thực hiện QA staging desktop 1440px và mobile 390px, Lighthouse report, bảng kiểm nghiệm thu và bàn giao để duyệt trước production.
 - [x] Tạo và dùng `srcset` WebP responsive từ đúng bảy asset gốc để giảm tải ảnh cho mobile staging.
 - [x] Chuyển cấu trúc landing TEMPO staging đã được duyệt sang route production `/` trên v2joy.life, đồng thời giữ legal/COD/tracking an toàn.
-- [ ] Kiểm thử regression và xác minh production cache-bypass sau checkpoint phát hành bản staging đã duyệt.
+- [x] Kiểm thử regression và xác minh production cache-bypass sau checkpoint phát hành bản staging đã duyệt.
+- [x] Kiểm kê brief V2, toàn bộ asset/component hiện có, 10 infographic, video nền, visual diary, 10 feedback và snapshot tồn kho trước khi chỉnh staging.
+- [x] Khôi phục sitemap storytelling đầy đủ theo brief V2, giữ toàn bộ asset cũ và bổ sung đúng bảy ảnh mới theo mapping.
+- [x] Thiết lập `PRODUCT_CONFIG` tập trung với giá owner đã chốt 499.000đ, không hard-code giá rải rác trên route Restore V2 staging.
+- [x] Bổ sung fast conversion lane, order summary, COD/form đầy đủ và tracking funnel không gửi Purchase trước giao thành công.
+- [x] Khắc phục độ bền Chrome cloud/#root, bundle/cache/service worker và thêm fallback/error boundary theo yêu cầu P0.
+- [x] QA staging cross-browser, playback toàn bộ landing, Lighthouse, inventory trước/sau, screenshot và bảng kiểm asset trước khi duyệt phát hành.
+- [x] Cấu hình giá bán cuối 499.000đ đã được owner xác nhận trong `PRODUCT_CONFIG` duy nhất và loại toàn bộ mức 349.000đ còn sót khỏi staging.
+- [x] Thêm regression test cho Restore V2: `PRODUCT_CONFIG`, route staging/noindex, 10 infographic, 5 video, 5 diary, packaging, 10 feedback, consent, tracking an toàn và fallback P0.
+- [x] Chẩn đoán lỗi owner không quan sát thấy video nền: năm video phát bình thường trên Restore V2 staging; production vẫn là bản cũ không có video vì đang chờ owner duyệt staging trước khi phát hành.
+- [x] Tái hiện lỗi autoplay owner vẫn gặp trên link demo Restore V2, điều chỉnh điều kiện phát/độ nhận biết video và kiểm thử lại desktop-mobile trước khi xin duyệt production.
+- [x] Bỏ hoàn toàn nút phát tay Restore V2; bảo đảm từng video tự phát khi section vào viewport và tự pause ngay khi section rời viewport.
+- [ ] Phát hành Restore V2 đã được owner duyệt lên `v2joy.life` và xác minh cache-bypass production có đủ 5 video autoplay theo viewport.

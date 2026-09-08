@@ -1,11 +1,8 @@
 <!doctype html>
 <html lang="vi">
-
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TEMPO — Làm chủ nhịp yêu</title>
     <meta name="description" content="TEMPO by V2JOY — nghi thức chuẩn bị kín đáo cho một buổi hẹn có chủ đích." />
     <link rel="icon" type="image/webp" href="/manus-storage/v2joylogo-official_9302769f.webp" />
@@ -13,26 +10,50 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
     <script>
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '%VITE_META_PIXEL_ID%');
-      fbq('track', 'PageView');
+      window.__tempoStagingRoute = window.location.pathname.indexOf('/staging/') === 0;
+      if (!window.__tempoStagingRoute) {
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '%VITE_META_PIXEL_ID%');
+        fbq('track', 'PageView');
+      }
     </script>
     <script>
-      (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window, document, "clarity", "script", "y468d5yk1c");
+      if (!window.__tempoStagingRoute) {
+        (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "y468d5yk1c");
+      }
     </script>
   </head>
-
   <body>
-    <div id="root"></div>
+    <div id="root" data-app-mounted="false">
+      <main class="tempo-boot-fallback" aria-labelledby="tempo-boot-title">
+        <div class="tempo-boot-fallback__mark">V2JOY</div>
+        <p>TEMPO 3ML</p>
+        <h1 id="tempo-boot-title">Đang chuẩn bị<br /><em>một nhịp vừa đủ.</em></h1>
+        <span aria-hidden="true"></span>
+        <p class="tempo-boot-fallback__support">Nếu trang không tự mở sau ít giây, hãy tải lại trang. Nội dung đặt COD không được ghi nhận khi màn hình này đang hiển thị.</p>
+      </main>
+    </div>
+    <style>
+      .tempo-boot-fallback{align-items:flex-start;background:#f5f1e9;color:#17251f;display:flex;flex-direction:column;font-family:Arial,sans-serif;justify-content:center;min-height:100vh;padding:clamp(28px,8vw,120px)}
+      .tempo-boot-fallback__mark{background:#087d78;border-radius:999px;color:#fff;font-size:11px;font-weight:800;letter-spacing:.06em;padding:9px 12px}.tempo-boot-fallback p{font-size:11px;font-weight:800;letter-spacing:.12em;margin:24px 0 10px}.tempo-boot-fallback h1{font-family:Georgia,serif;font-size:clamp(40px,7vw,78px);letter-spacing:-.05em;line-height:.96;margin:0}.tempo-boot-fallback h1 em{color:#087d78}.tempo-boot-fallback span{background:#28bbc4;height:3px;margin:28px 0;width:120px}.tempo-boot-fallback__support{color:#5f6b64;font-size:12px!important;font-weight:500!important;letter-spacing:0!important;line-height:1.55;max-width:420px}
+    </style>
+    <script>
+      window.addEventListener('error', function () { var root = document.getElementById('root'); if (root && root.dataset.appMounted !== 'true') root.dataset.bootError = 'true'; });
+      window.addEventListener('unhandledrejection', function () { var root = document.getElementById('root'); if (root && root.dataset.appMounted !== 'true') root.dataset.bootError = 'true'; });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <script>
+      if (!window.__tempoStagingRoute) {
+        var analyticsScript = document.createElement('script');
+        analyticsScript.defer = true;
+        analyticsScript.src = '%VITE_ANALYTICS_ENDPOINT%/umami';
+        analyticsScript.dataset.websiteId = '%VITE_ANALYTICS_WEBSITE_ID%';
+        document.body.appendChild(analyticsScript);
+      }
+    </script>
   </body>
-
 </html>
